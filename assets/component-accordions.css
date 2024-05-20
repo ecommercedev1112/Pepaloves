@@ -1,0 +1,178 @@
+/* * Menu Accordion Styles */
+/* * Base styles */
+.c-accordion {
+  --transition: all 0.4s cubic-bezier(.02, .01, .47, 1);
+}
+.c-accordion .dropdown-arrow {
+  cursor: pointer;
+}
+
+.c-accordion__panel {
+  display: block;
+  max-height: 0px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.c-accordion__panel.is-active,
+.accordion-expanded + li,
+.c-accordion__header[aria-expanded="true"] + .c-accordion__panel {
+  max-height: 99em;
+  transition: var(--transition);
+}
+
+/* add extra bottom padding for active panels */
+.c-accordion--custom-page .c-accordion__inner {
+  padding-bottom: 0.625rem;
+}
+
+/* * Custom Page Template Accordion */
+.c-accordion.c-accordion--custom-page {
+  color: var(--text-color);
+}
+
+.c-accordion.c-accordion--product .c-accordion__header, .c-accordion.c-accordion--custom-page .c-accordion__header {
+  display: flex;
+  width: 100%;
+  font-weight: 600;
+  overflow: hidden;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.625rem;
+  background: var(--background);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--dotted-color);
+  height: unset !important;
+}
+
+.c-accordion.c-accordion--product .c-accordion__header .dropdown-arrow,
+.c-accordion.c-accordion--custom-page .c-accordion__header .dropdown-arrow {
+  margin-left: auto;
+  transform: rotate(0deg);
+  transition: transform 0.35s ease;
+}
+
+/* rotate arrow when active */
+.c-accordion.c-accordion--product .c-accordion__header[aria-expanded="true"] .dropdown-arrow,
+.c-accordion.c-accordion--custom-page .c-accordion__header[aria-expanded="true"] .dropdown-arrow {
+  transform: rotate(180deg);
+  transition: transform 0.35s ease;
+}
+.c-accordion.c-accordion--product .c-accordion__panel,
+.c-accordion.c-accordion--custom-page .c-accordion__panel {
+  padding: 0 0.625rem;
+}
+
+/* * Accordion Menu */
+.c-accordion {
+  list-style: none;
+  margin: 0;
+}
+
+.c-accordion li:not(.c-accordion__panel) {
+  padding: var(--space-4) 1.375rem var(--space-4) 2rem;
+  border-bottom: 1px solid;
+}
+
+/* add more bottom padding on active panel */
+.c-accordion .c-accordion__third-level li:not(.c-accordion__panel) {
+  padding: var(--space-4) 3.5rem;
+}
+
+.c-accordion .c-accordion__header {
+  display: flex;
+}
+
+/* * 2. override button styles * 3. add from existing styles */
+.c-accordion .dropdown-arrow {
+  /* 2. */
+  border: none !important;
+  background: transparent !important;
+  display: unset !important;
+  margin-bottom: unset !important;
+  line-height: unset !important;
+  height: unset !important;
+  width: unset !important;
+  max-width: unset !important;
+  transition: unset !important;
+  /* 3. */
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  border-left: 1px solid;
+}
+
+/* not active */
+.c-accordion .dropdown-arrow > svg {
+  transform: rotate(0);
+  transition: transform 0.35s ease;
+  pointer-events: none;
+}
+
+/* active */
+.c-accordion .dropdown-arrow[aria-expanded="true"] > svg {
+  transform: rotate(180deg);
+  transition: transform 0.35s ease;
+}
+
+.c-accordion .c-accordion__header .dropdown-arrow {
+  margin-left: auto;
+}
+
+/* remove all list margins */
+.c-accordion ul {
+  margin: 0;
+  list-style: none;
+}
+
+.c-accordion__top-level .c-accordion__link, .c-accordion__second-level .c-accordion__link {
+  font-size: 0.875rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2;
+  letter-spacing: 1px;
+}
+
+.c-accordion__third-level .c-accordion__link, .collection__sm-filter--final-level .c-accordion__link, .collection__sm-filter--final-level .c-accordion__tag-link a {
+  font-size: 0.875rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 2;
+  letter-spacing: 1px;
+}
+
+/* Colors */
+.c-accordion--outer__wrapper {
+  border-top: 0.8px solid var(--text-color) !important;
+}
+
+.c-accordion__top-level {
+  border-bottom: 0.8px solid var(--text-color) !important;
+}
+
+.c-accordion li:not(.c-accordion__panel) {
+  border-color: var(--text-color) !important;
+}
+
+.c-accordion__link {
+  color: var(--text-color) !important;
+}
+
+.dropdown-arrow .icon-fill {
+  stroke: var(--text-color) !important;
+}
+
+.c-accordion__second-level-wrapper {
+  background-color: var(--background) !important;
+}
+
+#accordion .tlink.has_sub_menu, #accordion .tlink2.has_sub_menu {
+  font-size: var(--font-size);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.57;
+  letter-spacing: 1px;
+  color: var(--text-color);
+  position: relative;
+}

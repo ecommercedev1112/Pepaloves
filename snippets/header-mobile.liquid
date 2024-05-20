@@ -1,0 +1,28 @@
+<div class="mobile-nav__mobile-header grid__wrapper mb1 pt3 pb3">
+  <ul class="span-3 md-span-3 sm-span-3 auto a-left v-center list-style-none mb0">
+    <li>
+      <div class="slideout__trigger--close">
+        <button class="slideout__trigger-{{ type }} js-slideout-close btn-as-link" data-slideout-direction="{{ slideout_direction }}" aria-label="Close navigation" tabindex="0" type="button" name="button">
+          {% render 'snip-icons',
+             wrapper: '.mobile-nav__mobile-header',
+             type: 'apollo',
+             icon: 'close',
+             size: '20px',
+             classes: 'mt0 mr0 mb0 ml0',
+             fill: fill_color,
+             hover: hover_color %}
+        </button>
+      </div>
+    </li>
+  </ul>
+  <div class="site-logo mobile-nav__logo-wrapper span-6 md-span-6 sm-span-6 auto a-center v-center">
+    {% if section.settings.logo != blank %}
+      <a class="mobile-nav__img-logo mb0 lh0 inline-block v-center" href="{{ routes.root_url }}">
+        {{ section.settings.logo | image_url: width: 800 | image_tag: loading: 'eager' }}
+      </a>
+    {% endif %}
+  </div>
+  <ul class="header__cart-links__wrapper--mobile span-3 md-span-3 sm-span-3 auto a-right v-center list-style-none inline-block mb0">
+    {% render 'header-cart-links', classes: "m0 p0", use_icons: true, is_mobile: true, fill_color: fill_color, hover_color: hover_color %}
+  </ul>
+</div>

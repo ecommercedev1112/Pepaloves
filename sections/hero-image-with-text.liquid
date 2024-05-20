@@ -1,0 +1,337 @@
+{% comment %} Hero image with text Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-hero-image-with-text.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-hero-image-with-text.css' | asset_url }}"></noscript>
+
+{% comment %} Hero image with text logic {% endcomment %}
+{%- liquid
+  case section.settings.text_align
+  when 'left'
+    assign text_align =  'a-left'
+  when 'center'
+    assign text_align =  'a-center'
+  when 'right'
+    assign text_align =  'a-right'
+  endcase
+
+  case section.settings.vertical_align
+  when 'top'
+    assign vertical_align =  'v-start'
+  when 'middle'
+    assign vertical_align =  'v-center'
+  endcase
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign sm_render = '100vw'
+  assign md_render = 'calc(100vw / 2)'
+  assign lg_render = 'calc(1600px / 2)'
+
+  assign text_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-text)'
+  assign bg_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-bg)'
+  assign hover_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-hover)'
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+
+-%}
+
+{% comment %} Hero image with text template {% endcomment %}
+<div
+  class="global__section section-text-with-image text-with-image-{{ section.id }} {{ section_padding }} {% if section.settings.color_header %}no-section-animation{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-section-type="hero-image-with-text">
+
+  <div class="grid__wrapper narrow">
+    <article class="text span-6 auto {{ text_align }} {{ vertical_align }}">
+      <div class="text-with-image pt8 pb9 sm-pb5">
+        {% if section.settings.title != blank %}
+          <h3 class="mb6 animate--text">{{ section.settings.title | escape }}</h3>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <div class="rte mb1 animate--text delay--1">{{ section.settings.text }}</div>
+        {% endif %}
+        {% if section.settings.button != blank and section.settings.link != blank %}
+          <a href="{{ section.settings.link }}" class="relative inline-block btn-border-link  mt4 animate--text delay--3">
+            <span>{{ section.settings.button | escape }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </article>
+    <article class="image span-6 auto relative {{ vertical_align }}">
+      <div
+        class="image-container pt8">
+
+        {% if section.settings.image == blank %}
+          <div class="demo-1 color-1 placeholder-image">
+            {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% else %}
+          {% render 'helper-image',
+             type: section.settings.image,
+             sm_render: sm_render
+             md_render: md_render,
+             lg_render: lg_render,
+             loading: loading,
+             fetchpriority: fetch_priority %}
+        {% endif %}
+      </div>
+    </article>
+  </div>
+
+  <style media="screen">
+    .text-with-image-{{ section.id }}.section-text-with-image {
+      background: -webkit-linear-gradient({{ bg_color }} 80%, var(--background) 20%);
+      color: {{ text_color }};
+    }
+    .text-with-image-{{ section.id }}.section-text-with-image p,
+    .text-with-image-{{ section.id }}.section-text-with-image a:not(.btn-border-link) {
+      font-size: {{ section.settings.text_size }}px;
+      color: {{ text_color }};
+    }
+    .text-with-image-{{ section.id }}.section-text-with-image .rte a:hover {
+      color: {{ hover_color }};
+    }
+    .text-with-image-{{ section.id }}.section-text-with-image h3 {
+      font-size: {{ section.settings.heading_size }}px;
+      color: {{ text_color }};
+    }
+    @media (min-width: 768px) {
+      .text-with-image-{{ section.id }}.section-text-with-image a,
+      .text-with-image-{{ section.id }}.section-text-with-image h3 {
+        color: {{ text_color }} !important;
+      }
+      .text-with-image-{{ section.id }}.section-text-with-image .rte a:hover {
+        color: {{ hover_color }} !important;
+      }
+      .text-with-image-{{ section.id }}.section-text-with-image .btn-border-link:before,
+      .text-with-image-{{ section.id }}.section-text-with-image .btn-border-link:after,
+      .text-with-image-{{ section.id }}.section-text-with-image .btn-border-link span:before,
+      .text-with-image-{{ section.id }}.section-text-with-image .btn-border-link span:after {
+        background: {{ text_color }};
+      }
+    }
+    @media (max-width: 767px) {
+      .text-with-image-{{ section.id }}.section-text-with-image {
+        background: -webkit-linear-gradient({{ bg_color }} 35%, var(--background) 35%);
+      }
+      .text-with-image-{{ section.id }}.section-text-with-image h3 {
+        font-size: calc({{ section.settings.heading_size }}px - ({{ section.settings.heading_size }}px * 0.15));
+      }
+      .text-with-image-{{ section.id }}.section-text-with-image p {
+        font-size: calc({{ section.settings.text_size }}px - ({{ section.settings.text_size }}px * 0.15));
+      }
+    }
+    {% if section.settings.color_header %}
+      .template-index #shopify-section-header,
+      .template-index .section-header__mobile,
+      .template-index .section-header__main-bar,
+      .template-index .navigation,
+      .template-index #mobile-search {
+        transition:  background-color 1s ease-in-out;
+        background-color: {{ bg_color }} !important;
+      }
+      .template-index .navigation__menulink:not(:hover),
+      .template-index .navigation__menuitem--dropdown[aria-expanded="true"],
+      .template-index .section-header .site-logo a,
+      .template-index ul.header__cart-links__wrapper a,
+      .template-index ul.header__cart-links__wrapper button,
+      .template-index ul.header__navigation a.dlink,
+      .template-index:not(.slideout-mobile-navigation--open) .mobile-nav__mobile-header .mobile-nav__logo-wrapper a.mobile-nav__text-logo,
+      .template-index:not(.slideout-mobile-navigation--open) .section-header__mobile_search--input::placeholder {
+        color: {{ text_color }} !important;
+      }
+      .template-index .navigation__menulink:not(:hover) svg .hover-fill {
+        fill: {{ text_color }} !important;
+      }
+      .template-index .section-header .site-logo a:hover,
+      .template-index ul.header__cart-links__wrapper a:hover,
+      .template-index ul.header__cart-links__wrapper button:hover,
+      .template-index ul.header__navigation a.dlink:hover span  {
+        color: {{ hover_color }} !important;
+      }
+      .template-index ul.header__cart-links__wrapper svg .hover-fill,
+      .template-index ul.header__navigation a.dlink svg .hover-fill,
+      .template-index:not(.slideout-mobile-navigation--open) .section-header__mobile svg .hover-fill,
+      .template-index:not(.slideout-mobile-navigation--open) .section-header__mobile_search--form svg .hover-fill {
+        fill: {{ text_color }} !important;
+      }
+      .template-index ul.header__cart-links__wrapper svg:hover .hover-fill,
+      .template-index ul.header__navigation a.dlink svg:hover .hover-fill,
+      .template-index:not(.slideout-mobile-navigation--open) .section-header__mobile svg:hover .hover-fill {
+        fill: {{ hover_color }} !important;
+      }
+      .template-index:not(.slideout-mobile-navigation--open) .mobile-header__cart-links--cart a {
+        background-color: {{ text_color }} !important;
+        color: {{ bg_color }} !important;
+      }
+      .template-index:not(.slideout-mobile-navigation--open) .section-header__mobile_search--input {
+        border-color: {{ text_color }} !important;
+        color: {{ text_color }} !important;
+      }
+    {% endif %}
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Hero image with text",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Use an image with a 3 x 4 vertical ratio for best results"
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_align",
+      "label": "Text horizontal align",
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "vertical_align",
+      "label": "Text vertical align",
+      "default": "middle",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Image with text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 22,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "color_header",
+      "label": "Match header to section colors",
+      "info": "Use this setting if this section is displayed first on the home page",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero image with text"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

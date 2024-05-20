@@ -1,0 +1,91 @@
+{% comment %} Register Template {% endcomment %}
+<section class="user-login">
+  <div class="grid__wrapper pt9 pb8">
+
+    {% render 'snip-headings', align: 'a-center', grid: 'span-12', translation: 'customer.register.title' %}
+
+    <div class="push-4 span-4 auto relative overflow-hidden">
+      {%- assign formId = 'RegisterForm' -%}
+      {% form 'create_customer', id: formId, novalidate: 'novalidate' %}
+        <div class="form grid__wrapper rg5">
+          <div class="span-12 a-left relative">
+            {% render 'snip-form-status', form: form, form_id: formId %}
+          </div>
+          <div class="span-12 a-left relative">
+            <label for="{{ formId }}-FirstName">{{ 'customer.register.first_name' | t }}</label>
+            <input type="text" name="customer[first_name]" id="{{ formId }}-FirstName" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocomplete="given-name">
+          </div>
+          <div class="span-12 a-left relative">
+            <label for="{{ formId }}-LastName">{{ 'customer.register.last_name' | t }}</label>
+            <input type="text" name="customer[last_name]" id="{{ formId }}-LastName" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocomplete="family-name">
+          </div>
+          <div class="span-12 a-left relative">
+            <label for="{{ formId }}-email">{{ 'customer.register.email' | t }}</label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="{{ formId }}-email"
+              class="{% if form.errors contains 'email' %} input--error{% endif %}"
+              {% if form.email %} value="{{ form.email }}"{% endif %}
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              aria-required="true"
+              {%- if form.errors contains 'email' -%}
+                class="input--error"
+                aria-invalid="true"
+                aria-describedby="{{ formId }}-email-error"
+              {%- endif -%}
+            >
+            {%- if form.errors contains 'email' -%}
+              <span id="{{ formId }}-email-error" class="input-error-message inline-block mt1">
+                <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                {% render 'snip-icons',
+                   wrapper: '.user-login',
+                   type: 'apollo',
+                   icon: 'error',
+                   size: '20px',
+                   classes: 'mr3',
+                   fill: 'var(--error-msg-dark)',
+                   hover: 'var(--error-msg-dark)' %}
+                <span class="sm">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="span-12 a-left relative">
+            <label for="{{ formId }}-password">{{ 'customer.register.password' | t }}</label>
+            <input
+              type="password"
+              name="customer[password]"
+              id="{{ formId }}-password"
+              class="{% if form.errors contains 'password' %} input--error{% endif %}"
+              aria-required="true"
+              {%- if form.errors contains 'password' -%}
+                class="input--error"
+                aria-invalid="true"
+                aria-describedby="{{ formId }}-password-error"
+              {%- endif -%}
+            >
+            {%- if form.errors contains 'password' -%}
+              <span id="{{ formId }}-password-error" class="input-error-message inline-block mt1">
+                {% render 'snip-icons',
+                   wrapper: '.user-login',
+                   type: 'apollo',
+                   icon: 'error',
+                   size: '20px',
+                   classes: 'mr3',
+                   fill: 'var(--error-msg-dark)',
+                   hover: 'var(--error-msg-dark)' %}
+                <span class="sm">{{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}.</span>
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="span-12 a-left relative">
+            <input class="button btn-secondary mr3" type="submit" value="{{ 'customer.register.submit' | t }}"/>
+            <a class="button " href="{{ routes.account_login_url }}">{{ 'customer.recover_password.cancel' | t }}</a>
+          </div>
+        </div>
+       {% endform %}
+    </div>
+  </div>
+</section>

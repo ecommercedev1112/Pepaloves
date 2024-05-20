@@ -1,0 +1,19 @@
+/* ---- Shop the look section ---- */
+
+.shop__thelook .stl__image {
+    position: relative;
+}
+.shop__thelook .stl__image .image-inner img { width: 100%; }
+.shop__thelook .stl__image .product-container { position: relative;}
+
+.product-hotspot .prod-image {
+    flex: 0 0 70px;
+}
+.product-hotspot .product-details {
+    flex: 0 0 170px;
+    margin-left: 10px;
+}
+.product-hotspot .product-details p,
+.product-hotspot .product-details .price {
+    font-size: var(--font-size-sm);
+}

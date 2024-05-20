@@ -1,0 +1,34 @@
+.section-img-txt-overlay__bg-img {
+  background-size: cover;
+  background-position: center center;
+}
+
+.section-img-txt-overlay__wrapper .onboard {
+  height: unset;
+  width: auto;
+  overflow: hidden;
+}
+
+.section-img-txt-overlay svg.placeholder-svg {
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 767px) {
+  .section-img-txt-overlay svg.placeholder-svg {
+    width: auto !important;
+  }
+
+  .section-img-txt-overlay__caption {
+    width: 95%;
+  }
+
+  .section-img-txt-overlay__heading {
+    font-size: 25px;
+  }
+
+  .section-img-txt-overlay__subheading {
+    font-size: 14px;
+  }
+}

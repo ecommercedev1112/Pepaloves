@@ -1,0 +1,204 @@
+{% comment %} Logo List Logic {% endcomment %}
+{%- liquid
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign sm_render = 'calc(100vw / 2)'
+  case section.blocks.size
+    when 1, 0
+      assign md_render = '100vw'
+      assign lg_render = '100vw'
+      assign full_class = 'span-12 auto'
+      assign block_width = 'span-12 auto sm-span-6'
+    when 2
+      assign md_render = 'calc(100vw / 2)'
+      assign lg_render = 'calc(1600px / 2)'
+      assign full_class = 'span-12 auto'
+      assign block_width = 'span-6 auto sm-span-6'
+    when 3
+      assign md_render = 'calc(100vw / 3)'
+      assign lg_render = 'calc(1600px / 3)'
+      assign full_class = 'span-12 auto'
+      assign block_width = 'span-4 auto sm-span-6'
+    when 4
+      assign md_render = 'calc(100vw / 4)'
+      assign lg_render = 'calc(1600px / 4)'
+      assign full_class = 'span-12 auto'
+      assign block_width = 'span-3 auto sm-span-6'
+    when 5
+      assign md_render = 'calc(100vw / 5)'
+      assign lg_render = 'calc(1600px / 5)'
+      assign wrapper_class = 'wrapper-fifths'
+      assign full_class = 'span-12 span-full-fifths'
+      assign block_width = 'span-3 auto sm-span-6'
+    when 6
+     assign full_class = 'span-12 auto'
+     assign block_width = 'span-2 auto sm-span-6'
+  endcase
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+
+{% comment %} Logo List Template {% endcomment %}
+<div
+  class="section-logo-list logo-list-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="logo-list"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper {{ wrapper_class }} rg0 sm-rg2 cg4 sm-cg2">
+    {% render 'snip-headings', align: heading_align, classes: 'section-logo-list__section-heading', grid: full_class, heading: section.settings.title %}
+
+    {% for block in section.blocks %}
+      <article class="{{ block_width }} v-center {% if block.type == 'spacer' %}logo-list--spacer{% endif %}" {{ block.shopify_attributes }}>
+        <div class="section-logo-list__item">
+          {%- unless block.type == 'spacer' -%}
+            {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+              {% if block.settings.image != blank %}
+                {% render 'helper-image',
+                   type: block.settings.image,
+                   sm_render: sm_render
+                   md_render: md_render,
+                   lg_render: lg_render,
+                   loading: loading,
+                   fetchpriority: fetch_priority %}
+              {% else %}
+                <div class="onboard demo-1 ">
+                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {% endif %}
+            {% if block.settings.link != blank %}</a>{% endif %}
+          {%- endunless -%}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+  {% if section.blocks.size == 0 %}
+    {% render 'onboard-no-blocks' %}
+  {% endif %}
+  <style>
+    @media (max-width: 767px) {
+      .logo-list--spacer { display: none; }
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Logo list",
+  "tag": "section",
+  "class": "dynamic-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "As seen in"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": [
+
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo list",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ],
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

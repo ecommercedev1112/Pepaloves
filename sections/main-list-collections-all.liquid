@@ -1,0 +1,73 @@
+{% comment %} All Collections Assets {% endcomment %}
+<link rel="preload" href="{{ 'component-collection-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-collection-grid.css' | asset_url }}"></noscript>
+
+{% comment %} All Collections Logic {% endcomment %}
+{%- liquid
+
+  case section.settings.items_per_row
+  when 4
+    assign items_per_row = 'span-3 sm-span-6 auto'
+  when 3
+    assign items_per_row = 'span-4 sm-span-6 auto'
+  when 2
+    assign items_per_row = 'span-6 sm-span-6 auto'
+  when 1
+    assign items_per_row = 'span-12 sm-span-12'
+  endcase
+
+-%}
+
+{% comment %} All Collections Template {% endcomment %}
+<section
+  class="collection-list-template collection-list-{{ section.id }} mt4 pb9"
+  data-section-id="{{ section.id }}"
+  data-section-type="collection-grid"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper cg5 sm-cg2 rg4 sm-rg0">
+    {% render 'collection-loop',
+      collection: collection,
+      grid_items: section.settings.items_per_row,
+      items_per_row: items_per_row,
+      items_per_page: section.settings.items_per_page,
+      show_collection_image: section.settings.show_collection_image %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "All collections",
+  "settings": [
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Collections per row",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "min": 3,
+      "max": 30,
+      "step": 1,
+      "label": "Collections per page",
+      "default": 15
+    },
+    {
+      "type": "paragraph",
+      "content": "Choose a collection list section to select specific collections in a preferred order"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "info": "Will show the collection image if there is one.",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

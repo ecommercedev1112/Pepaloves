@@ -1,0 +1,100 @@
+{%- liquid
+  if varying_grid == true and index == 3 or index == 4 or index == 13 or index == 14 or index == 23 or index == 24
+    assign items_per_row = 'span-6 r-span-2 auto'
+  elsif varying_grid == true
+    assign items_per_row = 'span-3 r-span-1 auto'
+  endif
+
+  assign product_info_mobile_grid_left = 'sm-span-12'
+
+  if varying_grid == true and index == 3 or index == 6 or index == 9 or index == 12 or index == 15 or index == 18
+    assign items_per_row_mobile = 'sm-span-12 auto'
+    assign product_info_mobile_grid_left = 'sm-span-9 a-left'
+    assign product_info_mobile_grid_right = 'sm-span-3 a-right'
+  elsif varying_grid == true
+    assign items_per_row_mobile = 'sm-span-6 auto'
+    assign product_info_mobile_grid_left = 'sm-span-12 a-left'
+    assign product_info_mobile_grid_right = 'sm-span-12 a-right'
+  endif
+
+-%}
+
+<article
+  class="product-loop__item {{ carousel_slide }} {% unless carousel %}{{ items_per_row }} {{ items_per_row_mobile }}{% endunless %} relative product-loop__item--{{ settings.image_ratio }}">
+
+    <div class="product-image relative">
+      <a href="#" tabindex="-1">
+        <div class="product-loop__img-wrapper relative">
+          <div class="demo-1  box-ratio" style="padding-bottom: 100%;">
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="grid__wrapper edge pt2 cg0 sm-cg0 rg0">
+      <div class="product-loop__info-wrapper span-8 {{ product_info_mobile_grid_left }} auto">
+        {%- if settings.show_rating and index == 2 or index == 4 or index == 6 -%}
+          <div class="product__section--rating-wrapper">
+            {% liquid
+              assign rating_decimal = 0
+              assign decimal = 4 | modulo: 1
+              if decimal >= 0.3 and decimal <= 0.7
+                assign rating_decimal = 0.5
+              elsif decimal > 0.7
+                assign rating_decimal = 1
+              endif
+            %}
+            <div class="product__section-rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: 4, rating_max: 5 }}">
+              <span aria-hidden="true" class="product__section-rating-star color-icon" style="--rating: {{ 4 | floor }}; --rating-max: {{ 5 }}; --rating-decimal: {{ rating_decimal }};"></span>
+            </div>
+            <p class="product__section-rating-text caption">
+              <span aria-hidden="true">4 / 5</span>
+            </p>
+            <p class="product__section-rating-count caption">
+              <span aria-hidden="true">(4)</span>
+              <span class="visually-hidden">4 {{ "accessibility.total_reviews" | t }}</span>
+            </p>
+          </div>
+        {%- endif -%}
+
+        {% if settings.product_grid_vendor %}
+          <p class="product-loop__vendor block mb2">VENDOR</p>
+        {% endif %}
+          <p class="product-loop__title"><a href="#">Product Title</a></p>
+      </div>
+
+      <div class="product-loop__price span-4 {{ product_info_mobile_grid_right }} auto">
+        <span class="product-loop__price--sale onsale inline-block mr1">
+          {%- assign mula = index | append: '00' | plus: 2200 -%}
+          {{ mula | money }}
+        </span>
+      </div>
+    </div>
+
+  {% if settings.show_collection_swatches %}
+    <div class="product-loop__color-swatches">
+      <div class="product-loop__swatch-wrapper swatch-style--{{ settings.color_swatch_shape }} a-left sm-hide">
+        <ul class="product-loop__swatch-options">
+          <li class="product-loop__swatch color">
+            <a title="Color Swatch" href="#" tabindex="-1">
+              <span style="background-color: var(--text-color);"></span>
+            </a>
+          </li>
+          <li class="product-loop__swatch color">
+            <a title="Color Swatch" href="#" tabindex="-1">
+              <span style="background-color: var(--text-color-light);"></span>
+            </a>
+          </li>
+          <li class="product-loop__swatch color">
+            <a title="Color Swatch" href="#" tabindex="-1">
+              <span style="background-color: var(--dotted-color);"></span>
+            </a>
+          </li>
+        </ul>
+      </div><!-- .swatch -->
+
+      <p class="sm a-left lg-hide md-hide" style="color: var(--text-color-light);">3 Color(s) Available</p>
+    </div>
+  {% endif %}
+</article>

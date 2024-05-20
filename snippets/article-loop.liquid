@@ -1,0 +1,176 @@
+{% if blog == blank %}
+
+  {% for i in (1..items_per_page) %}
+  <article class="article-loop__item {{ items_per_row }} relative article_wrapper--has-image">
+    <div class="inline-block w100 mb6">
+      <a class="demo-1  inline-block mb0 w100" href="#">
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      </a>
+    </div>
+    <div class="article-loop__excerpt excerpt pt5">
+      {% if section.settings.show_date %}
+        <p class="article-loop__date has-image--true posted inline-block mb1 mr2">{{ 'now' | date: "%a, %b %d, %y" }}</p>
+      {% endif %}
+      <h2 class="post-title mb2 h3">
+        <a class="no-hover" href="#">
+          Add a title or tagline #{{ i }}
+        </a>
+      </h2>
+      <div class="article-headline">
+        {%- if section.settings.show_excerpt -%}
+        <div class="article-headline__rte">
+          <div class="rte">
+           <p>
+             Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.
+           </p>
+          </div><!-- /.rte -->
+        </div><!-- /.article-headline__rte -->
+        {%- endif -%}
+        {%- if section.settings.show_author or section.settings.show_tags -%}
+          <div class="article__rte--details mt3">
+            {%- if section.settings.show_author -%}
+              <p class="article__rte--author block">
+                {{ 'blogs.article.by' | t }} Author Name
+              </p>
+            {%- endif -%}
+
+            {%- if section.settings.show_tags -%}
+              <p class="article__rte--tags block">
+                {{ 'blogs.article.tagged' | t }}:&nbsp;
+                <a href="">Tag 1</a>,&nbsp;<a href="">Tag 2</a>,&nbsp;<a href="">Tag 3</a>
+              </p>
+            {%- endif -%}
+          </div><!-- /.article__rte--details -->
+        {%- endif -%}
+          <div class="article-headline__links">
+            <a class="blog_article-cta-link relative btn-border-link inline-block wauto" href="#">
+              <span>{{ 'blogs.article.read_more' | t }}
+              {% render 'snip-icons',
+                   wrapper: '.blog_article-cta-link',
+                   type: 'theme',
+                   icon: 'arrow-right',
+                   size: '8px',
+                   classes: 'ml3 vib-center',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}</span>
+            </a>
+            {% if blog.comments_enabled? and section.settings.show_comments %}
+              <a class="blog_article-comments-link inline-block mb0 ml3 a-right" href="#">{{ 'blogs.comments.comments_with_count' | t: count: i }}</a>
+            {% endif %}
+        </div><!-- /.article-headline__links -->
+      </div><!-- /.article-headline -->
+    </div>
+  </article>
+  {% endfor %}
+
+    
+{% else %}
+
+  {% for article in blog.articles limit: items_per_page %}
+    {%- liquid
+      assign has_image = false
+      if article.image or article.content contains '<img'
+        assign has_image = true
+      endif
+
+      assign loading = 'lazy'
+      assign fetch_priority = 'auto'
+      if section.index == 1 and forloop.index <= 3
+        assign loading = 'eager'
+        assign fetch_priority = 'high'
+      endif
+       
+    -%}
+    <article class="{{ items_per_row }} relative {% if has_image %}article_wrapper--has-image{% endif %}">
+      <div class="relative">
+        {%- if article.image -%}
+          {%- liquid
+
+            assign has_image = true
+            assign sm_render = '100vw'
+            assign md_render = 'calc(100vw / ' | append: grid_items | append: ')'
+            assign lg_render = 'calc(1600px / ' | append: grid_items | append: ')'
+
+          -%}
+          <a class="inline-block mb0 w100" href="{{ article.url }}">
+            {% render 'helper-image',
+               type: article.image,
+               sm_render: sm_render
+               md_render: md_render,
+               lg_render: lg_render,
+               loading: loading,
+               fetchpriority: fetch_priority %}
+          </a>
+        {%- elsif article.content != blank and article.content contains "<img" -%}
+          {%- assign has_image = true -%}
+          {%- assign src = article.content | split: ' src="' | last | split: '"' | first -%}
+          <a class="inline-block mb0 w100" href="{{ article.url }}">
+            <img src="{{ src }}"
+              width="{{ src.width }}"
+              height="{{ src.height }}"
+              alt="{{ article.title }}"
+              loading="{{ loading }}"
+              fetchpriority="{{ fetch_priority }}">
+          </a>
+        {%- else -%}
+          {%- assign has_image = false -%}
+        {%- endif -%}
+      </div>
+      <div class="article-loop__excerpt pt5">
+        {% if section.settings.show_date %}
+          {% assign published_at = article.published_at | date: format: 'month_date_year' %}
+          <p class="article-loop__date posted has-image--{{ has_image }} inline-block mb1 mr2">{{ published_at | date: "%a, %b %d, %y" }}</p>
+        {% endif %}
+        <h2 class="post-title mb2 h3">
+          <a class="no-hover" href="{{ article.url }}">
+            {{ article.title }}
+          </a>
+        </h2>
+        <div class="article-headline">
+          {%- if section.settings.show_excerpt -%}
+          <div class="article-headline__rte">
+            <div class="rte">
+              {{ article.excerpt_or_content | strip_html | truncatewords: 30 }}
+            </div><!-- /.rte -->
+          </div><!-- /.article-headline__rte -->
+          {%- endif -%}
+          {%- if section.settings.show_author or section.settings.show_tags -%}
+            <div class="article__rte--details mt3">
+              {%- if article.author != blank and section.settings.show_author -%}
+                <p class="article__rte--author block">
+                  {{ 'blogs.article.by' | t }} {{ article.author }}
+                </p>
+              {%- endif -%}
+
+              {%- if article.tags.size > 0 and section.settings.show_tags -%}
+                <p class="article__rte--tags block">
+                  {{ 'blogs.article.tagged' | t }}:&nbsp;
+                  {%- for tag in article.tags -%}
+                    <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %},{% endunless %}
+                  {%- endfor -%}
+                </p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <div class="article-headline__links">
+            <a class="blog_article-cta-link relative btn-border-link inline-block wauto" href="{{ article.url }}">
+              <span>{{ 'blogs.article.read_more' | t }}
+              {% render 'snip-icons',
+                   wrapper: '.blog_article-cta-link',
+                   type: 'theme',
+                   icon: 'arrow-right',
+                   size: '8px',
+                   classes: 'ml3 vib-center',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}</span>
+            </a>
+            {% if blog.comments_enabled? and section.settings.show_comments %}
+              <a class="blog_article-comments-link inline-block mb0 ml3 a-right" href="{{ article.url }}#comments">{{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}</a>
+            {% endif %}
+          </div><!-- /.article-headline__links -->
+        </div><!-- /.article-headline -->
+      </div>
+    </article>
+  {% endfor %}
+
+{% endif %}

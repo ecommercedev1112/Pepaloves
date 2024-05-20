@@ -1,0 +1,28 @@
+{
+  "sections": {
+    "banner": {
+      "type": "article-header",
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "heading_placement": "left",
+        "alignment": "a-left",
+        "color_scheme": "3",
+        "show_date": true,
+        "show_author": true
+      }
+    },
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "show_sidebar": true
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main"
+  ]
+}

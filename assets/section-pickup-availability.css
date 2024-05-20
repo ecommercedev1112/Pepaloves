@@ -1,0 +1,74 @@
+.store-availability-container {
+  animation-duration: 3s;
+  /* don't forget to set a duration! */
+}
+
+.store-availability-container .store-availability-information__title,
+.store-availability-container .store-availability-information__title .slideout__trigger-store-availability {
+  color: var(--text-color);
+  font-size: var(--font-size-sm);
+}
+
+.store-availability-container .store-availability-small-text {
+  font-size: var(--font-size);
+  font-weight: var(--main-weight);
+  text-transform: initial;
+}
+
+.store-availability-container .store-availability__pickup-details {
+  color: var(--text-color);
+  font-size: var(--font-size);
+  font-weight: var(--main-weight);
+}
+
+.store-availability-container .store-availability-information {
+  display: flex;
+  margin-left: 5px;
+}
+
+.store-availability-container .store-availability-information-container {
+  margin-left: 5px;
+  text-align: left;
+}
+
+.store-availabilities__modal .store-availabilities-modal__variant-title {
+  font-size: var(--font-size);
+}
+
+.store-availabilities__modal .store-availability-list__address p,
+.store-availabilities__modal .store-availability-list__phone {
+  margin: 0 !important;
+  font-size: var(--font-size);
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: var(--main-spacing);
+}
+
+.store-availabilities__modal .store-availabilities-list {
+  overflow: auto;
+}
+
+.store-availabilities__modal .store-availabilities-modal__close {
+  margin-bottom: 13px;
+  cursor: pointer;
+}
+
+.store-availabilities__modal .store-availability-list__item>p {
+  font-size: var(--font-size);
+  margin-bottom: 0;
+}
+
+/* Forge Custom */
+.store-availability__pickup-details {
+  background: var(--forms-bg);
+  padding: var(--space-4);
+}
+
+.store-availability-information__title,
+.store-availability-information__content {
+  display: flex;
+}
+.store-availability-information__content {
+  flex-direction: column;
+}

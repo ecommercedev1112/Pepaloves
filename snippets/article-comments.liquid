@@ -1,0 +1,89 @@
+<div id="comments" class="article__comments--wrapper grid__wrapper edge cg0">
+    <div class="posted-comments span-6 auto pr7">
+      <h3>{{ 'blogs.comments.comments_with_count' | t: count: number_of_comments }}</h3>
+      {% paginate article.comments by 10 %}
+        {% if article.comments.size > 0 %}
+          <ul class="span-12">
+            {% for comment in article.comments %}
+              <li class="border py3 px3 mb3">
+                <div class="grid__wrapper edge">
+                  <div class="gravatar span-2 sm-span-2 auto">
+                    <img src="//www.gravatar.com/avatar/{{ comment.email | remove: ' ' | strip_newlines | downcase | md5 }}" width="40" height="40" loading="lazy" alt="{{ comment.author }}">
+                  </div>
+                  <div class="comment-details span-10 sm-span-10 auto">
+                    <h4 class="mb1">{{ comment.author }}</h4>
+                    <small class="mb2">{{ comment.created_at | date: "%B %d, %Y" }}</small>
+                    {{ comment.content }}
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul><!-- /.span-12 -->
+        {% endif %}
+        {% if paginate.pages > 1 %}
+          {%- render 'snip-pagination', paginate: paginate -%}
+        {% endif %}
+      {% endpaginate %}
+    </div>
+    <div id="comment-form" class="article__comments--form span-6 auto">
+      {% form article %}
+        <h3>{{ 'blogs.comments.title' | t }}</h3>
+        <!-- Check if a comment has been submitted in the last request, and if yes display an appropriate message -->
+      {% if form.posted_successfully? %}
+        {% if blog.moderated? %}
+          <div class="note note-success mb2">
+            <div class="inline-block v-center w10">
+              {% render 'snip-icons',
+                 wrapper: '.article__comments--form',
+                 type: 'apollo',
+                 icon: 'checkmark',
+                 size: '20px',
+                 classes: 'mr3',
+                 fill: 'var(--success-msg-dark)',
+                 hover: 'var(--success-msg-dark)' %}
+            </div>
+            <p class="sm inline-block v-center mb0 w80">{{ 'blogs.comments.success_moderated' | t }}</p>
+          </div>
+        {% else %}
+          <div class="note note-success mb2">
+            <div class="inline-block v-center w10">
+              {% render 'snip-icons',
+                 wrapper: '.article__comments--form',
+                 type: 'apollo',
+                 icon: 'checkmark',
+                 size: '20px',
+                 classes: 'mr3',
+                 fill: 'var(--success-msg-dark)',
+                 hover: 'var(--success-msg-dark)'
+              %}
+            </div>
+            <p class="sm inline-block v-center mb0 w80">{{ 'blogs.comments.success' | t }}</p>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% render 'snip-form-error', form: form %}
+
+      <div class="grid__wrapper edge form">
+        <div class="span-12">
+          <label for="comment_author">{{ 'blogs.comments.your_name' | t }}</label>
+          <input type="text" id="comment_author" name="comment[author]" size="40" value="{{ form.author }}" placeholder="{{ 'blogs.comments.your_name' | t }}" class="{% if form.errors contains 'author' %}input-error{% endif %}" />
+        </div>
+        <div class="span-12">
+          <label for="comment_email">{{ 'blogs.comments.your_email' | t }}</label>
+          <input type="text" id="comment_email" name="comment[email]" size="40" value="{{ form.email }}" placeholder="{{ 'blogs.comments.your_email' | t }}" class="{% if form.errors contains 'email' %}input-error{% endif %}" />
+        </div>
+        <div class="span-12">
+          <label for="comment_body">{{ 'blogs.comments.your_comment' | t }}</label>
+          <textarea id="comment_body" name="comment[body]" cols="40" rows="5" placeholder="{{ 'blogs.comments.your_comment' | t }}" class="{% if form.errors contains 'body' %}input-error{% endif %}">{{ form.body }}</textarea>
+        </div>
+        <div class="span-12">
+          {% if blog.moderated? %}
+            <p class="hint">{{ 'blogs.comments.moderated' | t }}</p>
+          {% endif %}
+            <input type="submit" class="btn-secondary button" value="{{ 'blogs.comments.post' | t }}" />
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>

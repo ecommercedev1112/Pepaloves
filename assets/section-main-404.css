@@ -1,0 +1,18 @@
+.template-404 h1 {
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: var(--heading-spacing);
+}
+
+@media (min-width: 768px) {
+  .template-404 p {
+    font-size: var(--font-size);
+  }
+}
+
+@media (max-width: 767px) {
+  .template-404 p {
+    font-size: var(--font-size);
+  }
+}

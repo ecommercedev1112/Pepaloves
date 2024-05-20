@@ -1,0 +1,172 @@
+{% comment %} Featured Blog Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-featured-blog.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-featured-blog.css' | asset_url }}"></noscript>
+
+{% comment %} Featured Blog Logic {% endcomment %}
+{%- liquid
+
+  assign blog = blogs[section.settings.blog]
+  assign items_per_page = section.settings.items_per_page
+
+  assign articles = blogs[blog.handle].articles
+  case articles.size
+  when 1
+    assign items_per_row = 'span-6 auto sm-span-12'
+  when 2
+    assign items_per_row = 'span-6 auto sm-span-12'
+  else
+    assign items_per_row = 'span-4 auto sm-span-12'
+  endcase
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+-%}
+
+{% comment %} Featured Blog Template {% endcomment %}
+<div
+  class="section-featured-blog featured-blog-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-blog"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper">
+    {% render 'snip-headings', align: heading_align, classes: 'section-featured-blog__section-heading', url: blog.url, grid: 'span-12' %}
+  </div>
+  <div class="grid__wrapper section-featured-blog__wrapper rg9">
+    {% render 'article-loop',
+        blog: blog,
+        grid_items: 'span-6 auto',
+        items_per_row: items_per_row,
+        items_per_page: items_per_page %}
+  </div>
+  <style>
+    .featured-blog-{{ section.id }} .article-loop__excerpt {
+      text-align: {{ section.settings.text_align }};
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Featured blog",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Blog"
+    },
+    {
+      "id": "blog",
+      "type": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Posts shown",
+      "default": 3
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show published date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Show comment count",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured blog",
+      "settings": {
+        "blog": "News"
+      }
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

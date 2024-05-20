@@ -1,0 +1,54 @@
+{% for option in product.options %}
+
+  {%- liquid
+    assign option_handle = option | handle
+    assign option_index = forloop.index0
+
+    assign values = ''
+
+    assign swatch_count = 0
+    assign show_sizes = false
+    if settings.show_collection_sizes
+      assign show_sizes = true
+    endif
+  -%}
+
+  {% capture downcased_option %}{{ option | downcase }}{% endcapture %}
+  {% if downcased_option contains 'color' or downcased_option contains 'colors' or downcased_option contains 'colour' or downcased_option contains 'colours' or downcased_option contains 'metal' or downcased_option contains 'cor' or downcased_option contains 'farbe' or downcased_option contains 'couleur' %}
+
+  <div class="product-loop__swatch-wrapper swatch-style--{{ settings.color_swatch_shape }} a-left sm-hide{% if show_sizes %} mb1{% endif %}">
+    <ul data-option-index="{{ option_index }}" class="product-loop__swatch-options {{ option_handle }}">
+      {% for variant in product.variants %}
+        {%- liquid
+              assign variant_image_url = blank
+              if variant.image
+                assign variant_image_url =  variant.image | image_url: width: 100
+              endif
+              assign value = variant.options[option_index]
+          -%}
+        {% capture wrapped_value %},{{ value }},{% endcapture %}
+        {% unless values contains wrapped_value %}
+        {%- assign swatch_count = swatch_count | plus: 1 -%}
+        <li data-option-title="{{ value | escape }}" class="product-loop__swatch color {{ value | handle }}">
+          <a title="{{ value | escape }}" href="{{ variant.url | within: collection }}" tabindex="-1">
+            {% liquid
+              assign swatch_img = null
+              assign swatch_color_name = value | handle | append: '.png'
+
+              if images[swatch_color_name] != blank
+                assign swatch_img = swatch_color_name | file_url
+              endif
+
+            %}
+            <span data-swatch-color="{{ value | handleize }}" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({% if color_swatch_style == 'variant-image' %}{{ variant_image_url }}{% elsif swatch_img != null %}{{ swatch_img }}{% endif %});"></span>
+          </a>
+        </li>
+        {% capture values %}{{ values }}{{ wrapped_value }}{% endcapture %}
+        {% endunless %}
+      {% endfor %}
+    </ul>
+  </div><!-- .swatch -->
+
+  <p class="sm a-left lg-hide md-hide" style="color: var(--text-color-light);">{{ swatch_count }} Color(s) Available</p>
+  {% endif %}
+{% endfor %}

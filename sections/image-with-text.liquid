@@ -1,0 +1,261 @@
+{% comment %} Image with text logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if section.settings.iwt_layout == 'image_left'
+    assign img_order = 1
+    assign text_order = 2
+  else
+    assign img_order = 2
+    assign text_order = 1
+  endif
+
+  assign text_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-text)'
+  assign bg_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-bg)'
+
+  if section.settings.full_width
+    assign full_width =  'edge'
+  endif
+
+-%}
+
+{% comment %} Image with text template {% endcomment %}
+<div
+  class="global__section section-image-with-text image-with-text-{{ section.id }} {{ section_padding }} grid__wrapper {{ full_width }} relative cg0 rg0"
+  data-section-id="{{ section.id }}"
+  data-section-type="image-with-text"
+  data-section-loaded="false">
+
+    <article class="image span-6 auto" style="order: {{ img_order }};">
+      {% if section.settings.iwt_image != blank %}
+        <div class="background-image"></div>
+      {% else %}
+        <div class="onboard demo-1 color-1">
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% endif %}
+    </article>
+    <article class="info span-6 auto relative" style="order: {{ text_order }};">
+      <div class="info__inner-wrapper px10 sm-px6 sm-py8">
+        {% if section.settings.iwt_heading != blank %}
+          <h2 class="animate--text">{{ section.settings.iwt_heading }}</h2>
+        {% endif %}
+        {% if section.settings.iwt_text != blank %}
+          <div class="rte mb0 animate--text delay--1">
+            {{ section.settings.iwt_text }}
+          </div>
+        {% endif %}
+        {% if section.settings.iwt_link != blank %}
+          <a class="btn-border-link inline-block mt4 mb0 animate--text delay--2 relative" href="{{ section.settings.iwt_link }}">
+            <span>{{ section.settings.iwt_button }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </article>
+    <style>
+      {%- unless section.settings.color_scheme == 'none' -%}
+        #shopify-section-{{ section.id }} {
+          background-color: {{ bg_color }};
+        }
+        .image-with-text-{{ section.id }} .info__inner-wrapper h2,
+        .image-with-text-{{ section.id }} .info__inner-wrapper p,
+        .image-with-text-{{ section.id }} .info__inner-wrapper a {
+          color: {{ text_color }};
+        }
+        .image-with-text-{{ section.id }} .btn-border-link:before,
+        .image-with-text-{{ section.id }} .btn-border-link:after {
+          background: {{ text_color }};
+        }
+        .image-with-text-{{ section.id }} .btn-border-link span:before,
+        .image-with-text-{{ section.id }} .btn-border-link span:after {
+          background: {{ text_color }};
+        }
+      {%- endunless -%}
+
+      @media (min-width: 768px) {
+        .image-with-text-{{ section.id }} article {
+          height: {{ section.settings.iwt_section_height }}px;
+        }
+        .image-with-text-{{ section.id }} .info__inner-wrapper {
+          position:absolute;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+      .image-with-text-{{ section.id }} .background-image {
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-position: {{ section.settings.iwt_image.presentation.focal_point }};
+      }
+      @media (min-width: 1367px) {
+        .image-with-text-{{ section.id }} .background-image {
+          background-image: url({{ section.settings.iwt_image | image_url: width: 975 }});
+        }
+      }
+      @media (min-width: 769px) and (max-width: 1366px) {
+        .image-with-text-{{ section.id }} .background-image {
+          height: {{ section.settings.iwt_section_height }}px;
+          background-image: url({{ section.settings.iwt_image | image_url: width: 700 }});
+        }
+      }
+      @media (min-width: 412px) and (max-width: 768px) {
+        .image-with-text-{{ section.id }} .background-image {
+          height: {{ section.settings.iwt_section_height }}px;
+          background-image: url({{ section.settings.iwt_image | image_url: width: 770 }});
+        }
+      }
+      @media (max-width: 411px) {
+        .image-with-text-{{ section.id }} .background-image {
+          height: {{ section.settings.iwt_section_height }}px;
+          background-image: url({{ section.settings.iwt_image | image_url: width: 420 }});
+        }
+      }
+    </style>
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "iwt_image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "iwt_layout",
+      "label": "Layout",
+      "default": "image_left",
+      "options": [
+        {
+          "value": "image_left",
+          "label": "Image left"
+        },
+        {
+          "value": "image_right",
+          "label": "Image right"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "iwt_heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "iwt_text",
+      "label": "Text",
+      "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+    },
+    {
+      "type": "text",
+      "id": "iwt_button",
+      "default": "Button",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "iwt_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "3",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "iwt_section_height",
+      "min": 200,
+      "max": 1200,
+      "step": 100,
+      "unit": "px",
+      "label": "Section height",
+      "default": 500
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

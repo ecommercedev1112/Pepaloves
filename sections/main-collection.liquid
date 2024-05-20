@@ -1,0 +1,332 @@
+{% comment %} Collection Page Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-collection.css' | asset_url }}"></noscript>
+<link rel="preload" href="{{ 'component-product-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}"></noscript>
+
+{% comment %} Collection Page Logic {% endcomment %}
+{%- liquid
+  assign page_limit = section.settings.items_per_page
+
+  assign has_sortby = false
+  for block in section.blocks
+    if block.type == 'sort_by'
+      assign has_sortby = true
+    endif
+  endfor
+
+  assign has_filter = false
+  for block in section.blocks
+    if block.type == 'filter'
+      assign has_filter = true
+    endif
+  endfor
+
+  assign filter_count = 0
+  for filter in collection.filters
+    if filter.type == 'price_range'
+      if filter.min_value.value != nil or filter.max_value.value != nil
+        assign filter_count = 1
+      endif
+    endif
+
+    assign filter_count = filter_count | plus: filter.active_values.size
+  endfor
+
+  if section.settings.collection_image and collection.image
+    assign collection_image = true
+    assign header_width = 'span-8'
+  else
+    assign collection_image = false
+    assign header_width = 'span-8 push-2'
+  endif
+
+  assign empty_collection = true
+  if collection.products.size > 0
+    assign empty_collection = false
+  endif
+
+  case section.settings.items_per_row
+  when 4
+    assign items_per_row = 'span-3 sm-span-6 auto'
+  when 3
+    assign items_per_row = 'span-4 sm-span-6 auto'
+  when 2
+    assign items_per_row = 'span-6 sm-span-6 auto'
+  when 1
+    assign items_per_row = 'span-12 sm-span-12'
+  endcase
+
+  if settings.varying_grid
+    assign grid_type = 'reverse cg6 sm-cg4 rg6 sm-rg6'
+  else
+    assign grid_type = 'cg6 sm-cg4 rg9 sm-rg6'
+  endif
+
+-%}
+
+{% comment %} Collection Page Template {% endcomment %}
+<section
+  id="collection-page"
+  class="collection__page--wrapper collection-template collection-{{ section.id }} mt6 pb9 no-section-animation"
+  data-section-id="{{ section.id }}"
+  data-section-type="collection"
+  data-asset-url="{{ 'section-main-collection.js' | asset_url }}"
+  data-collection-handle="{{ collection.handle }}"
+  data-empty="{{ empty_collection }}">
+
+  {% paginate collection.products by page_limit %}
+    <div id="CollectionProductGrid" class="grid__wrapper">
+      {%- if collection.description != blank -%}
+        <div class="collection__page--description collection-description {{ header_width }} auto mt2 pb2 a-center">
+          <div class="rte">
+            {{ collection.description | remove: "[banner]" }}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if collection_image -%}
+       <div class="collection__page--image span-4 auto">
+         {% liquid
+           if section.index == 1
+             assign loading = 'eager'
+             assign fetch_priority = 'high'
+           endif
+          %}
+         {% render 'helper-image',
+            type: collection.image,
+            sm_render: '100vw'
+            md_render: 'calc((100vw / 12) * 4)',
+            lg_render: 'calc((1600px / 12) * 4)',
+            loading: loading,
+            fetchpriority: fetch_priority %}
+       </div>
+     {%- endif -%}
+
+     <div class="collection__page--topbar span-12 auto grid__wrapper edge rg0">
+      <div class="span-5 sm-span-12 auto a-left v-end">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'filter' -%}
+              <button class="button js-slideout-open js-menu-toggle mr3"
+                data-wau-slideout-target="collection-filters"
+                data-slideout-direction="left"
+                data-toggle-menu="filter"
+                aria-label="Open filters"
+                {% if collection.all_products_count >= 1000 %}style="display: none;"{% endif %}
+                tabindex="0" type="button" name="button">
+                <span class="no-pe mr5">{{ 'collections.filter.filter' | t }}</span>
+               {% render 'snip-icons',
+                   wrapper: '.collection__page--topbar',
+                   classes: 'a-right'
+                   type: 'theme',
+                   icon: 'filter',
+                   size: '5px',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}
+              </button>
+            {%- when 'sort_by' -%}
+              <button class="button js-slideout-open js-menu-toggle mr3"
+                data-wau-slideout-target="collection-filters"
+                data-slideout-direction="left"
+                data-toggle-menu="sort"
+                aria-label="Open filters"
+                tabindex="0" type="button" name="button">
+                <span class="no-pe mr5">{{ 'collections.filter.sort_title' | t }}</span>
+                {% render 'snip-icons',
+                   wrapper: '.collection__page--topbar',
+                   classes: 'a-right'
+                   type: 'apollo',
+                   icon: 'down-carrot',
+                   size: '5px',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}
+              </button>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+      <div class="span-7 sm-hide auto a-right v-end">
+        {%- if section.settings.show_count -%}
+          <p class="topbar__count mb0">{{ 'collections.general.item_count.other' | t: count: collection.products_count }}</p>
+        {%- endif -%}
+      </div>
+      {%- if filter_count > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'filter' -%}
+              <div class="filter-drawer__filtering__results js-filters-reset span-12 auto">
+                <h3 class="visually-hidden">{{ 'collections.filter.filtering_by_label' | t }}</h3>
+                <ul class="current_filters mb0 mt4">
+                  {%- for filter in collection.filters -%}
+                    {%- for value in filter.active_values -%}
+                      <li class="current_filters--filter">
+                        <a class="js-current-filter" href="{{ value.url_to_remove }}">
+                          {{ value.label | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                    {% if filter.type == "price_range" %}
+                      {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                        <li class="current_filters--filter">
+                          <a class="js-current-filter" href="{{ filter.url_to_remove }}">
+                            {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {% endif %}
+                  {%- endfor -%}
+                  <li><a class="current_filters--clear js-current-filter ml4" href="{{ collection.url }}">{{ 'collections.filter.clear_all' | t }}</a></li>
+                </ul>
+              </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+      {%- if has_sortby or has_filter -%}
+        <aside class="slideout slideout__drawer-left py8 px7"
+          data-wau-slideout="collection-filters" id="slideout-collection-filters">
+          <form id="CollectionFiltersForm" data-filters>
+            {% render 'snip-filter-drawer',
+              has_sortby: has_sortby,
+              has_filter: has_filter,
+              type: collection,
+              filter_count: filter_count %}
+          </form>
+        </aside>
+      {%- endif -%}
+
+      {%- if collection.products.size >= 1 -%}
+        <div class="collection span-12" id="main-collection-product-grid" data-id="{{ section.id }}">
+          <div class="product-loop grid__wrapper {{ grid_type }} edge">
+            {% if collection != blank %}
+              {% for product in collection.products limit: page_limit %}
+                {% liquid
+                  assign loading = 'lazy'
+                  assign fetch_priority = 'auto'
+                  if section.index == 1
+                    if settings.varying_grid and forloop.index <= 3
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    elsif forloop.index <= section.settings.items_per_row
+                      assign loading = 'eager'
+                      assign fetch_priority = 'high'
+                    endif
+                  endif
+                 %}
+                {% render 'product-loop',
+                  collection: collection,
+                  product: product,
+                  grid_items: section.settings.items_per_row,
+                  product_info_align: 'a-center',
+                  items_per_row: items_per_row,
+                  varying_grid: settings.varying_grid,
+                  index: forloop.index,
+                  loading: loading,
+                  fetchpriority: fetch_priority %}
+              {% endfor %}
+              <div class="span-12 auto">
+              {% unless collection.products_count <= page_limit %}
+                {% render 'snip-pagination', paginate: paginate %}
+              {% endunless %}
+              </div>
+            {% else %}
+              {% for i in (1..3) %}
+                {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                {% assign placeholder = 'product-' | append: current %}
+                <article class="product-listing relative {{ settings.image_ratio }} a-center">
+                  <div class="product-image">
+                    <div class="reveal relative demo-1 ">
+                      {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                  </div>
+                  <div class="product-info mt1 pb1 px1 sm-px0 a-center">
+                    <small class="product-vendor block mb1">Product Vendor</small>
+                    <p class="product-title">Product Title</p>
+                    <p class="product-subtitle mb0">Product subtitle</p>
+                  </div>
+                </article>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="collection collection--empty span-12 relative" id="main-collection-product-grid" data-id="{{ section.id }}">
+          <div class="js-coll-empty-filter py10 a-center" style="display: none;">
+            <h2>{{ 'collections.filter.no_results' | t }}</h2>
+            <p>{{ 'collections.filter.use_fewer_filters' | t }}</p>
+            <a class="button btn-outlined" href="{{ collection.url }}">{{ 'collections.filter.clear_all' | t }}</a>
+          </div>
+          <div class="js-coll-empty py10 a-center no-js-show">
+            <h2>{{ 'collections.general.empty' | t }}</h2>
+            <p>{{ 'collections.general.no_matches' | t }}</p>
+            <a class="button btn-outlined" href="{{ routes.collections_url }}">{{ 'collections.general.all_collections' | t }}</a>
+          </div>
+        </div>
+      {%- endif -%}
+   </div>
+   {% endpaginate %}
+</section>
+
+{% schema %}
+{
+  "name": "Collection page",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "min": 2,
+      "max": 48,
+      "step": 1,
+      "label": "Products per page",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Products per row",
+      "default": 3,
+      "info": "Will not apply if offset product grid enabled."
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_image",
+      "label": "Show collection image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_savings",
+      "label": "Show savings amount",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sort_by",
+      "name": "Sort by",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "filter",
+      "name": "Filters",
+      "limit": 1,
+      "settings": [
+
+      ]
+    }
+  ]
+}
+{% endschema %}

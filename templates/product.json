@@ -1,0 +1,265 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a": {
+          "type": "product_title",
+          "settings": {
+          }
+        },
+        "43192c80-a930-4433-aa13-e083c64b206d": {
+          "type": "product_sku",
+          "settings": {
+          }
+        },
+        "43a00949-a2f3-4d11-9bc8-0764850b060f": {
+          "type": "product_prices",
+          "settings": {
+          }
+        },
+        "e6875fb5-148a-4e09-8072-5d5b4b2a1765": {
+          "type": "product_form",
+          "settings": {
+          }
+        },
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84": {
+          "type": "product_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "35d7ec12-af12-4b47-9421-dd981a44a735": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "GUÍA DE TALLAS",
+            "show_border_label": true,
+            "popup_metafield_content": "<p><strong>TALLA XS (cms)<\/strong><\/p><p>Pecho: 85-90  Cintura: 65-70  Caderas: 90-95<\/p><p><strong>TALLA S (cms)<\/strong><\/p><p>Pecho: 90-95  Cintura: 70-75  Caderas: 95-100 <\/p><p><strong>TALLA M (cms)<\/strong><\/p><p>Pecho: 95-100  Cintura: 75-80  Caderas: 100-105 <\/p><p><strong>TALLA L (cms)<\/strong><\/p><p>Pecho: 100-105  Cintura: 80-85. Caderas: 105-110 <\/p><p><strong>TALLA XL (cms)<\/strong><\/p><p>Pecho: 105-110  Cintura: 85-90  Caderas: 110-115<\/p><p><strong><br\/>Como coger tus medidas:<\/strong><\/p><p>Busto: Mide alrededor de la parte más ancha de tu busto, asegurándote de mantener la cinta paralela al suelo. <\/p><p>Cintura: Mide alrededor de la parte más estrecha de tu cintura, justo por encima del ombligo. <\/p><p>Caderas: Mide alrededor de la parte más ancha de tus caderas, haciendo asegúrese de mantener la cinta paralela al suelo. Utilice estas medidas como guía general y no dude en contactarnos si tiene alguna pregunta o inquietud sobre cómo encontrar el tamaño adecuado para usted.<\/p>",
+            "page": "guia-de-tallas"
+          }
+        },
+        "2d587658-77a6-434d-9116-80bb5399a066": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "GASTOS DE ENVÍOS",
+            "show_border_label": true,
+            "popup_metafield_content": "<p><strong>Envíos a España (Excepto Canarias, Ceuta y Melilla*) <\/strong><\/p><p>Envío GRATIS en pedidos superiores a 40 euros. Pedidos inferiores tienen un coste de 2,99 euros. 24\/48 (Lunes-Viernes no festivos) <\/p><p><strong>Canarias, Ceuta y Melilla*<\/strong><\/p><p>Envío GRATIS en pedidos superiores a 70 euros. Pedidos inferiores tienen un coste de 9,90 euros. Entrega en 4-6 días laborables (Lunes-Viernes) <\/p><p><strong>Envíos a la unión europea <\/strong><\/p><p>Envío GRATIS en pedidos superiores a 100 euros. Pedidos inferiores tienen un coste de 11,90 euros. Tiempo de entrega: Francia, Alemania, Bélgica, Dinamarca, Holanda, Luxemburgo, Austria, Italia: 3-4 días laborables (Lunes-Viernes). Eslovaquia, Eslovenia, Estonia, Hungría, Irlanda: 4-6 días laborables (Lunes-Viernes). Suecia, Finlandia, Noruega: 5-7 días laborables (Lunes-Viernes) <\/p><p><strong>* Tasas e impuestos <\/strong><\/p><p>Todos los pedidos a las Islas Canarias, Ceuta, Melilla y Gibraltar pueden estar sujetos a tasas adicionales e impuestos de aduanas. Estas tasas son calculadas por las autoridades aduaneras. Desafortunadamente, no tenemos control sobre esas tasas y no podemos estimar el coste que tendrá, ya que cada política aduanera y las tasas varían según el país. Una buena idea es contactar con tu oficina aduanera local para consultar las tasas actualizadas antes de hacer tu pedido, y así evitar costes inesperados. Hacemos todo lo posible por incluir la documentación necesaria y cualquier otro requerimiento de las autoridades locales para la entrega en destino. Por esta razón, es posible que necesitemos alguna información personal (Nº de DNI, pasaporte o carnet de conducir) para la documentación internacional. Para cualquier duda, puedes ponerte en contacto con nuestro equipo de la eShop escribiendo a onlineshop@pepaloves.com.<\/p>",
+            "page": ""
+          }
+        },
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "DEVOLUCIONES",
+            "show_border_label": true,
+            "popup_metafield_content": "<p>Si no estás satisfecho con tu compra, puedes devolver o cambiar los artículos que pediste en un plazo máximo de 30 días. <\/p><p>El envío de vuelta a nuestros almacenes correrá de tu cuenta, puedes hacerlo con la compañía de transporte que prefieras. <\/p><p>Si solicitas un cambio, el envío de la nueva prenda irá a nuestro cargo, no tendrás que pagar gastos de envío. <\/p><p>Envíanos las prendas que quieras devolver o cambiar a nuestra dirección: <\/p><p>Pepaloves (OnlineShop) Calle Manuel Franco Cubeiro, 32 29620 - Torremolinos  - Málaga <\/p><p>El paquete debe incluir las prendas en perfecto estado y etiquetadas junto con el formulario de devoluciones. <a href=\"https:\/\/drive.google.com\/file\/d\/1IBz5BqMQZZ2cO9cdTM7PZKUTS2SC3yhi\/view\" title=\"https:\/\/drive.google.com\/file\/d\/1IBz5BqMQZZ2cO9cdTM7PZKUTS2SC3yhi\/view\">PINCHA AQUÍ PARA DESCARGAR EL FORMULARIO DE CAMBIOS\/DEVOLUCIONES.<\/a> <\/p><p>Una vez recibamos tu paquete procederemos al reembolso o cambio de prendas que hayas solicitado en el formulario. Si tienes cualquier duda puedes consultar con nosotros a través de las siguientes vías: <\/p><p>-Teléfono 952 378 067 <\/p><p>-WhatsApp en el móvil 686 070 185 <\/p><p>-Correo onlineshop@pepaloves.com<\/p>",
+            "page": ""
+          }
+        },
+        "ab17f510-012b-488a-97e2-a6ebf60e7732": {
+          "type": "text_metafield",
+          "settings": {
+            "label": "PERSONALIZATION",
+            "content": ""
+          }
+        },
+        "6de531da-e00e-4bb6-bda9-87b7d806e825": {
+          "type": "richtext_metafield",
+          "settings": {
+            "label": "MATERIALS",
+            "content": ""
+          }
+        },
+        "1623dfe7-5ea9-47ab-a679-594538b7e404": {
+          "type": "product_description",
+          "settings": {
+          }
+        },
+        "fa93d867-94af-47af-999d-e5cf78771b56": {
+          "type": "social_share",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a",
+        "43192c80-a930-4433-aa13-e083c64b206d",
+        "43a00949-a2f3-4d11-9bc8-0764850b060f",
+        "e6875fb5-148a-4e09-8072-5d5b4b2a1765",
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84",
+        "35d7ec12-af12-4b47-9421-dd981a44a735",
+        "2d587658-77a6-434d-9116-80bb5399a066",
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741",
+        "ab17f510-012b-488a-97e2-a6ebf60e7732",
+        "6de531da-e00e-4bb6-bda9-87b7d806e825",
+        "1623dfe7-5ea9-47ab-a679-594538b7e404",
+        "fa93d867-94af-47af-999d-e5cf78771b56"
+      ],
+      "settings": {
+        "full_width": true,
+        "gallery_style": "scroll_gallery",
+        "gallery_grid_size": "normal",
+        "thumbnail_position": "right",
+        "click_to_enlarge": true,
+        "enable_video_looping": false
+      }
+    },
+    "1642796129844cd818": {
+      "type": "collage",
+      "blocks": {
+        "16427961293651b8a6-1": {
+          "type": "text",
+          "settings": {
+            "heading": "Our Collections",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Shop All Collections",
+            "link_url": "",
+            "alignment": "a-left",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "16427961293651b8a6-0": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true,
+            "mobile_full": false
+          }
+        },
+        "16427961293651b8a6-2": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true,
+            "mobile_full": false
+          }
+        },
+        "f5a62b97-c552-4915-b030-9636a520c23c": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Learn More",
+            "link_url": "shopify:\/\/pages\/contact",
+            "alignment": "a-left",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": false,
+            "padding_bottom": true
+          }
+        }
+      },
+      "block_order": [
+        "16427961293651b8a6-1",
+        "16427961293651b8a6-0",
+        "16427961293651b8a6-2",
+        "f5a62b97-c552-4915-b030-9636a520c23c"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "grid_gap": 20,
+        "section_padding": "none"
+      }
+    },
+    "product-details": {
+      "type": "main-product-details",
+      "blocks": {
+        "d1fafd22-8a86-4284-a422-a96fa258731c": {
+          "type": "product_inventory",
+          "settings": {
+          }
+        },
+        "6f1f3608-16f5-4316-ae3c-31752e9d85c5": {
+          "type": "product_weight",
+          "settings": {
+          }
+        },
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3": {
+          "type": "product_type",
+          "settings": {
+          }
+        },
+        "d12e3a4e-453a-4362-8144-0ffcf29965d7": {
+          "type": "product_sku",
+          "settings": {
+          }
+        },
+        "87ab27ea-e73d-437e-897b-28d30835ed8b": {
+          "type": "product_vendor",
+          "settings": {
+          }
+        },
+        "a739078f-4d98-4349-a399-c18c2f011733": {
+          "type": "product_collection",
+          "settings": {
+          }
+        },
+        "5f5b2366-2c2d-4f21-993f-edcc396ef367": {
+          "type": "product_richtext",
+          "settings": {
+            "metafield_label": "Gold Care",
+            "metafield_content": ""
+          }
+        },
+        "2dabc49f-deb1-47c0-a5e6-121e913d4e16": {
+          "type": "product_richtext",
+          "settings": {
+            "metafield_label": "Stone Care",
+            "metafield_content": ""
+          }
+        }
+      },
+      "block_order": [
+        "d1fafd22-8a86-4284-a422-a96fa258731c",
+        "6f1f3608-16f5-4316-ae3c-31752e9d85c5",
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3",
+        "d12e3a4e-453a-4362-8144-0ffcf29965d7",
+        "87ab27ea-e73d-437e-897b-28d30835ed8b",
+        "a739078f-4d98-4349-a399-c18c2f011733",
+        "5f5b2366-2c2d-4f21-993f-edcc396ef367",
+        "2dabc49f-deb1-47c0-a5e6-121e913d4e16"
+      ],
+      "disabled": true,
+      "settings": {
+        "outer_border": true,
+        "container_width": "66",
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "items_per_row": 4,
+        "items_shown": 9,
+        "title": "Related Products",
+        "subheading": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+        "link_text": "",
+        "link_url": "",
+        "text_position": "left",
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1642796129844cd818",
+    "product-details",
+    "product-recommendations"
+  ]
+}

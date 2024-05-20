@@ -1,0 +1,93 @@
+.section-background-video .background-video__outer-wrapper {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.section-background-video .vidbg-container {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.section-background-video .vidbg-container video {
+  position: absolute;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.25s opacity ease-in-out;
+  max-width: none;
+  opacity: 0;
+}
+
+.section-background-video .vidbg-overlay,
+.section-background-video .background-video__placeholder-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.section-background-video .background-video__placeholder-image {
+  z-index: -1;
+  overflow: hidden;
+}
+
+.section-background-video .background-video__placeholder-image .box-ratio img {
+  object-fit: cover;
+}
+
+.section-background-video .background-video__caption {
+  position: absolute;
+  width: fit-content;
+  text-align: center;
+  padding: var(--space-7);
+  max-width: 600px;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+ .section-background-video .background-video__caption {
+    width: 90%;
+  }
+}
+
+/* YouTube & Vimeo Styles */
+:root {
+  --video-width: 100vw;
+  --video-height: 100vh;
+}
+@media (min-aspect-ratio: 16/9) {
+  :root {
+    --video-height: 56.25vw;
+  }
+}
+@media (max-aspect-ratio: 16/9) {
+  :root {
+    --video-width: 177.78vh;
+  }
+}
+.section-background-video .alternative-iframe--wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+.section-background-video .alternative-iframe--wrapper iframe {
+  border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--video-width);
+  height: var(--video-height);
+  transform: translate(-50%, -60%);
+   z-index: -1;
+}

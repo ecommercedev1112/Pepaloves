@@ -1,0 +1,420 @@
+{% comment %} Product Details Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-product-details.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-product-details.css' | asset_url }}"></noscript>
+
+{% comment %} Product Details Logic {% endcomment %}
+{%- liquid
+
+  assign collection_handle_namespace = product.type | handle | append: "-details"
+  assign current_variant = product.selected_or_first_available_variant
+  assign has_app = false
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+
+  case section.settings.container_width
+  when "50"
+    assign grid_width = 'span-6 push-3 auto'
+  when "66"
+    assign grid_width = 'span-8 push-2 auto'
+  when "83"
+    assign grid_width = 'span-10 push-1 auto'
+  when "100"
+    assign grid_width = 'span-12 auto px10'
+  endcase
+
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app = true
+      assign grid_width = 'span-6 auto pr10 sm-pr0 dv-px5'
+    endif
+  endfor
+
+-%}
+
+{% comment %} Product Details Template {% endcomment %}
+<section class="global__section section__product-details product-bottom grid__wrapper product__section--details edge {{ section_padding }}"
+data-product-details
+data-section-id="{{ section.id }}"
+data-section-type="product-details"
+data-section-loaded="false">
+  <div class="section__product-details--inner grid__wrapper span-12 auto py8 cg9 sm-cg0 edge">
+    {%- if has_app -%}
+      <article class="span-6 auto v-start sm-span-12 pl10 dv-pl0">
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            {%- assign has_app = true -%}
+            <div class="product__section--app" {{ block.shopify_attributes }}>
+              {% render block %}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </article>
+    {%- endif -%}
+    <article class="{{ grid_width }} v-start sm-span-12">
+      <ul class="product-template__details-table mb0 {%- if has_app -%}{%- endif -%}">
+        {% if product.handle contains 'gift-card' and product.description != blank %}
+          <li class="description rte">
+            <p class="label mb3">{{ 'products.product.product_info' | t }}</p>
+            {% if product.description contains '[#' %}
+              {{ product.description | split: '[#' | first }}
+            {% else %}
+              {{ product.description }}
+            {% endif %}
+          </li>
+        {% endif %}
+
+        {%- unless product.handle contains 'gift-card' -%}
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'product_description' -%}
+                {% if product.description != blank %}
+                  <li class="description rte" {{ block.shopify_attributes }}>
+                    <h3 class="mb6">{{ 'products.product.product_info' | t }}</h3>
+                    {% if product.description contains '[#' %}
+                      {{ product.description | split: '[#' | first }}
+                    {% else %}
+                      {{ product.description }}
+                    {% endif %}
+                  </li>
+                {% endif %}
+              {%- when 'product_text' -%}
+                {%- unless block.settings.metafield_content == blank -%}
+                  <li class="detail" {{ block.shopify_attributes }}>
+                    {%- if block.settings.metafield_label != blank -%}
+                      <p class="label">{{ block.settings.metafield_label | escape }}:</p>
+                    {%- endif -%}
+                    <p class="item custom_metafield {% if block.settings.metafield_label == blank %}full_grid{% endif %}">
+                      {{ block.settings.metafield_content }}
+                    </p>
+                  </li>
+                {%- endunless -%}
+              {%- when 'product_richtext' -%}
+                {%- unless block.settings.metafield_content == blank -%}
+                  <li class="detail" {{ block.shopify_attributes }}>
+                    {%- if block.settings.metafield_label != blank -%}
+                      <p class="label">{{ block.settings.metafield_label | escape }}:</p>
+                    {%- endif -%}
+                    <div class="item custom_metafield rte mb0 {% if block.settings.metafield_label == blank %}full_grid{% endif %}">
+                      {{ block.settings.metafield_content }}
+                    </div>
+                  </li>
+                {%- endunless -%}
+              {%- when 'product_tag_groups' -%}
+                {% for link in linklists[collection_handle_namespace].links %}
+                  {% assign tag_group = link.title %}
+                  {% assign tag_group_collection = product.type %}
+                  {% assign product_tags = product.tags | downcase %}
+
+                  {% assign tags = "" %}
+                  {% for sub_link in link.links %}
+                    {% assign tag = sub_link.title | downcase %}
+                     {% if product_tags contains tag %}
+                      {% assign tags = tag | split: ", " %}
+                     {% endif %}
+                  {% endfor %}
+
+                  {% if tags.size > 0 %}
+                    <li class="detail" {{ block.shopify_attributes }}>
+                      <p class="label">{{ tag_group }}:</p>
+                      <p class="item">
+                        {% for sub_link in link.links %}
+                          {% assign tag = sub_link.title | downcase %}
+                           {% if product_tags contains tag %}
+                             <a href="/collections/{{ tag_group_collection | handle }}/{{ sub_link.title | handleize }}">
+                             {{ sub_link.title }}<span>,</span></a>
+                           {% endif %}
+                        {% endfor %}
+                      </p>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              {%- when 'product_inventory' -%}
+                <li class="detail" {{ block.shopify_attributes }}>
+                  <p class="label">{{ 'products.product.inventory' | t }}:</p>
+                  <p class="item variant_inventory">
+                    {{ current_variant.inventory_quantity }}
+                  </p>
+                </li>
+              {%- when 'product_weight' -%}
+                <li class="detail" {{ block.shopify_attributes }}>
+                  <p class="label">{{ 'products.product.weight' | t }}:</p>
+                  <p class="item js-variant-weight">
+                    {{ current_variant.weight | weight_with_unit }}
+                  </p>
+                </li>
+              {%- when 'product_type' -%}
+                {% if product.type != blank %}
+                  <li class="detail" {{ block.shopify_attributes }}>
+                    <p class="label">{{ 'products.product.product_type' | t }}:</p>
+                    <p class="item">
+                      {{ product.type }}
+                    </p>
+                  </li>
+                {% endif %}
+              {%- when 'product_sku' -%}
+                <li class="detail" {{ block.shopify_attributes }}>
+                  <p class="label">{{ 'products.product.sku' | t }}:</p>
+                  <p class="item js-variant-sku">
+                    {{ current_variant.sku }}
+                  </p>
+                </li>
+              {%- when 'product_vendor' -%}
+                {% if product.vendor != blank %}
+                  <li class="detail" {{ block.shopify_attributes }}>
+                    <p class="label">{{ 'products.product.brand' | t }}:</p>
+                    <p class="item">
+                      {{ product.vendor }}
+                    </p>
+                  </li>
+                {% endif %}
+              {%- when 'product_collection' -%}
+                {% if collection %}
+                  <li class="detail" {{ block.shopify_attributes }}>
+                    <p class="label">{{ 'products.product.collection' | t }}:</p>
+                    <p class="item">
+                      {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+                      {{ collection.title | link_to: url }}
+                    </p>
+                  </li>
+                {% endif %}
+            {%- endcase -%}
+          {%- endfor -%}
+        {%- endunless -%}
+      </ul>
+    </article>
+  </div>
+  <style>
+    {% unless section.settings.color_scheme == 'none' %}
+      .product__section--details,
+      .product__section--details h2,
+      .product__section--details h3,
+      .product__section--details li,
+      .product__section--details p,
+      .product__section--details a,
+      .product__section--details .spr-summary.rte {
+        color: var(--scheme-{{ section.settings.color_scheme }}-text) !important;
+      }
+      .product__section--details a:hover {
+        color: var(--scheme-{{ section.settings.color_scheme }}-hover) !important;
+      }
+      .product__section--details .product-template__details-table,
+      .product__section--details .product-template__details-table ul,
+      .product__section--details .product-template__details-table li {
+        border-color: var(--scheme-{{ section.settings.color_scheme }}-text) !important;
+      }
+      .section__product-details--inner {
+        background-color: var(--scheme-{{ section.settings.color_scheme }}-bg) !important;
+      }
+    {% endunless %}
+    {% unless section.settings.outer_border %}
+      .product__section--details .product-template__details-table {
+        border: unset;
+      }
+    {% endunless %}
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "Product details",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "outer_border",
+      "label": "Container border",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "container_width",
+      "label": "Container width",
+      "default": "83",
+      "options": [
+        {
+          "value": "50",
+          "label": "50%"
+        },
+        {
+          "value": "66",
+          "label": "66%"
+        },
+        {
+          "value": "83",
+          "label": "83%"
+        },
+        {
+          "value": "100",
+          "label": "100%"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "metafield_label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "metafield_content",
+          "label": "Content",
+          "info": "Add a [new custom metafield](https://dev-underground-foodie.myshopify.com/admin/metafields/product/create) then insert dynamic source."
+        }
+      ]
+    },
+    {
+      "type": "product_richtext",
+      "name": "Richtext",
+      "settings": [
+        {
+          "type": "text",
+          "id": "metafield_label",
+          "label": "Label",
+          "info": "Optional"
+        },
+        {
+          "type": "richtext",
+          "id": "metafield_content",
+          "label": "Content",
+          "info": "Add a [new custom metafield](/admin/metafields/product/create) then insert dynamic source."
+        }
+      ]
+    },
+    {
+      "type": "product_tag_groups",
+      "name": "Tag groups",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Show groups of product tags which link to all products with the same tags. Follow our [guide](https://www.weareunderground.com/blogs/foodie-support/foodie-product-pages) to get tag groups set up."
+        }
+      ]
+    },
+    {
+      "type": "product_inventory",
+      "name": "Inventory",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_weight",
+      "name": "Weight",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_type",
+      "name": "Type",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_sku",
+      "name": "Sku",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_vendor",
+      "name": "Vendor",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "product_collection",
+      "name": "Collection",
+      "limit": 1,
+      "settings": [
+
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

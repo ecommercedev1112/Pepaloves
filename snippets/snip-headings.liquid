@@ -1,0 +1,25 @@
+{%- if section.settings.title != blank -%}
+  {%- unless grid == blank -%}<div class="{{ grid }}">{%- endunless -%}
+    <h2 id="{{ section.settings.title | handleize }}" class="section-heading {{ align }} mt2 pb2 {{ classes }}">
+      {%- unless url == blank -%}<a href="{{ url }}">{%- endunless -%}
+        {{ section.settings.title | escape }}
+      {%- unless url == blank -%}</a>{%- endunless -%}
+    </h2>
+  {%- unless grid == blank -%}</div>{%- endunless -%}
+{% elsif heading != blank %}
+  {%- unless grid == blank -%}<div class="{{ grid }}">{%- endunless -%}
+    <h2 id="{{ section.settings.title | handleize }}" class="section-heading {{ align }} mt2 pb2 {{ classes }}">
+      {%- unless url == blank -%}<a href="{{ url }}">{%- endunless -%}
+        {{ heading }}
+      {%- unless url == blank -%}</a>{%- endunless -%}
+    </h2>
+  {%- unless grid == blank -%}</div>{%- endunless -%}
+{% elsif translation != blank %}
+  {%- unless grid == blank -%}<div class="{{ grid }}">{%- endunless -%}
+    <h2 id="{{ section.settings.title | handleize }}" class="section-heading {{ align }} mt2 pb2 {{ classes }}">
+      {%- unless url == blank -%}<a href="{{ url }}">{%- endunless -%}
+        {{ translation | t }}
+      {%- unless url == blank -%}</a>{%- endunless -%}
+    </h2>
+  {%- unless grid == blank -%}</div>{%- endunless -%}
+{%- endif -%}

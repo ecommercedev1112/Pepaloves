@@ -1,0 +1,21 @@
+@media (max-width: 767px) {
+  .section-txt-cols__inner-wrapper {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin-right: 20px;
+    margin-left: 20px;
+    padding: 0;
+  }
+
+  .section-txt-cols__item {
+    flex: 0 0 auto;
+    width: 270px !important;
+    margin-right: 15px !important;
+  }
+}
+
+.section-txt-cols__block-heading {
+  word-break: break-all;
+}

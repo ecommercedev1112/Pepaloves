@@ -1,0 +1,34 @@
+{% comment %} Announcement Bar Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-announcement-bar.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-announcement-bar.css' | asset_url }}"></noscript>
+
+{% comment %} Announcement Bar Logic {% endcomment %}
+{%- liquid
+  if section.settings.show_cart_links_in_announcement_bar
+    assign grid_width = 'span-9 a-left'
+  else
+    assign grid_width = 'span-12 a-center'
+  endif
+-%}
+{% comment %} Announcement Template {% endcomment %}
+{% if section.settings.announcement_text != blank %}
+  <div class="section-top-bar__wrapper sm-hide js-top-bar py1"
+  data-section-id="{{ section.id }}"
+  data-section-type="announcement-bar">
+  <div class="grid__wrapper cg0">
+    <div class="{{ grid_width }} auto rte mb0">
+      {{ section.settings.announcement_text }}
+    </div>
+  </div>
+  <style>
+    .section-top-bar__wrapper a,
+    .section-top-bar__wrapper a span,
+    .section-top-bar__wrapper p {
+      color: var(--announcement-text);
+      font-size: {{ section.settings.announcement_text_size }}px !important;
+      margin-bottom: 0;
+      margin-top: 1px;
+    }
+  </style>
+  </div>
+{% endif %}

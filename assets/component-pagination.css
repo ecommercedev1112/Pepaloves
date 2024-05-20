@@ -1,0 +1,31 @@
+/* Pagination */
+.pagination .page-number {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: transparent;
+  border-color: transparent;
+  font-size: var(--font-size);
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin: 0 5px;
+}
+
+@media (max-width:767px) {
+  .pagination .page-number {
+    font-size: var(--font-size);
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+  }
+}
+
+.pagination .page-number.current,
+.pagination .page-number:hover {
+  color: var(--button-text);
+  background-color: var(--button-bg);
+}
+
+

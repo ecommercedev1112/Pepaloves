@@ -1,0 +1,96 @@
+{% comment %} Banner Image Logic {% endcomment %}
+{%- liquid
+
+  assign section_banner = false
+
+  if section.settings.image != blank
+    assign section_banner = true
+  endif
+
+  if section.settings.full_width
+    assign full_width =  'edge'
+  endif
+
+  if section.settings.image == blank and template contains 'article' and article.image != blank
+    assign section_banner = true
+  endif
+
+  assign sm_render = '100vw'
+  assign md_render = '100vw'
+  assign lg_render = '100vw'
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+
+-%}
+
+{% comment %} Banner Image Template {% endcomment %}
+{%- if section_banner -%}
+  <div class="global__section section__banner-{{ section.id }} mt0 grid__wrapper {{ full_width }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="banner-image"
+  data-section-loaded="false">
+    <div class="section__banner-image span-12 auto">
+      {%- if section.settings.image == blank and template contains 'article' and article.image != blank -%}
+        {% render 'helper-image',
+           type: article.image,
+           sm_render: sm_render
+           md_render: md_render,
+           lg_render: lg_render,
+           loading: loading,
+           fetchpriority: fetch_priority %}
+      {%- else -%}
+        {% render 'helper-image',
+           type: section.settings.image,
+           sm_render: sm_render
+           md_render: md_render,
+           lg_render: lg_render,
+           loading: loading,
+           fetchpriority: fetch_priority %}
+      {%- endif -%}
+    </div>
+    <style>
+      .section__banner-{{ section.id }} .box-ratio {
+        padding-bottom: {{ section.settings.banner_height }}px !important;
+      }
+      .section__banner-{{ section.id }} .box-ratio img {
+        object-fit: cover;
+        object-position: {{ section.settings.image.presentation.focal_point }};
+        height: {{ section.settings.banner_height }}px !important;
+      }
+    </style>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Banner image",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "1920px x 600px recommended"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "min": 200,
+      "max": 600,
+      "step": 100,
+      "unit": "px",
+      "label": "Banner height",
+      "default": 400
+    }
+  ]
+}
+{% endschema %}

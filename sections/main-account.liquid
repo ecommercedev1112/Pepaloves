@@ -1,0 +1,61 @@
+{% comment %} Customer Account Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-customers.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-customers.css' | asset_url }}"></noscript>
+
+{% comment %} Customer Account Template {% endcomment %}
+<section class="customer-account pt10 pb8"
+  data-section-id="{{ section.id }}"
+  data-section-type="customer-account"
+  data-section-loaded="false">
+  <div class="grid__wrapper narrow cg9 sm-cg0">
+    <h1 class="visually-hidden">{{ 'customer.account.title' | t }}</h1>
+    <div class="span-3 auto">
+      {%- render 'snip-customers-sidebar' -%}
+    </div>
+    <div class="span-9 auto">
+      <div class="account-orders">
+        <h3 class="a-left border-bottom mb0 pb2">{{ 'customer.orders.title' | t }}</h3>
+
+        {% if customer.orders.size != 0 %}
+          {% paginate customer.orders by 20 %}
+            <table class"responsive-table mb2">
+              <thead>
+                <tr>
+                  <th class="order_number">{{ 'customer.orders.order_number' | t }}</th>
+                  <th class="date">{{ 'customer.orders.date' | t }}</th>
+                  <th class="payment_status">{{ 'customer.orders.payment_status' | t }}</th>
+                  <th class="fulfillment_status">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                  <th class="total">{{ 'customer.orders.total' | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in customer.orders %}
+                <tr class="{% cycle 'odd', 'even' %} {% if order.cancelled %}cancelled_order{% endif %}">
+                  <td>{{ order.name | link_to: order.customer_url }}</td>
+                  <td><span>{{ order.created_at | date: "%b %d, %Y" }}</span></td>
+                  <td><span class="status_{{ order.financial_status }}">{{ order.financial_status }}</span></td>
+                  <td><span class="status_{{ order.fulfillment_status }}">{{ order.fulfillment_status }}</span></td>
+                  <td>{{ order.total_price | money }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            {%- if paginate.pages > 1 -%}
+              {% render 'snip-pagination', paginate: paginate %}
+            {%- endif -%}
+          {% endpaginate %}
+        {% else %}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Main account",
+  "settings": [
+  ]
+}
+{% endschema %}

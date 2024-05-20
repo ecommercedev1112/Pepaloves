@@ -1,0 +1,402 @@
+{%- liquid
+  assign text_color = 'var(--scheme-' | append: section.settings.mobile_nav_scheme | append: '-text)'
+  assign bg_color = 'var(--scheme-' | append: section.settings.mobile_nav_scheme | append: '-bg)'
+  assign hover_color = 'var(--scheme-' | append: section.settings.mobile_nav_scheme | append: '-hover)'
+
+  if section.settings.enable_sticky
+    assign sticky = 'stickynav'
+    assign sticky_js = 'js-stickynav'
+  endif
+
+  if section.settings.header_layout == 'logo_left'
+   assign mob_lay = 'left'
+  else
+   assign mob_lay = 'right'
+  endif
+
+-%}
+
+{% comment %} Mobile Header Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-mobile-navigation.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-mobile-navigation.css' | asset_url }}"></noscript>
+<link rel="preload" href="{{ 'component-accordions.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-accordions.css' | asset_url }}"></noscript>
+<link rel="preload" href="{{ 'component-slideouts.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-slideouts.css' | asset_url }}"></noscript>
+<link rel="preload" href="{{ 'component-modals.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-modals.css' | asset_url }}"></noscript>
+
+{% comment %} Mobile Header {% endcomment %}
+<section
+  class="section-header__mobile mobile-nav__mobile-header {{ sticky }} lg-hide l0 z5 pt2 pb2 js-mobile-header relative"
+  data-section-id="{{ section.id }}"
+  data-asset-url="{{ 'section-mobile-navigation.js' | asset_url }}"
+  data-asset-preload="true"
+  data-section-type="mobile-header">
+  {%- capture mobile_cart_link -%}
+     <li class="mobile-header__cart-links--cart cart-link relative">
+        {% if settings.cart_type == 'page_only' %}
+          <a class="{% if mob_lay == 'left' %}mr2{% endif %}" aria-label="{{ 'general.header.cart' | t }}" href="{{ routes.cart_url }}">
+            <span class="js-cart-count">{{ cart.item_count }}</span>
+          </a>
+        {%- else -%}
+          {%- liquid
+            if settings.cart_type == 'drawer'
+              assign cart_classes = 'js-slideout-open'
+              assign cart_settings = 'data-wau-slideout-target="ajax-cart" data-slideout-direction="right"'
+            elsif settings.cart_type == 'modal_cart'
+              assign cart_classes = 'js-modal-open'
+              assign cart_settings = 'data-wau-modal-target="ajax-cart"'
+            endif
+          -%}
+          <div class="slideout__trigger--open lh0">
+            <a class="js-mini-cart-trigger {{ cart_classes }} {% if mob_lay == 'left' %}mr2{% endif %}"
+              {{ cart_settings }}
+              aria-label="Open cart"
+              href="{{ routes.cart_url }}">
+                <span class="js-cart-count">{{ cart.item_count }}</span>
+            </a>
+          </div>
+        {%- endif -%}
+      </li>
+   {%- endcapture -%}
+  {%- capture mobile_nav_link -%}
+    <li class="mobile-header__cart-links--nav relative">
+      <div class="slideout__trigger--open mobile-header--open">
+        <button class="slideout__trigger-mobile-menu js-slideout-open btn-as-link" data-wau-slideout-target="mobile-navigation" data-slideout-direction="top" aria-label="Open navigation" tabindex="0" type="button" name="button">
+          {% render 'snip-icons',
+             wrapper: '.section-header__mobile',
+             type: 'theme',
+             icon: 'menu-bars',
+             size: '32px',
+             classes: 'mt0 mr0 mb0 ml0',
+             fill: 'var(--header-text)',
+             hover: 'var(--header-hover)' %}
+        </button>
+      </div>
+    </li>
+  {%- endcapture -%}
+  <article id="mobile-menu" class="grid__wrapper narrow mb1 pt1 pb1">
+    {%- if section.settings.header_layout == 'logo_left' -%}
+      <div class="site-logo mobile-nav__logo-wrapper span-8 md-span-8 sm-span-8 auto a-left v-center shrink-wrap">
+        {% if section.settings.logo != blank %}
+          <a class="mobile-nav__img-logo inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}">{{ section.settings.logo | image_url: width: 800 | image_tag: loading: 'eager', fetchpriority: 'high' }}</a>
+        {% else %}
+          <a class="mobile-nav__text-logo inline-block v-center m0" href="{{ routes.root_url }}">{{ shop.name }}</a>
+        {% endif %}
+      </div>
+      <ul class="span-4 md-span-4 sm-span-4 auto a-right v-center list-style-none mb0 inline-block">
+       {{ mobile_cart_link }}
+       {{ mobile_nav_link }}
+      </ul>
+    {%- else -%}
+      <ul class="span-4 md-span-4 sm-span-4 auto a-left v-center list-style-none mb0 inline-block">
+        {{ mobile_nav_link }}
+      </ul>
+      <div class="site-logo mobile-nav__logo-wrapper span-4 md-span-4 sm-span-4 auto a-center v-center shrink-wrap">
+        {% if section.settings.logo != blank %}
+          <a class="mobile-nav__img-logo inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}">{{ section.settings.logo | image_url: width: 800 | image_tag: loading: 'eager', fetchpriority: 'high' }}</a>
+        {% else %}
+          <a class="mobile-nav__text-logo inline-block v-center m0" href="{{ routes.root_url }}">{{ shop.name }}</a>
+        {% endif %}
+      </div>
+      <ul class="span-4 md-span-4 sm-span-4 auto a-right v-center list-style-none mb0 inline-block">
+        {{ mobile_cart_link }}
+      </ul>
+    {%- endif -%}
+
+    {% style %}
+      .mobile-nav__mobile-header .mobile-nav__logo-wrapper a.mobile-nav__text-logo {
+        font-size: {{ section.settings.logo_size }}px !important;
+        word-break: break-word;
+        font-family:  var(--heading-family);
+        font-weight:  var(--heading-weight);
+      }
+      .mobile-nav__mobile-header .mobile-nav__logo-wrapper a.mobile-nav__img-logo {
+        max-width: {{ section.settings.logo_max_width }}% !important;
+      }
+      #mobile-slideout {
+        background-color: {{ bg_color }};
+        z-index: 15;
+      }
+    {% endstyle %}
+  </article>
+</section>
+<div class="clear js-clear-element"></div>
+
+{% comment %} Mobile Search {% endcomment %}
+{%- if section.settings.show_searchbox -%}
+  {%- unless template contains 'search' -%}
+    <section id="mobile-search" class="grid__wrapper narrow lg-hide py3 relative">
+      <form class="section-header__mobile_search--form span-12 auto" action="{{ routes.search_url }}" method="get">
+       <label class="visually-hidden" for="q">{{ 'general.search.placeholder' | t }}</label>
+       <input
+          class="section-header__mobile_search--input mb0 no-bg-color"
+          type="text"
+          name="q"
+          placeholder="{{ 'general.search.placeholder' | t }}"/>
+        <button type="submit" class="button btn-as-link section-header__mobile_search--submit" aria-label="{{ 'general.search.placeholder' | t }}">
+          {% render 'snip-icons',
+             wrapper: '.section-header__mobile_search--submit',
+             type: 'theme',
+             icon: 'search',
+             size: '16px',
+             classes: 'mr0',
+             fill: text_color,
+             hover: hover_color %}
+        </button>
+      </form>
+    </section>
+  {%- endunless -%}
+{%- endif -%}
+
+{% comment %} Mobile Navigation Slideout {% endcomment %}
+<aside id="mobile-slideout" class="slideout slideout__drawer-left" data-wau-overlay="false" data-wau-slideout="mobile-navigation" id="slideout-mobile-navigation">
+  <div class="slideout__trigger--close mobile-header--close">
+    <button class="slideout__trigger-mobile-navigation js-slideout-close btn-as-link" data-slideout-direction="top" aria-label="Close navigation" tabindex="0" type="button" name="button">
+      {% render 'snip-icons',
+         wrapper: '.section-header__mobile',
+         type: 'theme',
+         icon: 'close',
+         size: '18px',
+         classes: 'mt0 mr0 mb0 ml0',
+         fill: 'var(--header-text)',
+         hover: 'var(--header-hover)' %}
+    </button>
+  </div>
+  <div
+  class="mobile-nav__wrapper no-section-animation">
+
+    <div class="mobile-nav__menu-blocks pt0">
+      {% if section.settings.main_nav != blank %}
+        <div class="mobile-nav__mobile-menu-wrapper px6">
+
+          {% assign unique_id = section.id | slice: 0, 7 %}
+          {% assign mobile_menu_allow_multiple = false %}
+
+          <ul class="js-accordion js-accordion-mobile-nav c-accordion c-accordion--mobile-nav c-accordion--outer__wrapper c-accordion--{{ unique_id }}"
+            id="c-accordion--mobile"
+            {% if mobile_menu_allow_multiple %}data-accordion-allow-multiple{% endif %}>
+
+          {% assign menu = linklists[section.settings.main_nav] %}
+
+          {%- render 'snip-linklist', menu: menu, text_color: text_color, hover_color: hover_color -%}
+
+          {% if shop.customer_accounts_enabled %}
+            <hr class="links--divider mt4 mb4">
+            {% if customer %}
+              <li class="c-accordion__top-level">
+                <a class="js-accordion-link c-accordion__link mb0" href="{{ routes.account_url }}">
+                  {{ 'general.header.account' | t }}
+                </a>
+              </li>
+              <li class="c-accordion__top-level">
+                <a class="js-accordion-link c-accordion__link mb0" href="{{ routes.account_logout_url }}">
+                  {{ 'general.header.logout' | t }}
+                </a>
+              </li>
+            {% else %}
+              <li class="c-accordion__top-level">
+                <a class="js-accordion-link c-accordion__link mb0" href="{{ routes.account_login_url }}">{{ 'general.header.login' | t }}</a>
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+
+        </div>
+      {% endif %}
+      {% if section.settings.menu_image != blank %}
+        <div class="grid__wrapper narrow py8">
+          <div class="mobile-nav__img-wrapper span-12 auto relative">
+            {%- if section.settings.menu_image_url -%}<a href="{{ section.settings.menu_image_url }}">{%- endif -%}
+              {% render 'helper-image',
+               type: section.settings.menu_image,
+               sm_render: '360px'
+               md_render: '360px',
+               lg_render: '360px' %}
+              {%- if section.settings.menu_image_text -%}
+                <p class="h2 absolute-center">{{ section.settings.menu_image_text }}</p>
+              {%- endif -%}
+            {%- if section.settings.menu_image_url -%}</a>{%- endif -%}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    {% style %}
+      #slideout-mobile-navigation,
+      #slideout-mobile-navigation .mobile-nav__mobile-header,
+      .mobile-nav__wrapper .c-accordion__second-level-wrapper {
+        background-color: {{ bg_color }} !important;
+      }
+      body.slideout-mobile-navigation--open .section-header__mobile,
+      body.slideout-mobile-navigation--open #mobile-search {
+        background-color: {{ bg_color }} !important;
+      }
+      #slideout-mobile-navigation .mobile-nav__mobile-header svg .hover-fill,
+      .slideout-mobile-navigation--open #shopify-section-mobile-header .section-header__mobile svg .hover-fill,
+      .slideout-mobile-navigation--open #shopify-section-mobile-header .section-header__mobile_search--form svg .hover-fill,
+      .slideout-mobile-navigation--open #shopify-section-mobile-header .mobile-nav__mobile-header svg .hover-fill {
+        fill: {{ text_color }} !important;
+      }
+      .section-header__mobile_search--form {
+        border-color: {{ text_color }} !important;
+      }
+      #slideout-mobile-navigation .mobile-nav__mobile-header svg:hover .hover-fill,
+      .slideout-mobile-navigation--open #shopify-section-mobile-header .section-header__mobile svg:hover .hover-fill,
+      .slideout-mobile-navigation--open #shopify-section-mobile-header .mobile-nav__mobile-header svg:hover .hover-fill {
+        fill: {{ hover_color }} !important;
+      }
+      .mobile-nav__wrapper input::placeholder,
+      .slideout-mobile-navigation--open .section-header__mobile_search--input::placeholder  {
+        color: {{ text_color }} !important;
+        opacity: 1;
+      }
+      .mobile-nav__wrapper input:-ms-input-placeholder {
+        color: {{ text_color }} !important;
+        opacity: 1;
+      }
+      .mobile-nav__wrapper input::-ms-input-placeholder {
+        color: {{ text_color }} !important;
+        opacity: 1;
+      }
+
+      .mobile-nav__wrapper .mobile-nav__logo-wrapper a,
+      .mobile-nav__wrapper .c-accordion__link,
+      .slideout-mobile-navigation--open .mobile-nav__mobile-header .mobile-nav__logo-wrapper a.mobile-nav__text-logo,
+      .slideout-mobile-navigation--open .section-header__mobile_search--input {
+        color: {{ text_color }} !important;
+      }
+      .slideout-mobile-navigation--open .mobile-header__cart-links--cart a {
+        background-color: {{ text_color }} !important;
+        color: {{ bg_color }} !important;
+      }
+      .mobile-nav__wrapper .c-accordion__top-level  {
+        border-bottom: 0.8px solid {{ text_color }} !important;
+      }
+      .mobile-nav__wrapper .c-accordion.c-accordion--mobile-nav li:not(.c-accordion__panel),
+      .slideout-mobile-navigation--open .section-header__mobile_search--input {
+        border-color: {{ text_color }} !important;
+      }
+      .mobile-nav__wrapper .c-accordion__link:hover {
+        color: {{ hover_color }} !important;
+      }
+    {% endstyle %}
+  </div>
+</aside>
+
+{% schema %}
+{
+  "name": "Mobile header",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use mobile view to edit settings."
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Header layout",
+      "options": [
+        {
+          "value": "logo_left",
+          "label": "Logo left"
+        },
+        {
+          "value": "logo_center",
+          "label": "Logo center"
+        }
+      ],
+      "default": "logo_left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_searchbox",
+      "label": "Show searchbox",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "default": false,
+      "label": "Enable sticky header"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 10,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Logo width",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Logo text",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "mobile_nav_scheme",
+      "label": "Color scheme",
+      "info": "Colors apply to mobile header and mobile navigation when it is opened.",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "main_nav",
+      "label": "Choose mobile menu",
+      "default": "main-menu",
+      "info": "It is best practice to select the same menu used in the Header. [Learn More](https://developers.google.com/search/mobile-sites/mobile-first-indexing)"
+    },
+    {
+      "type": "header",
+      "content": "Menu image"
+    },
+    {
+      "type": "image_picker",
+      "id": "menu_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "menu_image_text",
+      "label": "Heading",
+      "default": "Browse the Lookbook"
+    },
+    {
+      "type": "url",
+      "id": "menu_image_url",
+      "label": "Link"
+    }
+  ]
+}
+{% endschema %}

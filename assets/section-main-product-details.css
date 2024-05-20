@@ -1,0 +1,71 @@
+.product__section--details .product-template__details-table {
+  border: solid 1px var(--dotted-color);
+}
+
+.product__section--details .product-template__details-table li.detail {
+  border-bottom: solid 1px var(--dotted-color);
+  padding: var(--space-4);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+}
+
+.product__section--details .product-template__details-table li.detail:last-child {
+  border-bottom: none;
+}
+
+.product__section--details .product-template__details-table li.detail p {
+  align-self: center;
+  vertical-align: middle;
+}
+
+.product__section--details .product-template__details-table li.detail p, .product__section--details .product-template__details-table li.detail p a {
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+.product__section--details .product-template__details-table li.detail a:last-child span {
+  display: none;
+}
+
+.product__section--details .product-template__details-table li.detail a:hover {
+  text-decoration: underline;
+}
+
+.product__section--details .product-template__details-table li.detail p.label {
+  grid-column: auto / span 1;
+  padding-right: var(--space-1);
+  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  letter-spacing: 1px;
+}
+
+.product__section--details .product-template__details-table li.detail .item {
+  grid-column: auto / span 3;
+}
+
+.product__section--details .product-template__details-table li.description {
+  border-bottom: solid 1px var(--dotted-color);
+  padding: var(--space-7) var(--space-4);
+  margin: 0;
+}
+
+.product__section--details .product-template__details-table li.description p {
+  display: inline-block;
+  margin: 0 0 var(--space-2) 0;
+  width: 100%;
+}
+
+.product__section--details .product-template__details-table li.description p.label {
+  width: 100%;
+  margin-bottom: var(--space-3);
+}
+
+/* Forge Custom */
+
+.spr-header-title {
+  font-size: var(--h2-size);
+}

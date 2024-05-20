@@ -1,0 +1,63 @@
+{
+  "sections": {
+    "banner": {
+      "type": "template-header",
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "subheading": "",
+        "heading_placement": "center",
+        "alignment": "a-center",
+        "color_scheme": "3"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "4eb3e1c9-91d8-41a2-9f34-7ab315323c81": {
+          "type": "heading",
+          "settings": {
+            "heading": "Get in touch!",
+            "block_position": "sidebar"
+          }
+        },
+        "6a1e5aff-95ea-4f9e-b9eb-e5dc11c43fe2": {
+          "type": "text",
+          "settings": {
+            "text_rte": "<p>Teléfono:<br\/>(+34) 952 378 067<\/p><p>Whatsapp:<br\/>(+34) 686 070 185<\/p><p>Email:<br\/>info@pepaloves.com<\/p><p>Horario:<br\/>Lunes — Viernes<br\/>8am a 15pm <br\/><\/p>",
+            "show_border": true,
+            "block_position": "sidebar"
+          }
+        },
+        "4335fa9a-4179-4f3f-8983-d5b81c71f219": {
+          "type": "page_content",
+          "disabled": true,
+          "settings": {
+            "block_position": "content"
+          }
+        },
+        "07e56099-bfa6-4c3d-bd77-8a2dbbf45945": {
+          "type": "contact_form",
+          "settings": {
+            "block_position": "content"
+          }
+        }
+      },
+      "block_order": [
+        "4eb3e1c9-91d8-41a2-9f34-7ab315323c81",
+        "6a1e5aff-95ea-4f9e-b9eb-e5dc11c43fe2",
+        "4335fa9a-4179-4f3f-8983-d5b81c71f219",
+        "07e56099-bfa6-4c3d-bd77-8a2dbbf45945"
+      ],
+      "settings": {
+        "page_alignment": "left"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main"
+  ]
+}

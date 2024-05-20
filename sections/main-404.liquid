@@ -1,0 +1,18 @@
+{% comment %} 404 Error Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-404.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-404.css' | asset_url }}"></noscript>
+
+{% comment %} 404 Error Template {% endcomment %}
+<section class="error-page"
+  data-section-id="{{ section.id }}"
+  data-section-type="404-page"
+  data-section-loaded="false">
+  <div class="grid__wrapper pt10 pb10">
+    <div class="push-4 span-4 a-center">
+      <p>{{ 'general.404.subtext' | t }}</p>
+      <a class="btn-border-link inline-block relative" href="{{ routes.root_url }}">
+        <span>{{ 'general.404.button' | t }}</span>
+      </a>
+    </div>
+  </div>
+</section>

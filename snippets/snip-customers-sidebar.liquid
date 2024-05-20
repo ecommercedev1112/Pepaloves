@@ -1,0 +1,12 @@
+<div class="account-sidebar">
+  <h3 class="a-left border-bottom mb3 pb2">{{ 'customer.account.details' | t }}</h3>
+  <ul class="customer-account__sidebar-links">
+    <li><a class="customer-account__sidebar-link py2 {% if request.path == routes.account_url %}active--link{% endif %}" href="{{ routes.account_url }}">{{ 'customer.orders.title' | t }}</a></li>
+    <li><a class="customer-account__sidebar-link py2 {% if request.path == routes.account_addresses_url %}active--link{% endif %}" href="{{ routes.account_addresses_url }}">{{ 'customer.addresses.title' | t }}</a></li>
+    <li><a class="customer-account__sidebar-link py2 {% if request.path == routes.account_logout_url %}active--link{% endif %}" href="{{ routes.account_logout_url }}">{{ 'customer.account.logout' | t }}</a></li>
+  </ul>
+  <hr class="mb2" />
+  {%- if settings.customers_shop_email_address -%}
+    <p class="sm">{{ 'customer.account.help' | t }} <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  {%- endif -%}
+</div>

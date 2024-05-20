@@ -1,0 +1,60 @@
+{% comment %}
+snippets/helper-image.liquid
+Renders a responsive image with featured.
+Accepts:
+- type:         {Object} Image object. (required)
+- width:        {Number} Explicit image width. (optional)
+- lg_render:    {String} Width of image for large viewports. (optional)
+- md_render:    {String} Width of image for medium viewports. (optional)
+- class:        {String} CSS Classes added to the parent '.box-ratio' element. (optional)
+- loading:      {String} Set the loading attribute. By default is 'lazy'. (optional)
+- img_class:    {String} CSS Classes added to the img element. (optional)
+- class:        {String} CSS Classes added to the parent '.box-ratio' element. (optional)
+- loading:      {String} Set the loading attribute. By default is 'lazy'. (optional)
+- style         {String} Inline style added to the img element. Default is an empty string. (optional)
+- fetchpriority {String} Set the fetchpriority attribute. By defaul is 'auto'. (optional)
+
+Useage:
+{%
+  render 'helper-image',
+  type: product.image,
+  width: 1200,
+  sm_render: sm_render,
+  lg_render: lg_render,
+  md_render: md_render,
+  img_class: class,
+  class: class,
+  loading: 'eager',
+  fetchpriority: 'high',
+  style: 'object-position: inherit'
+%}
+{% endcomment %}
+
+{% if type.size > 1 %}
+  {% assign image_box_ratio = type.height | append: ".0" | times: 1 | divided_by: type.width | times: 100 | append: "%" %}
+  {% capture sizes %}(min-width: 1601px) {{ lg_render | default: '2000px' }},(min-width: 768px) and (max-width: 1600px) {{ md_render | default: '1200px' }},(max-width: 767px) {{ sm_render | default: '100vw' }}, 900px{% endcapture %}
+  {% capture loading %}{{ loading | default: 'lazy' }}{% endcapture %}
+  {% capture style %}{{ style | default: '' }}{% endcapture %}
+  {% capture fetch_priority %}{{ fetchpriority | default: 'auto' }}{% endcapture %}
+
+  {%- capture lazy_w_fallback -%}
+  {{ type | image_url: width: width | image_tag:
+    loading: loading,
+    fetchpriority: fetch_priority,
+    sizes: sizes,
+    widths: '200, 300, 400, 500, 600, 700, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000',
+    style: style
+  }}
+  {%- endcapture -%}
+
+  {%- capture native_lazy -%}
+    {{ type | image_url: width: width | image_tag }}
+  {%- endcapture -%}
+
+  <div class="box-ratio {{ class }}" style="padding-bottom: {{ image_box_ratio }};">
+    {{ lazy_w_fallback }}
+    <noscript>
+      {{ native_lazy }}
+    </noscript>
+  </div>
+{% endif %}

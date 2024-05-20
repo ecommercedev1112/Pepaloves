@@ -1,0 +1,141 @@
+{%- liquid
+
+  if product.template_suffix == 'pre-order'
+    assign call_to_action = 'products.product.pre_order' | t
+  else
+    assign call_to_action = 'products.product.add_to_cart' | t
+  endif
+  unless current_variant.available
+    assign call_to_action = 'products.product.sold_out' | t
+  endunless
+
+  assign product_form_id = product.id | append: '-product-form-buttons-' | append: section.id
+
+  unless no_js
+    assign no_js_class = 'no-js-hidden'
+  endunless
+
+  assign classes = "js-product-form-quickshop product__form-buttons js-prod-form-submit " | append: no_js_class
+
+  if product.gift_card?
+    assign show_quantity = false
+  endif
+-%}
+
+{%
+  form 'product', product,
+  id: product_form_id,
+  class: classes,
+  data-product-id: product.id
+%}
+
+
+  {% if show_quantity %}
+  <div class="product__quantity pt2 mb2" {{ block.shopify_attributes }}>
+    <label class="product__quantity-label vib-center" for="quickshop-productQty-{{ product.id }}">
+      {{- 'products.product.quantity' | t -}}
+    </label>
+    <div class="product__quantity--selector">
+      <button
+        class="product__quantity-down downer js-qty-down mr1 mb0 no-js-hidden"
+        href="{{ product.url }}"
+        tabindex="0"
+        aria-label="Decrease"
+        type="button"
+      >
+        {%
+          render 'snip-icons',
+          wrapper: '.product__quantity',
+          type: 'apollo',
+          icon: 'minus',
+          size: '10px',
+          fill: 'var(--text-color)',
+          hover: 'var(--text-color)'
+        %}
+      </button>
+      <input
+        id="quickshop-productQty-{{ product.id }}"
+        min="1"
+        data-limit="{% if current_variant.inventory_management == 'shopify' %}{% unless current_variant.inventory_policy == 'continue' %}{{ current_variant.inventory_quantity }}{% endunless %}{% endif %}"
+        type="text"
+        name="quantity"
+        class="product-qty product__quantity-input vib-center"
+        value="1"
+      >
+      <button
+        class="product__quantity-up js-qty-up up ml1 mb0 no-js-hidden"
+        href="{{ product.url }}"
+        tabindex="0"
+        aria-label="Increase"
+        type="button"
+      >
+        {%
+          render 'snip-icons',
+          wrapper: '.product__quantity',
+          type: 'apollo',
+          icon: 'plus',
+          size: '10px',
+          fill: 'var(--text-color)',
+          hover: 'var(--text-color)'
+        %}
+      </button>
+    </div>
+  </div>
+  {% else %}
+    <input class="formQty" type="hidden" name="quantity" value="1">
+  {% endif %}
+  <div
+    class="product-form__buttons product__add-container mt4 animate--text delay--{{ index }}"
+    {{ block.shopify_attributes }}
+  >
+
+    {% if block.settings.show_gift_card_recipient and product.gift_card? %}
+      {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+    {%- endif -%}
+
+    <input id="formVariantId" name="id" type="hidden" value="{{ product.selected_or_first_available_variant.id }}">
+    <div class="note note-success mt3 js-added-msg a-center mb4" style="display: none">
+      <b>{{ 'products.product.added' | t }}</b>&nbsp;&nbsp;&nbsp;<a class="underline" href="{{ routes.cart_url }}">
+        {{- 'products.product.view_cart' | t -}}
+      </a>
+      {{ 'products.product.or' | t }}
+      <a class="underline" href="{{ routes.all_products_collection_url }}">{{ 'products.product.continue' | t }}</a>.
+    </div>
+    <div class="note note-error js-error-msg a-center mb4" style="display: none">
+      <b>{{ 'cart.general.cart_error' | t }}</b>&nbsp;&nbsp;&nbsp;{{ 'cart.general.update_qty_error' | t }}
+    </div>
+    <input
+        type="submit"
+        name="button"
+        data-variant-id="{{ current_variant.id }}"
+        class="button ajax-submit js-ajax-submit add-item add w100 inline-block {% if settings.product_show_payment_button or product.selling_plan_groups.size == 0 %} btn-secondary{% endif %}"
+        value="{{ call_to_action }}"
+        {% unless current_variant.available %}
+          disabled
+        {% endunless %}
+      >
+    {% if settings.product_show_payment_button %}
+      <div class="product-additional-buttons mb2">
+        {{ form | payment_button }}
+      </div>
+    {% endif %}
+  </div>
+{%- endform -%}
+
+{%- for block in section.blocks -%}
+  {%- if block.type == '@app' -%}
+    <!-- Infinite Options by ShopPad -->
+    <script>
+      // Create "window.Shoppad.apps.infiniteoptions" object if it doesn't already exist
+      'Shoppad.apps.infiniteoptions'.split('.').reduce(function (o, x) {
+        if (!o[x]) {
+          o[x] = {};
+        }
+        return o[x];
+      }, window);
+      // Note we are using the theme app extension
+      window.Shoppad.apps.infiniteoptions.themeAppExtensionId = "{{ product_form_id }}";
+    </script>
+    {% break %}
+  {%- endif -%}
+{%- endfor -%}

@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="{{ 'component-pagination.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'component-pagination.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="pagination__wrapper pagination mt11">
+  <div class="grid__wrapper">
+    <div class="span-3 sm-span-3 auto v-center a-left">
+      {% if paginate.previous %}
+        <a class="paginate-buttons mb0" href="{{ paginate.previous.url }}" aria-label="Previous">
+          {% render 'snip-icons',
+             wrapper: '.pagination__wrapper',
+             type: 'theme',
+             icon: 'left-arrow',
+             size: '20px',
+             classes: '',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+        </a>
+      {% else %}
+        <span class="paginate-buttons disabled mb0">
+          {% render 'snip-icons',
+             wrapper: '.pagination__wrapper',
+             type: 'theme',
+             icon: 'left-arrow',
+             size: '20px',
+             classes: '',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+         </span>
+      {% endif %}
+    </div>
+    <div class="span-6 sm-span-6 auto v-center a-center">
+      {% for part in paginate.parts %}
+        {% if part.length < 1 %}
+         <h1>nopages</h1>
+        {% endif %}
+        {% if part.is_link %}
+          <a class="page-number mb0" href="{{ part.url }}">{{ part.title }}</a>
+        {% else %}
+          {% if part.title == '&hellip;' %}
+            <span class="page-number mb0">{{ part.title }}</span>
+          {% else %}
+            <span class="page-number current mb0">{{ part.title }}</span>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="span-3 sm-span-3 auto v-center a-right">
+      {% if paginate.next %}
+        <a class="paginate-buttons mb0" href="{{ paginate.next.url }}" aria-label="Next">
+          {% render 'snip-icons',
+             wrapper: '.pagination__wrapper',
+             type: 'theme',
+             icon: 'right-arrow',
+             size: '20px',
+             classes: '',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+        </a>
+      {% else %}
+        <span class="paginate-buttons disabled mb0">
+          {% render 'snip-icons',
+             wrapper: '.pagination__wrapper',
+             type: 'theme',
+             icon: 'right-arrow',
+             size: '20px',
+             classes: '',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+           </span>
+      {% endif %}
+    </div>
+  </div>
+</div>

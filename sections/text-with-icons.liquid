@@ -1,0 +1,652 @@
+{% comment %} Text With Icons Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign icon_size = section.settings.icon_size | append: 'px'
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+
+  case section.blocks.size
+    when 0
+    when 1
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width =  'auto/span 12'
+      assign grid_wrapper = 'repeat(12,1fr)'
+    when 2
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width =  'auto/span 6'
+      assign grid_wrapper = 'repeat(12,1fr)'
+    when 3
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width =  'auto/span 4'
+      assign grid_wrapper = 'repeat(12,1fr)'
+    when 4
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width = 'auto/span 3'
+      assign grid_wrapper = 'repeat(12,1fr)'
+    when 5
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width =  'auto/span 1'
+      assign grid_wrapper = 'repeat(5,1fr)'
+    when 6
+      assign wrapper_class = 'cg9 narrow'
+      assign block_width = 'auto/span 2'
+      assign grid_wrapper = 'repeat(12,1fr)'
+    when 7
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(7,1fr)'
+    when 8
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(8,1fr)'
+    when 9
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(9,1fr)'
+    when 10
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(10,1fr)'
+    when 11
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(11,1fr)'
+    when 12
+      assign block_width = 'auto/span 1'
+      assign grid_wrapper = 'repeat(12,1fr)'
+  endcase
+
+
+  if section.settings.color_scheme == 'none'
+    assign text_color = 'var(--text-color)'
+    assign bg_color = 'var(--background)'
+    assign hover_color = 'var(--text-color-light)'
+  else
+    assign text_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-text)'
+    assign bg_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-bg)'
+    assign hover_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-hover)'
+  endif
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+{% comment %} Text With Icons Template {% endcomment %}
+<div
+  class="section-txt-icons text-icons-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="text-with-icons"
+  data-section-loaded="false">
+
+  <div class="section-txt-icons__outer-wrapper">
+    <div class="grid__wrapper pt8">
+      {% render 'snip-headings', align: heading_align, classes: 'section-txt-icons__section-heading pb5', grid: 'span-12', heading: section.settings.title %}
+    </div>
+    <div class="section-txt-icons__inner-wrapper grid__wrapper px9 pb8 sm-cg0 {{ wrapper_class }}">
+      {% for block in section.blocks %}
+        <article class="section-txt-icons__item text-promo-{{ block.id }} a-center animate--text delay--{{ forloop.index0 }}{% cycle ' odd', ' even' %}{% if forloop.last %} last_item{% endif %}" {{ block.shopify_attributes }}>
+          {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+            <div class="section-txt-icons__image mb4">
+              {%- liquid
+
+                assign has_image = false
+
+                if block.settings.image != blank
+                  assign has_image = true
+                endif
+
+                if block.settings.icon contains 'jewelry_'
+                  assign icon = block.settings.icon | split: 'jewelry_' | last
+                  assign icon_type = 'theme'
+                else
+                  assign icon = block.settings.icon
+                  assign icon_type = 'apollo'
+
+                endif
+              -%}
+              {% unless has_image %}
+                <div class="section-txt-icons__text-icon--icon lh0">
+                  {% if block.settings.icon contains 'jewelry_' %}
+                  {% render 'snip-icons-jewelry',
+                     wrapper: '.product-form__text-icon',
+                     type: icon_type,
+                     icon: icon,
+                     size: icon_size,
+                     classes: 'absolute-center',
+                     fill: text_color,
+                     hover: text_color %}
+                  {% else %}
+                  {% render 'snip-icons',
+                     wrapper: '.product-form__text-icon',
+                     type: icon_type,
+                     icon: icon,
+                     size: icon_size,
+                     classes: 'absolute-center',
+                     fill: text_color,
+                     hover: text_color %}
+                  {% endif %}
+                </div>
+              {% endunless %}
+              {% if has_image %}
+                <div class="section-txt-icons__text-icon--image lh0">
+                  {{ block.settings.image | image_url: width: 150 | image_tag: loading: 'lazy', loading: loading, fetchpriority: fetch_priority }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="section-txt-icons__content mb2">
+              {% if block.settings.title != blank %}
+                <p class="section-txt-icons__block-heading mb2 h5">{{ block.settings.title }}</p>
+              {% endif %}
+              {% if block.settings.subheading != blank %}
+                <div class="section-txt-icons__block-subheading mb2">
+                  {{ block.settings.subheading }}
+                </div>
+              {% endif %}
+            </div>
+          {% if block.settings.link != blank %}</a>{% endif %}
+        </article>
+      {% endfor %}
+
+      {% if section.blocks.size == 0 %}
+        {% render 'onboard-no-blocks' %}
+      {% endif %}
+    </div>
+  </div>
+  {% style %}
+    .section-txt-icons__text-icon--icon {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+    .section-txt-icons__text-icon--icon svg {
+      max-width: 120px;
+    }
+    .section-txt-icons__text-icon--image {
+      max-width: 120px;
+    }
+    .section-txt-icons__item.a-center .section-txt-icons__text-icon--icon,
+    .section-txt-icons__item.a-center .section-txt-icons__text-icon--image {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .text-icons-{{ section.id }},
+    .text-icons-{{ section.id }} h2,
+    .text-icons-{{ section.id }} p,
+    .text-icons-{{ section.id }} a {
+      color: {{ text_color }} !important;
+    }
+    .text-icons-{{ section.id }} a:hover {
+      color: {{ hover_color }} !important;
+    }
+    .text-icons-{{ section.id }} .section-txt-icons__outer-wrapper {
+      background-color: {{ bg_color }} !important;
+    }
+    @media (min-width:  768px) {
+      .text-icons-{{ section.id }} .section-txt-icons__inner-wrapper {
+        grid-template-columns:  {{ grid_wrapper }} !important;
+      }
+      .text-icons-{{ section.id }} .section-txt-icons__inner-wrapper .section-txt-icons__item {
+        grid-column:  {{ block_width }} !important;
+      }
+    }
+    @media (max-width: 767px) {
+      .text-icons-{{ section.id }} .section-txt-icons__inner-wrapper {
+        grid-template-columns: repeat(12,1fr) !important;
+      }
+      .text-icons-{{ section.id }} .section-txt-icons__inner-wrapper .section-txt-icons__item {
+        {%- if section.blocks.size >= 8 -%}
+          grid-column:  auto/span 4 !important;
+        {%- else -%}
+          grid-column:  auto/span 6 !important;
+        {%- endif -%}
+      }
+      .text-icons-{{ section.id }} .section-txt-icons__inner-wrapper .section-txt-icons__item.odd.last_item {
+        grid-column: auto / span 12 !important;
+      }
+    }
+  {% endstyle %}
+</div>
+
+{% schema %}
+{
+  "name": "Text with icons",
+  "tag": "section",
+  "class": "dynamic-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Text with Icons"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 35,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon size (height)",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Choose an icon",
+          "options": [
+            {
+              "value": "jewelry_bracelets",
+              "label": "Bracelets",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_earrings",
+              "label": "Earrings",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_necklaces",
+              "label": "Necklaces",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_rings",
+              "label": "Rings",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_pendants",
+              "label": "Pendants",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_asscher",
+              "label": "Asscher",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_baguette",
+              "label": "Baguette",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_cushion",
+              "label": "Cushion",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_emerald",
+              "label": "Emerald",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_heart",
+              "label": "Heart",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_marquise",
+              "label": "Marquise",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_oval",
+              "label": "Oval",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_pear",
+              "label": "Pear",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_princess",
+              "label": "Princess",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_radiant",
+              "label": "Radiant",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_round",
+              "label": "Round",
+              "group": "Jewelry"
+            },
+            {
+              "value": "jewelry_trillion",
+              "label": "Trillion",
+              "group": "Jewelry"
+            },
+            {
+              "value": "bag",
+              "label": "Bag"
+            },
+            {
+              "value": "cart",
+              "label": "Cart"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "credit-card",
+              "label": "Credit card"
+            },
+            {
+              "value": "envelope",
+              "label": "Envelope"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "globe",
+              "label": "Globe"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "home",
+              "label": "Home"
+            },
+            {
+              "value": "info",
+              "label": "Info"
+            },
+            {
+              "value": "chat",
+              "label": "Chat"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "location",
+              "label": "Location"
+            },
+            {
+              "value": "return",
+              "label": "Return"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "sale-tag",
+              "label": "Sale tag"
+            },
+            {
+              "value": "search",
+              "label": "Search"
+            },
+            {
+              "value": "secure",
+              "label": "Secure"
+            },
+            {
+              "value": "ship-truck",
+              "label": "Shipping"
+            },
+            {
+              "value": "smile",
+              "label": "Smile emoji"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "verified",
+              "label": "Verified"
+            }
+          ],
+          "default": "chat"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Or add a custom image",
+          "info": "100px x 100px recommended"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Text",
+          "default": "<p>Pair icon with text on store details.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text with icons",
+      "blocks": [
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_asscher",
+            "link": "",
+            "title": "Asscher",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_baguette",
+            "link": "",
+            "title": "Baguette",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_cushion",
+            "link": "",
+            "title": "Cushion",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_emerald",
+            "link": "",
+            "title": "Emerald",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_heart",
+            "link": "",
+            "title": "Heart",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_marquise",
+            "link": "",
+            "title": "Marquise",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_oval",
+            "link": "",
+            "title": "Oval",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_pear",
+            "link": "",
+            "title": "Pear",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_princess",
+            "link": "",
+            "title": "Princess",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_radiant",
+            "link": "",
+            "title": "Radiant",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_round",
+            "link": "",
+            "title": "Round",
+            "subheading": ""
+          }
+        },
+        {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_trillion",
+            "link": "",
+            "title": "Trillion",
+            "subheading": ""
+          }
+        }
+      ],
+      "settings": {
+        "title": "Shop by Shape",
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ],
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

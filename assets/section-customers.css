@@ -1,0 +1,21 @@
+@media (max-width: 767px) {
+  .template-order .product .image {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .template-addresses #address-loop {
+    text-align: center;
+  }
+}
+
+/* Forge Custom */
+.customer-account__sidebar-link {
+  display:  inline-block;
+  margin-bottom:  0;
+}
+.customer-account__sidebar-link.active--link,
+.customer-account__sidebar-link:hover {
+  text-decoration:  underline;
+}

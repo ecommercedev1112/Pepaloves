@@ -1,0 +1,44 @@
+<p class="js-collection-filter-title sm mb1">{{ 'collections.filter.filter' | t }}</p>
+<div class="tag-group type-filters inline-block mb0 w20 v-start">
+  {% for block in section.blocks %}
+    {% if block.type == 'tag_group' %}
+      <button class="js-collection-tag-group {% if forloop.first %}selected{% endif %} mr1" type="button" data-type="{{ block.settings.filter_by_heading | handleize }}" {{ block.shopify_attributes }}>
+        {{ block.settings.filter_by_heading }}
+      </button>
+    {% endif %}
+  {% endfor %}
+</div>
+<ul class="tag-filters inline-block a-left mb0 w70 v-start" {{ block.shopify_attributes }}>
+  {% for block in section.blocks %}
+    {% if block.type == 'tag_group' %}
+      {% assign selected_tags = block.settings.filter_by | replace: ' ,', ',' | replace: ', ', ',' | split: ',' %}
+      {%- for tag in selected_tags -%}
+        {%- if collection.all_tags contains tag -%}
+        {% if current_tags contains tag %}
+          <li class="js-collection-tag selected" data-type="{{ block.settings.filter_by_heading | handleize }}" data-tag="{{ tag | handleize }}">{{ tag | link_to_remove_tag: tag }}</li>
+        {% else %}
+          <li class="js-collection-tag" data-type="{{ block.settings.filter_by_heading | handleize }}" data-tag="{{ tag | handleize }}">{{ tag | link_to_add_tag: tag }}</li>
+        {% endif %}
+        {%- endif -%}
+      {%- endfor -%}
+    {% endif %}
+  {% endfor %}
+
+  {%- if selected_tags.size > 0 -%}
+    {%- if current_tags -%}
+      <li>
+        <a class="clear-tags" href="{{ collection.url }}">
+          {% render 'snip-icons',
+            wrapper: '.clear-tags',
+            type: 'apollo',
+            icon: 'close',
+            classes: 'm0',
+            size: '6px',
+            fill: 'var(--text-color)',
+            hover: 'var(--text-color)' %}
+            {{ 'collections.general.clear_all_tags' | t }}
+        </a>
+      </li>
+    {%- endif -%}
+  {%- endif -%}
+</ul>

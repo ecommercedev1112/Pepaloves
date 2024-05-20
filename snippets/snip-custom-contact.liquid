@@ -1,0 +1,115 @@
+{% form 'contact' %}
+  <div id="contact-form" class="contact-form__wrapper grid__wrapper form rg5">
+    {% if form.posted_successfully? %}
+      <div class="span-12 auto note note-success">
+        <div class="inline-block v-center w10">
+          {%
+            render 'snip-icons',
+            wrapper: '.contact-form__wrapper',
+            type: 'apollo',
+            icon: 'checkmark',
+            size: '20px',
+            classes: 'mr3',
+            fill: 'var(--success-msg-dark)',
+            hover: 'var(--success-msg-dark)'
+          %}
+        </div>
+        <p class="sm-caps inline-block v-center mb0 w80">{{ 'sections.contact_form.post_success' | t }}</p>
+      </div>
+    {% endif %}
+
+    <div class="span-6 auto a-left relative">
+      <label for="contactFormFirstName">{{ 'sections.contact_form.name' | t }}</label>
+      <input type="text" id="contactFormFirstName" name="contact[FirstName]" required>
+    </div>
+
+    <div class="span-6 auto a-left relative">
+      <label for="contactFormLastName">{{ 'sections.contact_form.lastname' | t }}</label>
+      <input type="text" id="contactFormLastName" name="contact[LastName]" required>
+    </div>
+
+    {% if section.settings.cf_show_company_name %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormCompanyName">{{ 'sections.contact_form.companyname' | t }}</label>
+        <input type="text" id="contactFormCompanyName" name="contact[CompanyName]">
+      </div>
+    {% endif %}
+
+    {% if section.settings.cf_show_address %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormAddress">{{ 'sections.contact_form.address' | t }}</label>
+        <input type="text" id="contactFormAddress" name="contact[address]">
+      </div>
+    {% endif %}
+
+    {% if section.settings.cf_show_website_url %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormWebsiteURL">{{ 'sections.contact_form.websiteurl' | t }}</label>
+        <input type="text" id="contactFormWebsiteURL" name="contact[WebsiteUrl]">
+      </div>
+    {% endif %}
+
+    <div class="span-12 a-left relative">
+      <label for="contactFormEmail">{{ 'sections.contact_form.email' | t }}</label>
+      <input type="email" id="contactFormEmail" name="contact[email]" required>
+    </div>
+
+    {% if section.settings.cf_show_phone %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormTelephone">{{ 'sections.contact_form.phone' | t }}</label>
+        <input type="text" id="contactFormTelephone" name="contact[phone]">
+      </div>
+    {% endif %}
+
+    {% if section.settings.cf_show_custom_field_one == true and section.settings.cf_custom_field_one_type == 'input' %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormCustomFieldOne">{{ section.settings.cf_custom_field_one }}</label>
+        <input type="text" id="contactFormCustomFieldOne" name="contact[CustomFieldOne]">
+      </div>
+    {% elsif section.settings.cf_show_custom_field_one == true and section.settings.cf_custom_field_one_type == 'textarea' %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormCustomFieldOne">{{ section.settings.cf_custom_field_one }}</label>
+        <textarea rows="15" cols="90" id="contactFormCustomFieldOne" name="contact[CustomFieldOne]"></textarea>
+      </div>
+    {% endif %}
+
+    {% if section.settings.cf_show_custom_field_two == true and section.settings.cf_custom_field_two_type == 'input' %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormCustomFieldTwo">{{ section.settings.cf_custom_field_two }}</label>
+        <input type="text" id="contactFormCustomFieldTwo" name="contact[CustomFieldTwo]">
+      </div>
+    {% elsif section.settings.cf_show_custom_field_two == true and section.settings.cf_custom_field_two_type == 'textarea' %}
+      <div class="span-12 a-left relative">
+        <label for="contactFormCustomFieldTwo">{{ section.settings.cf_custom_field_two }}</label>
+        <textarea rows="15" cols="90" id="contactFormCustomFieldTwo" name="contact[CustomFieldTwo]"></textarea>
+      </div>
+    {% endif %}
+
+    <div class="span-12 a-left relative">
+      <label for="contactFormMessage">{{ 'sections.contact_form.message' | t }}</label>
+      <textarea rows="15" cols="90" id="contactFormMessage" name="contact[body]" required></textarea>
+    </div>
+
+    {% if form.errors %}
+      <div class="span-12 auto note note-error">
+        <div class="inline-block v-center w10">
+          {%
+            render 'snip-icons',
+            wrapper: '.contact-form__wrapper',
+            type: 'apollo',
+            icon: 'error',
+            size: '20px',
+            classes: 'mr3',
+            fill: 'var(--error-msg-dark)',
+            hover: 'var(--error-msg-dark)'
+          %}
+        </div>
+        <p class="sm-caps inline-block v-center mb0 w80">{{ form.errors | default_errors | strip_html }}</p>
+      </div>
+    {% endif %}
+
+    <div class="span-12 a-left">
+      <input type="submit" id="contactFormSubmit" class="btn-secondary button" value="{{ 'sections.contact_form.send' | t }}">
+    </div>
+  </div>
+{% endform %}

@@ -1,0 +1,241 @@
+{% comment %} Tables Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+
+  assign columns = 0
+  assign headers = 0
+  assign column_index = false
+
+  for block in section.blocks
+    if block.type == 'table_column'
+      assign columns = columns | plus: 1
+    else
+      assign headers = headers | plus: 1
+    endif
+  endfor
+
+  for block in section.blocks offset: headers
+    if block.type == 'table_column'
+      assign table_cells = block.settings.table_cells | strip_html | split: ','
+
+      if forloop.first
+        assign table_cells_length = table_cells.size
+      endif
+    endif
+  endfor
+-%}
+
+{% comment %} Tables Template {% endcomment %}
+<div class="section-size-guide-table section-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="size-guides"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper">
+    {%- if section.settings.title != blank -%}
+      {% render 'snip-headings', align: heading_align, grid: 'span-12' %}
+    {%- endif -%}
+  </div>
+  <div class="size-guide-table__outer-wrapper grid__wrapper narrow">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'table_header' -%}
+        <table class="size-guide-table__table span-12 auto responsive" {%- unless forloop.first -%}style="display: none;"{%- endunless -%}data-table="{{ block.settings.table_name | handleize }}">
+          <thead class="size-guide-table__header">
+            <tr>
+              {%- liquid
+                assign header_cells = block.settings.header_cells | strip_html | split: ','
+              -%}
+              {%- for cell in header_cells -%}
+                <th>{{ cell }}</th>
+              {%- endfor -%}
+            </tr>
+          </thead>
+          <tbody class="size-guide-table__body">
+            {%- for row in (1..table_cells_length) -%}
+                {%- assign table_cells = '' -%}
+                {%- assign column_index = forloop.index -%}
+                <tr>
+                  {%- for block in section.blocks offset: headers -%}
+                    {%- if block.type == 'table_column' -%}
+                      {%- assign table_cells = block.settings.table_cells | strip_html | split: ',' -%}
+                      {%- for cell in table_cells -%}
+                        {%- if forloop.index == column_index -%}
+                          <td>{{ cell }}</td>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </tr>
+              {%- endfor -%}
+          </tbody>
+        </table>
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+
+  {%- style -%}
+    .section-{{ section.id }} .size-guide-table__header th,
+    .section-{{ section.id }} .size-guide-table__body td {
+      text-align: {{ section.settings.alignment }};
+    }
+    thead.size-guide-table__header {
+      background: var(--background-accent);
+    }
+    thead.size-guide-table__header th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-family: var(--heading-family);
+    }
+    @media (max-width: 767px) {
+      .size-guide-table__outer-wrapper {
+        overflow-y: auto;
+        margin: 0 7%;
+        padding: 0 0 10px 0!important;
+      }
+    }
+  {%- endstyle -%}
+</div>
+
+{% schema %}
+{
+  "name": "Table",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Table Chart"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Cell alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "table_column",
+      "name": "Table Column",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "table_cells",
+          "label": "Table column cells",
+          "info": "List contents of each cell comma separated.",
+          "default": "<p>Neck, 14.5, 15, 15.5, 16, 16.5, 17</p>"
+        }
+      ]
+    },
+    {
+      "type": "table_header",
+      "name": "Table header",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "header_cells",
+          "label": "Header cells",
+          "info": "List contents of each cell comma separated.",
+          "default": "<p>Size, XS, S, M, L, XL, XXL</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Table",
+      "blocks": [
+        {
+          "type": "table_header",
+          "settings": {
+            "header_cells": "<p>Column 1, Column 2, Column 3</p>"
+          }
+        },
+        {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>Row 1, Row 2, Row 3, Row 4</p>"
+          }
+        },
+        {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>Row 1, Row 2, Row 3, Row 4</p>"
+          }
+        },
+        {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>Row 1, Row 2, Row 3, Row 4</p>"
+          }
+        }
+      ],
+      "settings": {
+        "title": "Table Chart",
+        "alignment": "center",
+        "section_padding": "both"
+      }
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "collection",
+      "page",
+      "product",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,276 @@
+{% comment %} Product Recommendations Logic {% endcomment %}
+<link rel="preload" href="{{ 'component-product-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}"></noscript>
+<script src='{{ 'carousel.js' | asset_url }}' defer></script>
+
+{% comment %} Product Recommendations Template {% endcomment %}
+<div
+  class="global__section product-recommendations__wrapper product-recommendations__wrapper--{{ section.id }} relative {{ section_padding }}">
+
+  {%- if recommendations.performed -%}
+    {%- if recommendations.products_count > 0 -%}
+      {%- liquid
+        assign carousel = true
+
+        assign section_padding = ''
+        if section.settings.section_padding == 'top'
+          assign section_padding = 'pb0'
+        elsif section.settings.section_padding == 'bottom'
+          assign section_padding = 'mt0'
+        elsif section.settings.section_padding == 'none'
+          assign section_padding = 'mt0 pb0'
+        endif
+
+        case section.settings.items_per_row
+        when 5
+          assign wrapper_class = 'wrapper-fifths'
+          assign grid_width = 'span-3 auto sm-span-6'
+        when 4
+          assign grid_width = 'span-3 auto sm-span-6'
+        when 3
+          assign grid_width = 'span-4 auto sm-span-6'
+        when 2
+          assign grid_width = 'span-6 auto sm-span-6'
+        when 1
+          assign grid_width = 'span-12 sm-span-12'
+        endcase
+
+
+        assign prod_limit = section.settings.items_shown
+        assign items_per_row = section.settings.items_per_row
+
+        assign enough_to_wrap = true
+        if prod_limit <= items_per_row
+          assign enough_to_wrap = false
+        endif
+
+        if recommendations.products.size <= items_per_row
+          assign enough_to_wrap = false
+        endif
+
+        if prod_limit > items_per_row
+          assign enough_to_wrap = true
+        endif
+
+        case section.settings.items_per_row
+        when 2
+          assign prod_grid = 51
+          assign noJSGrid = 48.95
+        when 3
+          assign prod_grid = 34
+          assign noJSGrid = 31.95
+        when 4
+          assign prod_grid = 25.5
+          assign noJSGrid = 23.45
+        when 5
+          assign prod_grid = 20.4
+          assign noJSGrid = 18.35
+        endcase
+
+        if section.settings.title == blank and section.settings.subheading == blank and section.settings.link_url == blank and section.settings.link_text == blank
+          assign wrapper_grid_width = 'span-12'
+        else
+          assign wrapper_grid_width = 'span-9'
+        endif
+      -%}
+      <div class="product-recommendations js-product-rec-inner" data-section-loaded="false">
+        {%- capture text_section -%}
+          <div class="product-recommendations__text-wrapper span-3 auto px3 v-center">
+            {%- if section.settings.title != blank -%}
+              <h2 class="section-product-recommendations__section-heading">{{ section.settings.title }}</h2>
+            {%- endif -%}
+            {%- if section.settings.subheading != blank -%}
+              <div class="rte mb2">{{ section.settings.subheading }}</div>
+            {%- endif -%}
+            {%- if section.settings.link_url != blank and section.settings.link_text != blank -%}
+              <a class="btn-border-link inline-block mt4 mb0 sm-mb2 relative" href="{{ section.settings.link_url }}">
+                <span>{{ section.settings.link_text }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endcapture -%}
+
+        <div class="grid__wrapper relative section-product-recommendations__wrapper--{%- if carousel -%}carousel{%- else -%}grid{%- endif -%}">
+          {%- if section.settings.text_position == 'left' -%}
+            {{ text_section }}
+          {%- endif -%}
+
+          {% capture carousel_config %}{
+            "wrapAround":{{ enough_to_wrap }},
+            "cellAlign": "left",
+            "dragThreshold":"15",
+            "draggable": true,
+            "pauseAutoPlayOnHover":false,
+            "prevNextButtons": false,
+            "pageDots": {{ enough_to_wrap }},
+            "arrowShape": "M71.9,95L25.1,52.2c-0.6-0.6-0.9-1.3-0.9-2.2s0.3-1.6,0.9-2.2L71.9,5l3.9,4.3L31.4,50l44.4,40.7L71.9,95z"
+          }{% endcapture %}
+
+          <div class="product-recommendations__wrapper--loop {{ wrapper_grid_width }} auto{% if carousel %} js-carousel{% endif %}" {%- if carousel -%}data-flickity='{{ carousel_config }}'{%- endif -%}>
+            {%- unless carousel -%}<div class="grid__wrapper edge cg6 rg6 {{ wrapper_class }}">{%- endunless -%}
+              {%- for product in recommendations.products limit: section.settings.items_shown -%}
+                {% render 'product-loop',
+                  carousel: carousel,
+                  collection: collection,
+                  product: product,
+                  product_info_align: 'a-center',
+                  grid_items: section.settings.items_per_row,
+                  items_per_row: grid_width,
+                  featured_collection: true %}
+              {% endfor %}
+            {%- unless carousel -%}</div>{%- endunless -%}
+          </div>
+          {%- if section.settings.text_position == 'right' -%}
+            {{ text_section }}
+          {%- endif -%}
+        </div>
+        {% style %}
+          @media (min-width: 768px) {
+            .product-recommendations__wrapper--loop {
+              padding-bottom: 30px;
+            }
+            .product-recommendations .flickity-viewport {
+              padding-bottom: 10px;
+            }
+            .section-product-recommendations__wrapper--carousel .product-loop__item {
+              margin-bottom: 20px;
+            }
+            {% if carousel %}
+              .product-recommendations__wrapper--{{ section.id }} .section--reloaded [data-section-loaded="false"] .product-loop__item,
+              .product-recommendations__wrapper--{{ section.id }} [data-section-loaded="false"] .product-loop__item,
+              .no-js .section-product-recommendations__wrapper--carousel .product-loop__item {
+                width: {{ noJSGrid }}% !important;
+                margin-right: 2%;
+                display: inline-block !important;
+              }
+              .section--reloaded [data-section-loaded="false"] .product-loop__item:nth-child({{ section.settings.items_per_row }}),
+              [data-section-loaded="false"] .product-loop__item:nth-child({{ section.settings.items_per_row }}),
+              .no-js .section-product-recommendations__wrapper--carousel .product-loop__item:nth-child({{ section.settings.items_per_row }}) {
+                margin-right: 0;
+              }
+              .product-recommendations__wrapper--{{ section.id }} .section-product-recommendations__wrapper--carousel .flickity-slider .product-loop__item {
+                width: {{ prod_grid }}% !important;
+                padding-right: 2%;
+                margin-right: 0;
+                display: block !important;
+              }
+            {% endif %}
+          }
+          @media (max-width: 767px) {
+            .section-product-recommendations__wrapper--carousel .flickity-slider .product-loop__item {
+              padding-right: 10px;
+              width: 80% !important;
+            }
+          }
+        {% endstyle %}
+      </div>
+    {%- endif -%}
+  {%- else  -%}
+    <div class="page-width js-product-rec-wrapper"
+      data-base-url="{{ routes.product_recommendations_url }}"
+      data-product-id="{{ product.id }}"
+      data-section-id="{{ section.id }}"
+      data-intent="related"
+      data-section-type="product-recommendations"
+      data-section-loaded="false"
+      data-asset-url="{{ 'section-product-recommendations.js' | asset_url }}"></div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Dynamic recommendations change and improve with time. [Learn more](https://help.shopify.com/en/themes/development/recommended-products)"
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Products per row",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "items_shown",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products shown",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Text settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Related Products"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Use this text to share information about your brand with your customers. Describe a collection, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link text",
+      "default": "SHOP THE COLLECTION"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ]
+}
+{% endschema %}

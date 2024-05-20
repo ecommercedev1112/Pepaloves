@@ -1,0 +1,47 @@
+{% comment %} Activate Account Template {% endcomment %}
+<section class="activate-account">
+  <div class="grid__wrapper pt8">
+    {% render 'snip-headings', align: 'a-center', grid: 'span-12', translation: 'customer.activate_account.title' %}
+
+    <div class="push-4 span-4 auto relative overflow-hidden">
+      <p class="a-center">{{ 'customer.activate_account.subtext' | t }}</p>
+
+      {% form 'activate_customer_password' %}
+        <div class="form grid__wrapper">
+          <div class="span-12 a-left relative">
+            {%- if form.errors -%}
+              <div class="errors note note-error mb3 inline-block w100">
+                <div class="inline-block v-start w10">
+                  {% render 'snip-icons',
+                     wrapper: '.activate-account',
+                     type: 'apollo',
+                     icon: 'error',
+                     size: '20px',
+                     classes: 'mr3',
+                     fill: 'var(--error-msg-dark)',
+                     hover: 'var(--error-msg-dark)' %}
+                </div>
+                <div class="inline-block v-start mb0 w80">
+                  {{ form.errors | default_errors }}
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+          <div id="password" class="span-12 a-left relative">
+            <label class="large" for="customer_password">{{ 'customer.activate_account.password' | t }}</label>
+            <input type="password" value="" name="customer[password]" id="customer_password" class="large password" size="16" />
+          </div>
+          <div id="password_confirm" class="span-12 a-left relative">
+            <label class="large" for="customer_password_confirmation">{{ 'customer.activate_account.password_confirm' | t }}</label>
+            <input type="password" value="" name="customer[password_confirmation]" id="customer_password_confirmation" class="large password" size="16" />
+          </div>
+          <div class="span-12 a-left relative">
+            <input class="btn-secondary button" type="submit" value="{{ 'customer.activate_account.submit' | t }}" />
+            <input type="submit" class="button  cancel" name="decline" id="customer_decline" value="{{ 'customer.activate_account.cancel' | t }}" />
+          </div>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+
+</section>

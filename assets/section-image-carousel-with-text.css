@@ -1,0 +1,16 @@
+.section-image-carousel-text .flickity-button.previous {
+  right: unset;
+  left: 10px;
+  top: 50%;
+}
+
+.section-image-carousel-text .flickity-button.next {
+  right: 10px;
+  left: unset;
+  top: 50%;
+}
+
+.section-image-carousel-text .main-carousel.v-center .flickity-slider {
+  display: flex;
+  align-items: center;
+}

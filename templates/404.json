@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "banner": {
+      "type": "template-header",
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "subheading": "",
+        "heading_placement": "center",
+        "alignment": "a-center",
+        "color_scheme": "3"
+      }
+    },
+    "main": {
+      "type": "main-404",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main"
+  ]
+}

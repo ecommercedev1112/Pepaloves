@@ -1,0 +1,24 @@
+{% if show_sidebar %}
+  <aside class="span-3 auto">
+    {% if blog.articles_count > 0 %}
+      <h3>{{ 'blogs.article.recent_posts' | t }}</h3>
+      <ul id="posts" class="hover-list">
+        {% for article in blog.articles %}
+          <li>
+            <a title="{{ article.title }}" href="{{ article.url }}">{{ article.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if blog.all_tags.size > 0 %}
+      <h3 class="mt4">{{ 'blogs.article.tags' | t }}</h3>
+      <ul id="tags" class="hover-list">
+        {% for tag in blog.all_tags %}
+          <li>
+            <a title="{{ tag }}" href="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}">{{ tag }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </aside>
+{% endif %}

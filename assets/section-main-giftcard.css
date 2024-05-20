@@ -1,0 +1,57 @@
+.gift-card-page .collection-banner .box-ratio img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.gift-card-page .gift-card-image {
+  width: auto;
+  border-radius: 10px;
+  position: relative;
+}
+
+.gift-card-page .gift-card-image p.amount {
+  font-size: 40px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: var(--main-spacing);
+  color: white;
+  position: absolute;
+  top: 25px;
+  right: 25px;
+}
+
+@media (max-width: 767px) {
+  .gift-card-page .gift-card-image {
+    width: 305px;
+  }
+
+  .gift-card-page .gift-card-image p.amount {
+    font-size: 20px;
+  }
+
+  .gift-card-page .gift-card-image svg {
+    width: 50px;
+  }
+}
+
+.gift-card-page .gift-card-code {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1.6;
+  font-stretch: normal;
+}
+
+@media (max-width: 767px) {
+  .gift-card-page .gift-card-code {
+    font-size: 30px;
+  }
+}
+
+.gift-card-page #qr-code img {
+  display: inline-block !important;
+}
+
+.gift-card-page h1 {
+  word-break: break-all;
+}

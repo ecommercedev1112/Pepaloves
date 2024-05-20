@@ -1,0 +1,307 @@
+{% comment %} Search Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-search.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-search.css' | asset_url }}"></noscript>
+<link rel="preload" href="{{ 'component-product-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-product-grid.css' | asset_url }}"></noscript>
+
+{% comment %} Search Page Logic {% endcomment %}
+{%- liquid
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+
+  assign product_info_align =  'a-center'
+
+  assign has_products = false
+  assign has_articles = false
+  assign has_pages = false
+
+  if section.settings.show_filters
+   assign show_filters = true
+ endif
+
+ assign filter_count = 0
+ for filter in search.filters
+   if filter.type == 'price_range'
+     if filter.min_value.value != nil or filter.max_value.value != nil
+       assign filter_count = 1
+     endif
+   endif
+
+   assign filter_count = filter_count | plus: filter.active_values.size
+ endfor
+
+-%}
+
+{% comment %} Search Page Template {% endcomment %}
+<section class="search-template search__page--wrapper no-section-animation pt6 mb9"
+  data-section-id="{{ section.id }}"
+  data-asset-url="{{ 'section-main-search.js' | asset_url }}"
+  data-section-type="search-template">
+  <div id="searchResultsWrapper" class="grid__wrapper">
+    {% paginate search.results by 24 %}
+      <div id="search-bar" class="search__page--bar-wrapper push-2 span-8 mb2">
+        <form action="{{ routes.search_url }}" method="get">
+          <div class="a-center">
+            {% if search.performed %}
+              {% if search.results_count == 0 %}
+                <p>{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>
+              {% else %}
+                <p>{{ 'general.search.results_for_html' | t: terms: search.terms }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="form form-vertical a-center">
+            <input
+              class="mb0"
+              type="text"
+              name="q"
+              id="q"
+              placeholder="{{ 'general.search.placeholder' | t }}"/>
+            <button type="submit" class="button">
+              {% render 'snip-icons',
+                 wrapper: '.search__page-bar-wrapper',
+                 type: 'theme',
+                 icon: 'search',
+                 size: '15px',
+                 classes: 'mr0',
+                 fill: 'var(--button-text)',
+                 hover: 'var(--button-hover)' %}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {% if search.performed %}
+        {%- if show_filters -%}
+          <div class="search__page--topbar span-12 auto grid__wrapper edge rg0">
+            <div class="span-5 sm-span-12 auto a-left v-end">
+              <button class="button js-slideout-open js-menu-toggle mr3"
+                data-wau-slideout-target="search-filters"
+                data-slideout-direction="left"
+                data-toggle-menu="filter"
+                aria-label="Open filters"
+                tabindex="0" type="button" name="button">
+                <span class="no-pe mr5">{{ 'collections.filter.filter' | t }}</span>
+               {% render 'snip-icons',
+                   wrapper: '.search__page--topbar',
+                   classes: 'a-right'
+                   type: 'theme',
+                   icon: 'filter',
+                   size: '5px',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}
+              </button>
+              <button class="button js-slideout-open js-menu-toggle mr3"
+                data-wau-slideout-target="search-filters"
+                data-slideout-direction="left"
+                data-toggle-menu="sort"
+                aria-label="Open filters"
+                tabindex="0" type="button" name="button">
+                <span class="no-pe mr5">{{ 'collections.filter.sort_title' | t }}</span>
+                {% render 'snip-icons',
+                   wrapper: '.search__page--topbar',
+                   classes: 'a-right'
+                   type: 'apollo',
+                   icon: 'down-carrot',
+                   size: '5px',
+                   fill: 'var(--text-color)',
+                   hover: 'var(--text-color)' %}
+              </button>
+            </div>
+            <div class="span-7 sm-hide auto a-right v-end">
+              <p class="topbar__count mb0 sm-caps">{{ 'collections.general.item_count.other' | t: count: search.results_count }}</p>
+            </div>
+            {%- if filter_count > 0 -%}
+              <div class="filter-drawer__filtering__results js-filters-reset span-12 auto">
+                <h3 class="visually-hidden">{{ 'collections.filter.filtering_by_label' | t }}</h3>
+                <ul class="current_filters mb0 mt4">
+                  {%- for filter in search.filters -%}
+                    {%- for value in filter.active_values -%}
+                      <li class="current_filters--filter">
+                        <a class="js-current-filter" href="{{ value.url_to_remove }}">
+                          {{ value.label | escape }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                    {% if filter.type == "price_range" %}
+                      {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                        <li class="current_filters--filter">
+                          <a class="js-current-filter" href="{{ filter.url_to_remove }}">
+                            {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}-{%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {% endif %}
+                  {%- endfor -%}
+                  <li><a class="current_filters--clear js-current-filter ml4" href="{{ routes.search_url }}">{{ 'collections.filter.clear_all' | t }}</a></li>
+                </ul>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <aside class="slideout slideout__drawer-left py8 px7"
+            data-wau-slideout="search-filters" id="slideout-search-filters">
+            <form id="SearchFiltersForm" data-filters>
+              {% render 'snip-filter-drawer',
+                has_sortby: true,
+                has_filter: true,
+                type: search,
+                filter_count: filter_count %}
+            </form>
+          </aside>
+        {%- endif -%}
+
+        {%- liquid
+
+          for item in search.results
+            if item.object_type == 'product'
+             assign has_products = true
+            endif
+            if item.object_type == 'article'
+             assign has_articles = true
+            endif
+            if item.object_type == 'page'
+             assign has_pages = true
+            endif
+          endfor
+
+        -%}
+
+        {%- if search.results_count < 1 -%}
+          <div id="main-search-results"
+            class="search--empty span-12 auto"
+            data-id="{{ section.id }}">
+             <div class="py10 a-center">
+              <h2>{{ 'general.search.no_results' | t }}</h2>
+              <p>{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>
+             </div>
+          </div>
+        {%- else -%}
+           <div id="main-search-results"
+            class="span-12 auto"
+            data-id="{{ section.id }}">
+            {% if settings.search_show_products_only == false and has_pages %}
+             <div class="span-12 auto">
+               <div id="search-pages" class="grid__wrapper pt5">
+                 {% render 'snip-headings', align: heading_align, grid: 'span-12 mt3', translation: 'general.search.pages' %}
+                 <ul class="bullet span-12">
+                   {% for item in search.results %}
+                     {% if item.object_type == 'page' %}
+                      <li>
+                        <small class="block mb1 mt2 caps"><a class="m0" href="{{ item.url }}">{{ item.title }}</a></small>
+                        {%- if item.content -%}
+                        <p>{{ item.content | strip_html | truncatewords: 12 }}</p>
+                        {%- endif -%}
+                    </li>
+                     {% endif %}
+                   {% endfor %}
+                 </ul>
+               </div>
+             </div>
+            {% endif %}
+
+            {% if settings.search_show_products_only == false and has_articles %}
+             <div class="span-12 auto">
+               <div id="search-pages" class="grid__wrapper pt5">
+                 {% render 'snip-headings', align: heading_align, grid: 'span-12 mt3', translation: 'general.search.articles' %}
+
+                 {% for item in search.results %}
+                   {% if item.object_type == 'article' %}
+                     <article class="span-4 sm-span-12 auto relative">
+                       <div class="mb6">
+                         {% if item.image %}
+                           {% liquid
+                             assign articles_has_images = true
+                             if section.index == 1 and forloop.index <= 3
+                               assign loading = 'eager'
+                               assign fetch_priority = 'high'
+                             endif
+                            %}
+                           <a href="{{ item.url }}">
+                             {% render 'helper-image',
+                              type: item.image,
+                              sm_render: '100vw'
+                              md_render: 'calc((100vw / 12) * 4)',
+                              lg_render: 'calc((1600px / 12) * 4)',
+                              loading: loading,
+                              fetchpriority: fetch_priority %}
+                           </a>
+                         {% endif %}
+                       </div>
+                       <div class="rte excerpt">
+                         <h3 class="post-title mb5">
+                           <a href="{{ item.url }}">
+                             {{ item.title }}
+                           </a>
+                         </h3>
+                         <div class="article-headline">
+                           <p class="rte">
+                             {{ item.content | strip_html | truncatewords: 30 }}
+                           </p>
+                           <small>
+                             <a class="button" href="{{ item.url }}">{{ 'blogs.article.read_more' | t }}</a>
+                           </small>
+                         </div>
+                       </div>
+                     </article>
+                   {% endif %}
+                 {% endfor %}
+               </div>
+             </div>
+            {% endif %}
+
+            {% if has_products %}
+              {% render 'snip-headings', grid: 'span-12 mb0 p0', align: heading_align, translation: 'general.search.products' %}
+              <div class="span-12">
+                <div class="product-loop grid__wrapper cg9 rg6 sm-cg2">
+                  {% for item in search.results %}
+                    {% if item.object_type == 'product' %}
+                      {% liquid
+                        assign articles_has_images = true
+                        if section.index == 1 and articles_has_images == false and forloop.index <= 3
+                          assign loading = 'eager'
+                          assign fetch_priority = 'high'
+                        endif
+                       %}
+                      {% render 'product-loop',
+                        carousel: false,
+                        product: item,
+                        product_info_align: product_info_align,
+                        items_per_row: 'span-4 sm-span-6 auto',
+                        loading: loading,
+                        fetchpriority: fetch_priority %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            {% if search.results_count >= 24 %}
+               <div class="span-12 mb8">
+                 {% render 'snip-pagination', paginate: paginate %}
+               </div>
+            {% endif %}
+          </div>
+        {%- endif -%}
+      {% endif %}
+
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show search filters",
+      "info": "Learn how to add storefront filters [here](https://help.shopify.com/en/manual/online-store/themes/os20/customize/filters)"
+    }
+  ]
+}
+{% endschema %}

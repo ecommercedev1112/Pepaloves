@@ -1,0 +1,195 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-set-product",
+      "blocks": {
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a": {
+          "type": "product_title",
+          "settings": {
+          }
+        },
+        "747206a3-4bdf-4769-ae03-948ab392c6f9": {
+          "type": "product_prices",
+          "settings": {
+          }
+        },
+        "9fb26fd2-bd28-458f-b2b8-4e56e3cbaadc": {
+          "type": "set_item",
+          "settings": {
+          }
+        },
+        "3230fe5a-2fad-41aa-912d-c3d22fbadfdf": {
+          "type": "set_item",
+          "settings": {
+          }
+        },
+        "9b96ef88-39e3-4f97-9483-10eef1ec242a": {
+          "type": "set_item",
+          "settings": {
+          }
+        },
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84": {
+          "type": "product_buttons",
+          "settings": {
+          }
+        },
+        "35d7ec12-af12-4b47-9421-dd981a44a735": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "SIZE GUIDE",
+            "show_border_label": true,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        },
+        "2d587658-77a6-434d-9116-80bb5399a066": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "PRODUCTION",
+            "show_border_label": true,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        },
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "RETURNS",
+            "show_border_label": false,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a",
+        "747206a3-4bdf-4769-ae03-948ab392c6f9",
+        "9fb26fd2-bd28-458f-b2b8-4e56e3cbaadc",
+        "3230fe5a-2fad-41aa-912d-c3d22fbadfdf",
+        "9b96ef88-39e3-4f97-9483-10eef1ec242a",
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84",
+        "35d7ec12-af12-4b47-9421-dd981a44a735",
+        "2d587658-77a6-434d-9116-80bb5399a066",
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741"
+      ],
+      "settings": {
+        "full_width": false,
+        "gallery_style": "scroll_gallery",
+        "thumbnail_position": "right",
+        "click_to_enlarge": true,
+        "enable_video_looping": false
+      }
+    },
+    "1642796129844cd818": {
+      "type": "collage",
+      "blocks": {
+        "16427961293651b8a6-1": {
+          "type": "text",
+          "settings": {
+            "heading": "Our Collections",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Shop All Collections",
+            "link_url": "",
+            "alignment": "a-left",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "16427961293651b8a6-0": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "16427961293651b8a6-2": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "f5a62b97-c552-4915-b030-9636a520c23c": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Learn More",
+            "link_url": "shopify:\/\/pages\/contact",
+            "alignment": "a-left",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": false,
+            "padding_bottom": true
+          }
+        }
+      },
+      "block_order": [
+        "16427961293651b8a6-1",
+        "16427961293651b8a6-0",
+        "16427961293651b8a6-2",
+        "f5a62b97-c552-4915-b030-9636a520c23c"
+      ],
+      "settings": {
+        "full_width": false,
+        "grid_gap": 20,
+        "section_padding": "none"
+      }
+    },
+    "product-details": {
+      "type": "main-product-details",
+      "blocks": {
+        "87ab27ea-e73d-437e-897b-28d30835ed8b": {
+          "type": "product_vendor",
+          "settings": {
+          }
+        },
+        "a739078f-4d98-4349-a399-c18c2f011733": {
+          "type": "product_collection",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "87ab27ea-e73d-437e-897b-28d30835ed8b",
+        "a739078f-4d98-4349-a399-c18c2f011733"
+      ],
+      "settings": {
+        "outer_border": true,
+        "container_width": "66",
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "items_per_row": 4,
+        "items_shown": 9,
+        "title": "Related Products",
+        "link_text": "",
+        "link_url": "",
+        "text_position": "left",
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1642796129844cd818",
+    "product-details",
+    "product-recommendations"
+  ]
+}

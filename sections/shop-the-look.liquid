@@ -1,0 +1,304 @@
+  {% comment %} Shop the Look Assets {% endcomment %}
+  <link rel="preload" href="{{ 'section-shop-the-look.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ 'section-shop-the-look.css' | asset_url }}"></noscript>
+
+{%- liquid
+
+    assign section_padding = ''
+    if section.settings.section_padding == 'top'
+      assign section_padding = 'pb0'
+    elsif section.settings.section_padding == 'bottom'
+      assign section_padding = 'mt0'
+    elsif section.settings.section_padding == 'none'
+      assign section_padding = 'mt0 pb0'
+    endif
+  
+    if settings.section_title_align == 'left'
+        assign heading_align = 'a-left'
+    else
+        assign heading_align = 'a-center'
+    endif
+
+    if section.index == 1
+      assign loading = 'eager'
+      assign fetch_priority = 'high'
+    endif
+  
+  -%}
+
+  {% comment %} Shop the Look Template {% endcomment %}
+  <section
+    class="shop__thelook global__section global__section--margin {{ section_padding }}"
+    data-section-id="{{ section.id }}"
+    data-section-type="shop-the-look"
+    data-section-loaded="false"
+    data-asset-url="{{ 'shop-the-look.js' | asset_url }}">
+
+    <div class="grid__wrapper">
+        {% render 'snip-headings', align: heading_align, classes: 'section-gallery__section-heading', grid: 'span-12 auto', heading: section.settings.title %}
+    </div>
+
+    {% if section.settings.full_width %}<div class="gridlock-fluid"><div class="row">{% endif %}
+    <div class="grid__wrapper pl0 pr0{% if section.settings.full_width %} edge{% endif %}">
+
+        <div class="shop__thelook-image-{{ section.id }} stl__image {{ image_width }} span-12 auto" {{ block.shopify_attributes }}>
+            <div class="image-inner">
+                {% if section.settings.image != blank %}
+                    {% render 'helper-image',
+                    type: section.settings.image,
+                    width: 2000,
+                    loading: loading,
+                    fetchpriority: fetch_priority
+                    %}
+                {% else %}
+                    <div class="onboard">
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            {% for block in section.blocks %}
+
+                {%- liquid
+                    assign has_product = false
+                    if block.settings.product != blank
+                        assign product = block.settings.product
+                        assign has_product = true
+                    endif
+                    assign hotspot_horizontal = block.settings.hotspot_horizontal
+                    assign hotspot_vertical = block.settings.hotspot_vertical
+                    assign color = block.settings.hotspot_color
+                -%}
+
+                <div class="product-{{ block.id }} hotspot">
+                    <div class="product-container">
+                        {% if has_product %}
+                        <div class="hover product-hotspot">
+                            <div class="prod-image">
+                                <a href="{{ product.url }}" title="{{ product.title | escape }}">
+                                <div class="reveal">
+                                    {% render 'helper-image', type: product.featured_media, width: 500 %}
+                                </div>
+                                </a>
+                            </div>
+                            <div class="product-details">
+                                <a href="{{ product.url }}" title="{{ product.title | escape }}">
+                                    <p class="product-title">{{ product.title }}</p>
+                                </a>
+                                <div class="price">
+                                {% if product.price < product.compare_at_price %}
+                                    <div class="onsale">{{ product.price | money }}</div>
+                                    <div class="was">{{ product.compare_at_price | money }}</div>
+                                {% else %}
+                                    <div class="prod-price">{% if product.price_varies %} {{ 'products.general.from' | t }} {{ product.price_min | money }} - {{ product.price_max | money }} {% else %}{{ product.price | money }}{% endif %}</div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% style %}
+                    .product-{{ block.id }} .hover {
+                        position: absolute;
+                        background: white;
+                        border: 1px solid #eee;
+                        top: 15px;
+                        left: 15px;
+                        display: none;
+                        z-index: 5;
+                        padding: 10px;
+                        align-items: center;
+                        width: 270px;
+                    }
+                    .product-{{ block.id }}.hotspot {
+                        position: absolute;
+                        left: {{ hotspot_horizontal }}%;
+                        top: {{ hotspot_vertical }}%;
+                        -webkit-transform: translate(-{{ hotspot_horizontal }}%, -{{ hotspot_vertical }}%);
+                        -ms-transform: translate(-{{ hotspot_horizontal }}%, -{{ hotspot_vertical }}%);
+                        -moz-transform: translate(-{{ hotspot_horizontal }}%, -{{ hotspot_vertical }}%);
+                        -o-transform: translate(-{{ hotspot_horizontal }}%, -{{ hotspot_vertical }}%);
+                        transform: translate(-{{ hotspot_horizontal }}%, -{{ hotspot_vertical }}%);
+                        cursor: pointer;
+                    }
+                    .product-{{ block.id }}.hotspot:after {
+                        content: "";
+                        background-color: {{ color }};
+                        width: 20px;
+                        height: 20px;
+                        border: 5px solid white;
+                        border-radius: 50%;
+                        opacity: 0.6;
+                        display: block;
+                        pointer-events: all;
+                    }
+                    .product-{{ block.id }}.hotspot:hover {
+                        z-index: 1;
+                    }
+                    .shop__thelook-image-{{ section.id }}:hover .hotspot:after {
+                        border: 5px solid white;
+                        transform: scale(1);
+                        animation: pulse 1.5s infinite;
+                        animation-timing-function: linear;
+                    }
+                    @keyframes pulse {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.25); }
+                        00% { transform: scale(1); }
+                    }
+                    .product-{{ block.id }}.hotspot:hover .hover {
+                        display: flex;
+                    }
+                {% endstyle %}
+            {% endfor %}
+        </div>
+    </div>
+    {% if section.settings.full_width %}</div></div>{% endif %}
+  </section>
+
+
+  {% schema %}
+  {
+    "name": "Shop the look",
+    "tag": "section",
+    "class": "dynamic-section",
+    "settings":
+    [
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full width"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Shop the Look"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "2000px x 1600px recommended"
+      },
+      {
+        "type": "select",
+        "id": "section_padding",
+        "label": "Section spacing",
+        "options": [
+          {
+            "value": "top",
+            "label": "Top"
+          },
+          {
+            "value": "bottom",
+            "label": "Bottom"
+          },
+          {
+            "value": "both",
+            "label": "Both"
+          },
+          {
+            "value": "none",
+            "label": "None"
+          }
+        ],
+        "default": "both"
+      }
+    ],
+    "blocks":
+    [
+      {
+        "type": "product",
+        "name": "Product",
+        "settings":
+        [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          },
+          {
+            "type": "range",
+            "id": "hotspot_horizontal",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Hotspot horizontal position",
+            "default": 40
+          },
+          {
+            "type": "range",
+            "id": "hotspot_vertical",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Hotspot vertical position",
+            "default": 40
+          },
+          {
+            "type": "color",
+            "id": "hotspot_color",
+            "label": "Hotspot color",
+            "default": "#000"
+          }
+        ]
+      }
+    ],
+    "presets":
+    [
+      {
+        "name": "Shop the look",
+        "blocks":
+        [
+          {
+            "type": "product",
+            "settings": {
+                "product": "",
+                "hotspot_horizontal": 42,
+                "hotspot_vertical": 27,
+                "hotspot_color": "#000"
+              }
+          },
+          {
+            "type": "product",
+            "settings": {
+                "product": "",
+                "hotspot_horizontal": 58,
+                "hotspot_vertical": 40,
+                "hotspot_color": "#000"
+              }
+          },
+          {
+            "type": "product",
+            "settings": {
+                "product": "",
+                "hotspot_horizontal": 37,
+                "hotspot_vertical": 68,
+                "hotspot_color": "#000"
+            }
+          }
+        ]
+      }
+    ],
+    "enabled_on": {
+      "templates": [
+        "404",
+        "article",
+        "blog",
+        "cart",
+        "collection",
+        "list-collections",
+        "index",
+        "page",
+        "product",
+        "search",
+        "metaobject"
+      ]
+    }
+  }
+  {% endschema %}

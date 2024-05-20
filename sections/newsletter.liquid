@@ -1,0 +1,345 @@
+{% comment %} Newsletter logic {% endcomment %}
+{%- liquid
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign text_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-text)'
+  assign bg_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-bg)'
+  assign hover_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-hover)'
+-%}
+
+{% comment %} Newsletter Template {% endcomment %}
+<div
+  id="newsletter"
+  class="global__section newsletter-{{ section.id }} {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="newsletter"
+  data-section-loaded="false"
+>
+  <div class="newsletter__inner-wrapper py7 px2">
+    <div class="grid__wrapper">
+      <article class="span-12 a-center v-center">
+        {% render 'snip-headings', align: section.settings.alignment, classes: 'animate--text delay--1' %}
+        {% if section.settings.subheading != blank %}
+          <div class="rte mb0 animate--text delay--2">
+            {{ section.settings.subheading }}
+          </div>
+        {% endif %}
+      </article>
+    </div>
+    <div class="grid__wrapper edge center-content">
+      <article class="span-6 push-3 v-stretch v-center">
+        <div class="section-newsletter animate--text delay--3">
+          {% form 'customer', id: 'section_newsletter_form', class: 'form' %}
+            {% if form.posted_successfully? %}
+              <div class="note note-success mt1 mb1">
+                <div class="inline-block v-center">
+                  {%
+                    render 'snip-icons',
+                    wrapper: '.note-success',
+                    type: 'apollo',
+                    icon: 'checkmark',
+                    classes: 'mr3',
+                    size: '12px',
+                    fill: 'var(--success-msg-dark)',
+                    hover: 'var(--success-msg-dark)'
+                  %}
+                </div>
+                <p class="sm-caps inline-block v-center mb0">{{ 'general.newsletter_form.confirmation' | t }}</p>
+              </div>
+            {% endif %}
+
+            <div class="form form-vertical input-group password__input-group">
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label for="Email--{{ section.id }}">{{ 'general.newsletter_form.newsletter_email' | t }}</label>
+              <input
+                type="email"
+                name="contact[email]"
+                id="Email--{{ section.id }}"
+                value="{% if customer %}{{ customer.email }}{% endif %}"
+                autocorrect="off"
+                autocapitalize="off"
+              >
+              <button type="submit" class="btn-border-link mt4 mb0 animate--text delay--2 relative a-center" name="commit">
+                <span>{{ 'general.newsletter_form.submit' | t }}</span>
+              </button>
+            </div>
+
+            {% if form.errors %}
+              <div class="note note-error mb1">
+                <div class="inline-block v-center">
+                  {%
+                    render 'snip-icons',
+                    wrapper: '.note-error',
+                    type: 'apollo',
+                    icon: 'error',
+                    classes: 'mr3',
+                    size: '12px',
+                    fill: 'var(--error-msg-dark)',
+                    hover: 'var(--error-msg-dark)'
+                  %}
+                </div>
+                <p class="sm-caps inline-block v-center mb0">{{ form.errors | default_errors | strip_html }}</p>
+              </div>
+            {% endif %}
+          {% endform %}
+        </div>
+        {% if section.settings.mail_gdpr_text %}
+          <div class="gdpr-text before-signup animate--text delay--4">{{ section.settings.mail_gdpr_text }}</div>
+        {% endif %}
+      </article>
+      {% if section.settings.show_social_icons %}
+      <article class="span-4 push-4 v-stretch v-center">
+        <div class="section-icons animate--text delay--5">
+          {% render 'snip-social-icons', fill_color: text_color, hover_color: hover_color %}
+        </div>
+      </article>
+    {% endif %}
+    </div>
+  </div>
+  <style>
+     {%- unless section.settings.color_scheme == 'none' -%}
+       .newsletter-{{ section.id }} .newsletter__inner-wrapper {
+         background: {{ bg_color }};
+       }
+       .newsletter-{{ section.id }} h2,
+       .newsletter-{{ section.id }} .form label,
+       .newsletter-{{ section.id }} p,
+       .newsletter-{{ section.id }} p a,
+       .newsletter-{{ section.id }} .gdpr-text.before-signup p {
+         color: {{ text_color }} !important;
+       }
+       .newsletter-{{ section.id }} .btn-border-link:before,
+       .newsletter-{{ section.id }} .btn-border-link:after {
+         background: {{ text_color }};
+       }
+       .newsletter-{{ section.id }} .btn-border-link span:before,
+       .newsletter-{{ section.id }} .btn-border-link span:after {
+         background: {{ text_color }};
+       }
+       .section-newsletter button[type="submit"] {
+          color: {{ text_color }} !important;
+       }
+     {%- endunless -%}
+
+     .newsletter-{{ section.id }} .form.form-vertical {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+     }
+
+     .newsletter-{{ section.id }} a {
+       text-decoration: underline;
+     }
+
+     .newsletter-{{ section.id }} h2 {
+        font-size: {{ section.settings.heading_font_size }}px;
+     }
+     .newsletter-{{ section.id }} p {
+       font-size: {{ section.settings.subheading_font_size }}px;
+       max-width: 60%;
+       margin: 0 auto !important;
+       padding-bottom: 20px !important;
+       margin-top: 10px !important;
+     }
+     .newsletter-{{ section.id }} p a {
+       opacity: 0.9;
+     }
+     .newsletter-{{ section.id }} p a:hover {
+       text-decoration: underline;
+     }
+     .newsletter-{{ section.id }} .note p {
+       padding: 0 !important;
+       margin: 0 !important;
+     }
+     @media (max-width: 767px) {
+       .newsletter-{{ section.id }} p {
+         max-width: 100%;
+       }
+       .newsletter-{{ section.id }} h2 {
+          font-size: calc({{ section.settings.heading_font_size }}px - ({{ section.settings.heading_font_size }}px * 0.15));
+       }
+       .newsletter-{{ section.id }} p {
+         font-size: calc({{ section.settings.subheading_font_size }}px - ({{ section.settings.subheading_font_size }}px * 0.15));
+       }
+     }
+     .gdpr-text.before-signup p {
+       font-size: var(--font-size-sm);
+       margin-bottom: 0 !important;
+       padding: 0;
+    }
+     .gdpr-text.before-signup a {
+       font-size: var(--font-size-sm);
+    }
+    .section-newsletter input,
+    .section-newsletter button.button.btn-secondary,
+    .section-newsletter button {
+      margin-bottom: 0 !important;
+    }
+    .section-newsletter button[type="submit"] {
+      background: transparent;
+      box-sizing: content-box;
+      height: var(--space-8);
+      vertical-align: middle;
+      line-height: var(--space-8);
+      margin: 0 !important;
+      color: inherit;
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Signup for our newsletter to stay up to date on sales and events.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "mail_gdpr_text",
+      "label": "GDPR text",
+      "default": "<p>*By completing this form you're signing up to receive our emails and can unsubscribe at any time.</p>"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "a-center",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        },
+        {
+          "value": "a-right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id":"show_social_icons",
+      "label":"Show social icons",
+      "default":true
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 12,
+      "max": 46,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "subheading_font_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "paragraph",
+      "content": "Any customers who signup will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ],
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{% if form.errors %}
+  <div class="errors note note-error mb3 inline-block">
+    <div class="inline-block v-center w10">
+      {% render 'snip-icons',
+         wrapper: '.errors.note',
+         type: 'apollo',
+         icon: 'error',
+         size: '20px',
+         classes: 'mr3',
+         fill: 'var(--error-msg-dark)',
+         hover: 'var(--error-msg-dark)' %}
+    </div>
+    {{ form.errors | default_errors }}
+  </div>
+{% endif %}

@@ -1,0 +1,361 @@
+{%- liquid
+  assign main_font = settings.main_font
+  assign nav_font = settings.nav_font
+  assign heading_font = settings.heading_font
+  assign main_font_bold = main_font | font_modify: 'weight', 'bold'
+  assign main_font_italic = main_font | font_modify: 'style', 'italic'
+  assign main_font_bold_italic = main_font_bold | font_modify: 'style', 'italic'
+%}
+
+{% style %}
+
+{{ main_font | font_face: font_display: 'swap' }}
+{{ main_font_bold | font_face: font_display: 'swap' }}
+{{ main_font_italic | font_face: font_display: 'swap' }}
+{{ main_font_bold_italic | font_face: font_display: 'swap' }}
+{{ heading_font | font_face: font_display: 'swap' }}
+{{ nav_font | font_face: font_display: 'swap' }}
+
+{%- liquid
+  case settings.heading_spacing
+    when 0
+      assign heading_spacing = '0px'
+    when 1
+      assign heading_spacing = '0.5px'
+    when 2
+      assign heading_spacing = '1px'
+    when 3
+      assign heading_spacing = '1.5px'
+    when 4
+      assign heading_spacing = '2px'
+    when 5
+      assign heading_spacing = '2.5px'
+    when 6
+      assign heading_spacing = '3px'
+  endcase
+  case settings.nav_spacing
+    when 0
+      assign nav_spacing = '0px'
+    when 1
+      assign nav_spacing = '0.5px'
+    when 2
+      assign nav_spacing = '1px'
+    when 3
+      assign nav_spacing = '1.5px'
+    when 4
+      assign nav_spacing = '2px'
+    when 5
+      assign nav_spacing = '2.5px'
+    when 6
+      assign nav_spacing = '3px'
+  endcase
+  case settings.font_spacing
+    when 0
+      assign font_spacing = '0px'
+    when 1
+      assign font_spacing = '0.5px'
+    when 2
+      assign font_spacing = '1px'
+    when 3
+      assign font_spacing = '1.5px'
+    when 4
+      assign font_spacing = '2px'
+    when 5
+      assign font_spacing = '2.5px'
+    when 6
+      assign font_spacing = '3px'
+  endcase
+  case settings.button_spacing
+    when 0
+      assign buttons_spacing = '0px'
+    when 1
+      assign buttons_spacing = '0.5px'
+    when 2
+      assign buttons_spacing = '1px'
+    when 3
+      assign buttons_spacing = '1.5px'
+    when 4
+      assign buttons_spacing = '2px'
+    when 5
+      assign buttons_spacing = '2.5px'
+    when 6
+      assign buttons_spacing = '3px'
+  endcase
+  assign nav_transform = 'unset'
+  if settings.nav_transform
+    assign nav_transform = 'uppercase'
+  endif
+  assign buttons_transform = 'unset'
+  if settings.buttons_transform
+    assign buttons_transform = 'uppercase'
+  endif
+-%}
+
+:root {
+  --heading-family: {{ heading_font.family }};
+  --heading-weight: {{ heading_font.weight }};
+  --heading-style: {{ heading_font.style }};
+  --heading-spacing: {{ heading_spacing }};
+  --heading-align: {{ settings.section_title_align }};
+
+  --main-family: {{ main_font.family }};
+  --main-weight: {{ main_font.weight }};
+  --main-style: {{ main_font.style }};
+  --main-spacing: {{ font_spacing }};
+
+  --nav-family: {{ nav_font.family }};
+  --nav-weight: {{ nav_font.weight }};
+  --nav-style: {{ nav_font.style }};
+  --nav-spacing: {{ nav_spacing }};
+  --nav-transform: {{ nav_transform }};
+
+  --font-size: {{ settings.font_size }}px;
+  --nav-size: {{ settings.nav_size }}px;
+  --h1-size: {{ settings.h1_size }}px;
+  --h2-size: {{ settings.h2_size }}px;
+  --h3-size: {{ settings.h3_size }}px;
+  --h4-size: calc(var(--font-size) + 2px);
+  --h5-size: calc(var(--font-size) + 1px);
+
+  --font-size-sm: calc({{ settings.font_size }}px - 2px);
+  --font-size-reset: {{ settings.font_size }}px;
+
+  --buttons-transform: {{ buttons_transform }};
+  --buttons-border-weight: 1px;
+  --buttons-corners: 0;
+  --buttons-spacing: {{ buttons_spacing }};
+  --form-border-weight: 1px;
+
+  --slideout-desktop: 550px;
+  --slideout-desktop-n: -550px;
+  --slideout-mobile: 100%;
+  --slideout-mobile-n: -100%;
+
+  --keyboard-focus: {{ settings.keyboard_focus }};
+  --keyboard-border-style: {{ settings.focus_border_style }};
+  --keyboard-border-weight: {{ settings.focus_border_weight }}px;
+  --keyboard-border-offset-weight: -{{ settings.focus_border_weight }}px;
+
+  --scheme-1-bg: {{ settings.scheme_1_bg }};
+  --scheme-1-text: {{ settings.scheme_1_text }};
+  --scheme-1-hover: {{ settings.scheme_1_hover }};
+
+  --scheme-2-bg: {{ settings.scheme_2_bg }};
+  --scheme-2-text: {{ settings.scheme_2_text }};
+  --scheme-2-hover: {{ settings.scheme_2_hover }};
+
+  --scheme-3-bg-light: {{ settings.scheme_3_bg | color_lighten: 20 }};
+  --scheme-3-bg: {{ settings.scheme_3_bg }};
+  --scheme-3-text: {{ settings.scheme_3_text }};
+  --scheme-3-hover: {{ settings.scheme_3_hover }};
+
+  --background: {{ settings.background }};
+  --background-dark: {{ settings.background | color_darken: 20 }};
+  --text-color-light: {{ settings.text_color | color_lighten: 25 }};
+  --text-color: {{ settings.text_color }};
+  --forms-bg: {{ settings.forms_bg }};
+  --dotted-color: {{ settings.border_color }};
+  --sale-color: {{ settings.sale_color }};
+  --sale-color-dark: {{ settings.sale_color | color_darken: 20 }};
+  --sale-color-light: {{ settings.sale_color | color_lighten: 20 }};
+  --announcement-bg: {{ settings.announcement_bg }};
+  --announcement-text: {{ settings.announcement_text }};
+  --announcement-hover: {{ settings.announcement_hover }};
+  --mobile-header-bg: {{ settings.mobile_header_bg }};
+  --mobile-header-text: {{ settings.mobile_header_text }};
+  --header-bg: {{ settings.header_bg }};
+  --header-text: {{ settings.header_text }};
+  --header-hover: {{ settings.header_hover }};
+  --button-bg: {{ settings.button_bg }};
+  --button-text: {{ settings.button_text }};
+  --button-hover: {{ settings.button_hover }};
+  --secondary-button-bg: {{ settings.secondary_button_bg }};
+  --secondary-button-text: {{ settings.secondary_button_text }};
+  --secondary-button-hover: {{ settings.secondary_button_hover }};
+  --swatch-accent: {{ settings.swatch_accent }};
+  --gold-swatch: {%- if settings.gold_gradient != blank -%}{{ settings.gold_gradient }}{%- else -%}{{ settings.gold_swatch }}{%- endif -%};
+  --rose-gold-swatch: {%- if settings.rose_gold_gradient != blank -%}{{ settings.rose_gold_gradient }}{%- else -%}{{ settings.rose_gold_swatch }}{%- endif -%};
+  --silver-swatch: {%- if settings.silver_gradient != blank -%}{{ settings.silver_gradient }}{%- else -%}{{ settings.silver_swatch }}{%- endif -%};
+  --platinum-swatch: {%- if settings.platinum_gradient != blank -%}{{ settings.platinum_gradient }}{%- else -%}{{ settings.platinum_swatch }}{%- endif -%};
+  --copper-swatch: {%- if settings.copper_gradient != blank -%}{{ settings.copper_gradient }}{%- else -%}{{ settings.copper_swatch }}{%- endif -%};
+  --directional-bg: {{ settings.directional_bg }};
+  --directional-text: {{ settings.directional_text }};
+  --directional-hover: {{ settings.directional_hover }};
+  --footer-bg: {{ settings.footer_bg }};
+  --footer-text: {{ settings.footer_text }};
+  --footer-hover: {{ settings.footer_hover }};
+  --error-msg-dark: #BF3333;
+  --error-msg-light: {{ '#BF3333' | color_lighten: 50 }};
+  --success-msg-dark: #43664a;
+  --success-msg-light: #a8cbaf;
+  --slideshow-btn-height: 34px;
+  --slideshow-btn-width: 34px;
+  --masonry-padding: 20px;
+  --section-padding: {{ settings.section_padding }}px;
+  --section-background: transparent;
+  --section-overlay-color: 0, 0, 0;
+  --section-overlay-opacity: 0;
+  --placeholder-background: {{ settings.text_color | color_modify: 'alpha', 0.7 }};
+  --placeholder-fill: {{ settings.text_color | color_modify: 'alpha', 0.3 }};
+
+  --color-body-text: var(--text-color);
+  --color-body: var(--background);
+  --color-bg: var(--background);
+
+  --star-active: {{ settings.text_color | color_to_rgb }};
+  --star-inactive: {{ settings.text_color | color_lighten: 30 | color_to_rgb }};
+}
+.ajax-cart__free-shipping .cart-shipping-countdown {
+  background-color: var(--scheme-{{ settings.free_shipping_scheme }}-bg);
+  color: var(--scheme-{{ settings.free_shipping_scheme }}-text);
+}
+.ajax-cart__free-shipping p, .ajax-cart__free-shipping span, .ajax-cart__free-shipping small {
+  color: var(--scheme-{{ settings.free_shipping_scheme }}-text);
+}
+.cart-shipping-countdown__meter {
+  background-color: var(--scheme-{{ settings.free_shipping_scheme }}-text);
+}
+.cart-shipping-countdown__meter > span {
+  background-color: var(--swatch-accent);
+}
+.product-form__upsell-item--outer {
+  background-color: var(--scheme-{{ settings.cart_upsell_scheme }}-bg);
+}
+.product-form__upsell-info--inner p,
+.product-form__upsell-info--inner a,
+.product-form__upsell-info--inner span,
+.product-form_upsell-buttons .btn-border-link {
+  color: var(--scheme-{{ settings.cart_upsell_scheme }}-text);
+}
+.product-form_upsell-buttons .btn-border-link:before, .product-form_upsell-buttons .btn-border-link:after,
+.product-form_upsell-buttons .btn-border-link span:before, .product-form_upsell-buttons .btn-border-link span:after {
+  background-color: var(--scheme-{{ settings.cart_upsell_scheme }}-text);
+}
+@media (max-width: 740px) {
+  :root {
+    --font-size: calc({{ settings.font_size }}px - ({{ settings.font_size }}px * 0.15));
+    --nav-size: calc({{ settings.nav_size }}px - ({{ settings.nav_size }}px * 0.15));
+    --h1-size: calc({{ settings.h1_size }}px - ({{ settings.h1_size }}px * 0.15));
+    --h2-size: calc({{ settings.h2_size }}px - ({{ settings.h2_size }}px * 0.15));
+    --h3-size: calc({{ settings.h3_size }}px - ({{ settings.h3_size }}px * 0.15));
+  }
+}
+{%- if settings.enable_metal_swatches -%}
+  /* ---- Custom Metal CSS Colors ----*/
+  [data-swatch-color="yellow-gold"],
+  [data-swatch-color="gold"],
+  [data-swatch-color="10kt-gold"],
+  [data-swatch-color="10kt-yellow-gold"],
+  [data-swatch-color="14kt-gold"],
+  [data-swatch-color="14kt-yellow-gold"],
+  [data-swatch-color="18kt-gold"],
+  [data-swatch-color="18kt-yellow-gold"],
+  [data-swatch-color="22kt-gold"],
+  [data-swatch-color="22kt-yellow-gold"],
+  [data-swatch-color="24kt-gold"],
+  [data-swatch-color="24kt-yellow-gold"] {
+    background: var(--gold-swatch) !important;
+  }
+
+  [data-swatch-color="rose-gold"],
+  [data-swatch-color="10kt-rose-gold"],
+  [data-swatch-color="14kt-rose-gold"],
+  [data-swatch-color="18kt-rose-gold"],
+  [data-swatch-color="22kt-rose-gold"],
+  [data-swatch-color="24kt-rose-gold"]     {
+    background: var(--rose-gold-swatch) !important;
+  }
+
+  [data-swatch-color="10kt-white-gold"],
+  [data-swatch-color="14kt-white-gold"],
+  [data-swatch-color="18kt-white-gold"],
+  [data-swatch-color="22kt-white-gold"],
+  [data-swatch-color="24kt-white-gold"],
+  [data-swatch-color="white-gold"],
+  [data-swatch-color="silver"],
+  [data-swatch-color="sterling-silver"],
+  [data-swatch-color="925-silver"] {
+    background: var(--silver-swatch) !important;
+  }
+
+  [data-swatch-color="platinum"] {
+    background: var(--platinum-swatch) !important;
+  }
+
+  [data-swatch-color="copper"] {
+    background: var(--copper-swatch) !important;
+  }
+{%- endif -%}
+{%- if settings.enable_kt_labels -%}
+  /* ---- Custom Metal KT labels ----*/
+  .swatches__swatch--color [data-swatch-color="10kt-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="10kt-yellow-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="10kt-white-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="10kt-rose-gold"]:after {
+    content: '10kt';
+    color: var(--text-color);
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+  }
+
+  .swatches__swatch--color [data-swatch-color="14kt-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="14kt-yellow-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="14kt-white-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="14kt-rose-gold"]:after {
+    content: '14kt';
+    color: var(--text-color);
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+  }
+
+  .swatches__swatch--color [data-swatch-color="18kt-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="18kt-white-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="18kt-yellow-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="18kt-rose-gold"]:after {
+    content: '18kt';
+    color: var(--text-color);
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+  }
+
+  .swatches__swatch--color [data-swatch-color="22kt-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="22kt-white-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="22kt-yellow-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="22kt-rose-gold"]:after {
+    content: '22kt';
+    color: var(--text-color);
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+  }
+
+  .swatches__swatch--color [data-swatch-color="24kt-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="24kt-white-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="24kt-yellow-gold"]:after,
+  .swatches__swatch--color [data-swatch-color="24kt-rose-gold"]:after {
+    content: '24kt';
+    color: var(--text-color);
+    font-size: 11px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+  }
+{%- endif -%}
+{% endstyle %}

@@ -1,0 +1,196 @@
+{%- liquid
+  assign icon_type = ''
+  assign icon_text = ''
+
+  if product.template_suffix == 'set'
+    assign icon_type = 'new'
+    assign icon_text =  'products.general.set' | t
+  elsif product.available
+    for col in product.collections
+      if col.handle == 'new'
+        assign icon_type = 'new'
+        assign icon_text =  'products.general.new' | t
+      endif
+    endfor
+    if product.price < product.compare_at_price
+      assign icon_type = 'sale-item'
+      assign icon_text =  'products.general.sale' | t
+    endif
+  else
+    assign icon_type = 'sold-out'
+    assign icon_text =  'products.general.sold' | t
+  endif
+
+  if varying_grid == true and index == 3 or index == 4 or index == 13 or index == 14 or index == 23 or index == 24
+    assign items_per_row = 'span-6 r-span-2 auto'
+  elsif varying_grid == true
+    assign items_per_row = 'span-3 r-span-1 auto'
+  endif
+
+  assign product_info_mobile_grid_left = 'sm-span-12'
+
+  if varying_grid == true and index == 3 or index == 6 or index == 9 or index == 12 or index == 15 or index == 18
+    assign items_per_row_mobile = 'sm-span-12 auto'
+    assign product_info_mobile_grid_left = 'sm-span-9 a-left'
+    assign product_info_mobile_grid_right = 'sm-span-3 a-right'
+  elsif varying_grid == true
+    assign items_per_row_mobile = 'sm-span-6 auto'
+    assign product_info_mobile_grid_left = 'sm-span-12 a-left'
+    assign product_info_mobile_grid_right = 'sm-span-12 a-right sm-a-left'
+  endif
+
+-%}
+
+<article
+  class="product-loop__item px0 relative product-loop__item--{{ settings.image_ratio }} span-12 grid__wrapper"
+  data-alpha="{{ product.title }}"
+  data-price="{{ product.price }}">
+
+  <div class="product-image relative sm-span-4 span-3 auto">
+    {% unless icon_type == '' %}
+      <div class="product-loop__badge-icon icon-type--{{ icon_type }} icn">{{ icon_text }}</div>
+    {% endunless %}
+    {%- if icon_type == 'sale-item' -%}
+      <div class="product-loop__badge-icon icon-type--savings icn">
+        {% assign savings = product.compare_at_price | minus: product.price %}
+        <span class="product-loop__price--savings savings">
+          ({{ 'collections.general.save' | t }} {{ savings | money }})
+        </span>
+      </div>
+    {%- endif -%}
+
+    <div class="product-loop__img-wrapper relative">
+      <a href="{{ product.url | within: collection }}" tabindex="-1" title="{{ product.title | escape }}">
+        {%- if product.media.size < 1 -%}
+           <div class="demo-1  box-ratio" style="padding-bottom: 100%;">
+             {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+           </div>
+        {%- else -%}
+          {%- liquid
+            assign sm_render = 'calc(100vw / 2)'
+            assign md_render = 'calc(100vw / ' | append: grid_items | append: ')'
+            assign lg_render = 'calc(1600px / ' | append: grid_items | append: ')'
+          -%}
+
+          {% render 'helper-image',
+             type: product.featured_media.preview_image,
+             sm_render: sm_render
+             md_render: md_render,
+             lg_render: lg_render,
+             img_width: '100%',
+             img_height: xlg_render %}
+
+          {% if settings.secondary_images_hover and product.media.size > 1 and product.media[1].media_type == 'image' %}
+            <div class="product-loop__img-wrapper--hidden">
+             {% render 'helper-image',
+                type: product.media[1],
+                sm_render: sm_render
+                md_render: md_render,
+                lg_render: lg_render,
+                img_width: '100%',
+                img_height: xlg_render %}
+            </div>
+          {% elsif settings.secondary_images_hover and product.media.size > 1 and product.media[1].media_type != 'image' %}
+            <div class="product-loop__img-wrapper--hidden">
+             {% render 'helper-image',
+                type: product.media[1].preview_image,
+                sm_render: sm_render
+                md_render: md_render,
+                lg_render: lg_render,
+                img_width: '100%',
+                img_height: xlg_render %}
+            </div>
+          {% endif %}
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- liquid
+      if routes.root_url == '/'
+        assign product_url = '/products/' | append: product.handle | append: '?section_id=quickshop'
+      else
+        assign product_url = routes.root_url | append: '/products/' | append: product.handle | append: '?section_id=quickshop'
+      endif
+
+      assign has_model = false
+      assign has_video = false
+      for media in product.media
+        if media.media_type == "video" or media.media_type == "external_video"
+          assign has_video = true
+          continue
+        endif
+        if media.media_type == "model"
+          assign has_model = true
+          continue
+        endif
+      endfor
+
+    -%}
+  </div>
+
+  <div class="pt2 cg0 sm-cg0 rg0 sm-span-8 span-9 auto">
+    <div class="product-loop__info-wrapper span-12 {{ product_info_mobile_grid_left }} auto">
+        <p class="product-loop__title mb0"><a href="{{ product.url | within: collection }}">{{ product.title }}</a></p>
+    </div>
+
+    {%- if product.template_suffix == 'set' -%}
+      <div class="product-loop__price span-12 {{ product_info_mobile_grid_right }} auto">
+        {{ 'products.product.price_varies' | t }}
+      </div>
+    {%- else -%}
+      <div class="product-loop__price span-12 {{ product_info_mobile_grid_right }} auto">
+        {% if product.price < product.compare_at_price %}
+          <span class="product-loop__price--sale onsale inline-block">
+            {{ product.price | money }}
+          </span>
+          <span class="product-loop__price--compare was inline-block ml1">
+            {{ product.compare_at_price | money }}
+          </span>
+          {% assign savings = product.compare_at_price | minus: product.price %}
+          <span class="product-loop__price--savings savings hide">
+            ({{ 'collections.general.save' | t }} {{ savings | money }})
+          </span>
+        {% else %}
+          {% if product.price_varies %}
+            {{ 'products.general.from' | t }} {{ product.price_min | money }} - {{ product.price_max | money }}
+          {% else %}
+            {{ product.price | money }}
+          {% endif %}
+        {% endif %}
+
+        {%- render 'product-unit-price', variant: product.selected_or_first_available_variant -%}
+
+        {%- if product.variants.size > 1 -%}
+          {% if product.available %}
+          <button class="quick-view-{{ product.id }} js-quickview-trigger no-js-hidden button-as-link"
+            type="button"
+            name="button"
+            aria-hidden="true"
+            data-quickview-alt="true"
+            data-complementary-product="true"
+            data-product-url="{{ product_url }}"
+            data-has-model="{{ has_model }}"
+            data-has-video="{{ has_video }}">
+            View options
+          </button>
+          {% endif %}
+        {%- else -%}
+          {% if product.available %}
+          <button class="quick-view-{{ product.id }} js-quickview-trigger no-js-hidden button-as-link"
+            type="button"
+            name="button"
+            aria-hidden="true"
+            data-quickview-alt="true"
+            data-quick-add
+            data-complementary-product="true"
+            data-product-url="{{ product_url }}"
+            data-has-model="{{ has_model }}"
+            data-has-video="{{ has_video }}">
+              Add to cart
+          </button>
+          {% endif %}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>

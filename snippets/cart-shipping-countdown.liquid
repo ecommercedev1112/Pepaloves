@@ -1,0 +1,30 @@
+{%- liquid
+
+  assign cart_total = cart.total_price
+  assign threshold = settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart_total
+
+  assign fulfillment = cart.total_price | divided_by: settings.free_shipping_threshold
+
+  if fulfillment > 100.00
+    assign fulfillment = '100'
+  endif
+-%}
+
+<div class="cart-shipping-countdown py5 px5 a-center">
+  <span>
+    {% if cart_total < threshold %}
+      <p class="mb1 sm">
+        {{ 'cart.general.free_shipping_before' | t }}
+        {{ remaining | money }}
+        {{ 'cart.general.free_shipping_after' | t }}
+      </p>
+    {% else %}
+      <p class="mb1 sm">{{ 'cart.general.free_shipping_qualified' | t }}</p>
+    {% endif %}
+  </span>
+
+  <div class="cart-shipping-countdown__meter">
+    <span style="width: {{ fulfillment }}%"></span>
+  </div>
+</div>

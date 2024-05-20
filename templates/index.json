@@ -1,0 +1,310 @@
+{
+  "sections": {
+    "7773d85e-29d5-49cb-80bc-bf840c5e1664": {
+      "type": "slideshow",
+      "blocks": {
+        "template--15986753863850__7773d85e-29d5-49cb-80bc-bf840c5e1664-1667577564f8f77732-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Banners_Shopify_-_Pepaloves_1.png",
+            "mobile_image": "shopify:\/\/shop_images\/Banner_shopify_-_version_movil_2.png",
+            "heading": "",
+            "subheading": "",
+            "link": "shopify:\/\/collections\/ss24",
+            "button_text": "",
+            "second_link": "shopify:\/\/collections\/ss24",
+            "second_button_text": "",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "slide_text_color": "#ffffff",
+            "caption_background": "rgba(0,0,0,0)",
+            "hide_caption_background": false,
+            "caption_horizontal": 50,
+            "caption_vertical": 50,
+            "text_align": "center"
+          }
+        },
+        "template--15986753863850__7773d85e-29d5-49cb-80bc-bf840c5e1664-1667577564f8f77732-1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/banner2.jpg",
+            "mobile_image": "shopify:\/\/shop_images\/banner2web.jpg",
+            "heading": "",
+            "subheading": "",
+            "link": "\/collections\/all",
+            "button_text": "Shop now",
+            "second_link": "shopify:\/\/collections\/ss24",
+            "second_button_text": "",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "slide_text_color": "#ffffff",
+            "caption_background": "rgba(0,0,0,0)",
+            "hide_caption_background": false,
+            "caption_horizontal": 50,
+            "caption_vertical": 50,
+            "text_align": "center"
+          }
+        }
+      },
+      "block_order": [
+        "template--15986753863850__7773d85e-29d5-49cb-80bc-bf840c5e1664-1667577564f8f77732-0",
+        "template--15986753863850__7773d85e-29d5-49cb-80bc-bf840c5e1664-1667577564f8f77732-1"
+      ],
+      "settings": {
+        "full_width": true,
+        "enable_autoplay": false,
+        "slider_speed": 5,
+        "pager": "arrows",
+        "slideshow_size": "fixed_height",
+        "desktop_height": 700,
+        "mobile_height": 500,
+        "caption_below": false,
+        "slide_heading_size": 32,
+        "subheading_size": 18,
+        "section_padding": "bottom"
+      }
+    },
+    "1642532857b939b884": {
+      "type": "rich-text",
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "rich_text": "",
+        "heading_size": 12,
+        "text_size": 12,
+        "page": "",
+        "alignment": "a-center",
+        "content_width": 10,
+        "reduce_padding": false,
+        "section_padding": "none",
+        "color_scheme": "1"
+      }
+    },
+    "collage_dfbxa4": {
+      "type": "collage",
+      "blocks": {
+        "image_6LMX9R": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/BANNER_PEPALOVES_1000X1500_ef686919-d88b-494d-9ae7-eaef360e97f1.png",
+            "image_url": "shopify:\/\/products\/mono-de-tirantas-100-algodon-1",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true,
+            "mobile_full": true
+          }
+        },
+        "text_KNRrRH": {
+          "type": "text",
+          "settings": {
+            "heading": "NEW IN!!",
+            "text": "<p>Check our new spring collection<\/p>",
+            "link_text": "Shop",
+            "link_url": "shopify:\/\/collections\/ss24",
+            "alignment": "a-center",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "image_Tb7QyH": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/5.png",
+            "image_url": "shopify:\/\/products\/lemon-buttoned-dress",
+            "grid_position": "right",
+            "padding_left": false,
+            "padding_right": true,
+            "padding_top": false,
+            "padding_bottom": false,
+            "mobile_full": true
+          }
+        },
+        "image_dDtx4d": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/7.png",
+            "image_url": "shopify:\/\/collections\/accesorios",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true,
+            "mobile_full": true
+          }
+        }
+      },
+      "block_order": [
+        "image_6LMX9R",
+        "text_KNRrRH",
+        "image_Tb7QyH",
+        "image_dDtx4d"
+      ],
+      "custom_css": [
+
+      ],
+      "settings": {
+        "full_width": true,
+        "grid_gap": 20,
+        "section_padding": "none"
+      }
+    },
+    "featured_collection_9nQEhU": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "SAILORS MEMORIES",
+        "subheading": "<p>New spring collection!<\/p>",
+        "link_text": "SHOP THE COLLECTION",
+        "link_url": "",
+        "text_position": "left",
+        "collection": "ss24",
+        "display_type": "carousel",
+        "items_per_row": 4,
+        "items_per_page": 14,
+        "section_padding": "top"
+      }
+    },
+    "164253557900d67a91": {
+      "type": "image-with-text-overlay",
+      "settings": {
+        "image": "shopify:\/\/shop_images\/BL8A0108.jpg",
+        "show_overlay_color": false,
+        "overlay_color": "#000000",
+        "image_height": 700,
+        "title": "Visita nuestro Outlet!",
+        "subheading_text": "Hasta un 70% de descuento",
+        "button_text": "Shop",
+        "link": "shopify:\/\/collections\/all",
+        "heading_size": 39,
+        "subheading_size": 18,
+        "text_color": "#000000",
+        "full_width": true,
+        "section_padding": "bottom"
+      }
+    },
+    "1642541933e9708a47": {
+      "type": "shop-the-look",
+      "blocks": {
+        "1642541933781cefa2-0": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "hotspot_horizontal": 43,
+            "hotspot_vertical": 29,
+            "hotspot_color": "#000000"
+          }
+        },
+        "f5c89dbb-bcd4-4567-a7b9-78905523d155": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "hotspot_horizontal": 58,
+            "hotspot_vertical": 46,
+            "hotspot_color": "#000000"
+          }
+        },
+        "9965037a-619b-4539-a933-cb350f0fe7dc": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "hotspot_horizontal": 37,
+            "hotspot_vertical": 73,
+            "hotspot_color": "#000000"
+          }
+        }
+      },
+      "block_order": [
+        "1642541933781cefa2-0",
+        "f5c89dbb-bcd4-4567-a7b9-78905523d155",
+        "9965037a-619b-4539-a933-cb350f0fe7dc"
+      ],
+      "disabled": true,
+      "settings": {
+        "full_width": false,
+        "title": "",
+        "section_padding": "both"
+      }
+    },
+    "1642520461c9848fcf": {
+      "type": "text-with-icons",
+      "blocks": {
+        "16425204605bb47af2-0": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "gift",
+            "link": "",
+            "title": "Gift wrap",
+            "subheading": ""
+          }
+        },
+        "16425204605bb47af2-1": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "globe",
+            "link": "",
+            "title": "Worldwide",
+            "subheading": ""
+          }
+        },
+        "16425204605bb47af2-2": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "chat",
+            "link": "",
+            "title": "24\/7 Support",
+            "subheading": ""
+          }
+        },
+        "9e893234-1f35-4234-b109-6fb9c7856a3e": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "return",
+            "link": "",
+            "title": "Free Returns",
+            "subheading": ""
+          }
+        },
+        "40f2ec0c-4c6f-4492-aa5c-6c17db35147e": {
+          "type": "text_block",
+          "settings": {
+            "icon": "heart",
+            "link": "",
+            "title": "Eco Friendly",
+            "subheading": ""
+          }
+        }
+      },
+      "block_order": [
+        "16425204605bb47af2-0",
+        "16425204605bb47af2-1",
+        "16425204605bb47af2-2",
+        "9e893234-1f35-4234-b109-6fb9c7856a3e",
+        "40f2ec0c-4c6f-4492-aa5c-6c17db35147e"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "icon_size": 45,
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "7773d85e-29d5-49cb-80bc-bf840c5e1664",
+    "1642532857b939b884",
+    "collage_dfbxa4",
+    "featured_collection_9nQEhU",
+    "164253557900d67a91",
+    "1642541933e9708a47",
+    "1642520461c9848fcf"
+  ]
+}

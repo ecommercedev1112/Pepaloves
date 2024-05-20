@@ -1,0 +1,103 @@
+{%- liquid
+
+  assign basic_banner = false
+  assign section_banner = false
+  assign full_width = false
+
+  assign basic_banner_img = collection.handle | append: '.jpg'
+
+  if images[basic_banner_img] != blank and collection.description contains '[banner]'
+    assign basic_banner = true
+  elsif section.settings.image != blank
+    assign section_banner = true
+  endif
+
+  if section.settings.full_width
+   assign full_width = 'edge'
+  endif
+
+  assign sm_render = '100vw'
+  assign md_render = '100vw'
+  assign lg_render = '100vw'
+
+-%}
+
+{%- if basic_banner or section_banner -%}
+  <section class="collection__section--banner collection__banner-{{ section.id }} grid__wrapper {{ full_width }} no-section-animation"
+    data-section-id="{{ section.id }}"
+    data-section-type="collection-banner">
+    <div class="collection__banner-image span-12 auto">
+      {%- if basic_banner -%}
+        <div class="box-ratio">
+           <img srcset="{{ basic_banner_img | file_img_url: '180x' }} 180w,
+              {{ basic_banner_img | file_img_url: '360x' }} 360w,
+              {{ basic_banner_img | file_img_url: '540x' }} 540w,
+              {{ basic_banner_img | file_img_url: '720x' }} 720w,
+              {{ basic_banner_img | file_img_url: '780x' }} 780w,
+              {{ basic_banner_img | file_img_url: '900x' }} 900w,
+              {{ basic_banner_img | file_img_url: '1080x' }} 1080w,
+              {{ basic_banner_img | file_img_url: '1220x' }} 1220w,
+              {{ basic_banner_img | file_img_url: '1520x' }} 1520w,
+              {{ basic_banner_img | file_img_url: '1920x' }} 1920w"
+              src="{{ basic_banner_img | file_img_url: '720x' }}"
+              sizes="(min-width: 1601px) {{ lg_render }}, (min-width: 768px) and (max-width: 1600px) {{ md_render }}, (max-width: 767px) {{ sm_render }}, 900px"
+              width="{{ basic_banner_img.width }}"
+              height="{{ basic_banner_img.height }}"
+              alt="{{ basic_banner_img.alt | escape }}"
+              loading="eager">
+         </div>
+      {%- elsif section.settings.image != blank -%}
+        {% render 'helper-image',
+           type: section.settings.image,
+           sm_render: sm_render
+           md_render: md_render,
+           lg_render: lg_render %}
+      {% endif %}
+    </div>
+    <style>
+      .collection__banner-{{ section.id }} .box-ratio {
+        padding-bottom: {{ section.settings.banner_height }}px !important;
+      }
+      .collection__banner-{{ section.id }} .box-ratio img {
+        object-fit: cover;
+        object-position: {{ section.settings.image.presentation.focal_point }};
+        width: 100%;
+        height: {{ section.settings.banner_height }}px !important;
+      }
+    </style>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Add a banner image to all collections in your store. Show a unique image per collection by following this [guide](https://www.weareunderground.com/blogs/theme-support/add-a-custom-banner-image-to-each-collection-page)."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "1920px x 600px recommended"
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "min": 200,
+      "max": 600,
+      "step": 100,
+      "unit": "px",
+      "label": "Banner height",
+      "default": 400
+    }
+  ]
+}
+{% endschema %}

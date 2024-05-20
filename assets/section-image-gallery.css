@@ -1,0 +1,192 @@
+.section-gallery__item-link {
+  display: block;
+  margin: 0;
+}
+
+.section-gallery__item-wrapper {
+  float: left;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.section-gallery__item-inner {
+  display: grid;
+  background: var(--section-background);
+}
+
+.section-gallery__item-wrapper a:hover {
+  cursor: pointer;
+}
+
+.section-gallery__item-image,
+.section-gallery__caption {
+    grid-column: 1/2;
+    grid-row: 1/2;
+}
+
+.section-gallery__item-image:before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content:"";
+  background: var(--section-overlay-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-gallery__caption {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-5);
+  padding: 20px;
+}
+
+.section-gallery__caption.center_left {
+  align-self: center;
+  justify-self: start;
+  text-align: left;
+}
+
+.section-gallery__caption.center_center {
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+.section-gallery__caption.center_right {
+  align-self: center;
+  justify-self: end;
+  text-align: right;
+}
+
+.section-gallery__caption.bottom_left {
+  align-self: end;
+  justify-self: start;
+  text-align: left;
+}
+
+.section-gallery__caption.bottom_center {
+  align-self: end;
+  justify-self: center;
+  text-align: center;
+}
+
+.section-gallery__caption.bottom_right {
+  align-self: end;
+  justify-self: end;
+  text-align: right;
+}
+
+.section-gallery__caption h3,
+.section-gallery__caption p,
+.section-gallery__caption a.section-gallery__block-link {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.section-gallery__caption a.section-gallery__block-link,
+.section-gallery__caption a.section-gallery__block-link span {
+  font-size: var(--font-size-reset);
+  border-color: var(--text-color);
+}
+
+.section-gallery__block-link.btn-border-link span:before,
+.section-gallery__block-link.btn-border-link span:after,
+.section-gallery__block-link.btn-border-link:before,
+.section-gallery__block-link.btn-border-link:after {
+  background-color: var(--text-color);
+}
+
+.section-gallery__caption.center_left a.section-gallery__block-link,
+.section-gallery__caption.bottom_left a.section-gallery__block-link {
+  margin-right: auto;
+}
+
+.section-gallery__caption.center_center a.section-gallery__block-link,
+.section-gallery__caption.bottom_center a.section-gallery__block-link {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.section-gallery__caption.center_right a.section-gallery__block-link,
+.section-gallery__caption.bottom_right a.section-gallery__block-link {
+  margin-left: auto;
+}
+
+.section-gallery__container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.section-gallery__item-wrapper--one-quarter {
+  width: 25%;
+}
+
+.section-gallery__item-wrapper--one-third {
+  width: calc(100% / 3);
+}
+
+.section-gallery__item-wrapper--two-thirds {
+  width: 66.667%;
+}
+
+.section-gallery__item-wrapper--one-half {
+  width: 50%;
+}
+
+.section-gallery__item-wrapper--three-quarters {
+  width: 75%;
+}
+
+.section-gallery__item-wrapper--one-whole {
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .section-gallery__container {
+    width: 100%;
+    margin: 0 auto !important;
+  }
+
+  .section-gallery__item-wrapper--one-quarter {
+    width: 50%;
+  }
+
+  .section-gallery__item-wrapper--one-third {
+    width: 100%;
+  }
+
+  .section-gallery__item-wrapper--two-thirds {
+    width: 100%;
+  }
+
+  .section-gallery__item-wrapper--one-half {
+    width: 100%;
+  }
+
+  .section-gallery__item-wrapper--three-quarters {
+    width: 100%;
+  }
+
+  .section-gallery__item-wrapper--one-whole {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .section-gallery__block-subheading {
+    font-size: var(--font-size);
+  }
+
+  .section-gallery__item-wrapper--one-quarter, .section-gallery__item-wrapper--one-third, .section-gallery__item-wrapper--two-thirds, .section-gallery__item-wrapper--one-half, .section-gallery__item-wrapper--three-quarters, .section-gallery__item-wrapper--one-whole {
+    float: none !important;
+  }
+}
+
+.section-gallery__block-heading {
+  word-break: break-word;
+}

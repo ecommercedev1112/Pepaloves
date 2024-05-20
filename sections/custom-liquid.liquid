@@ -1,0 +1,103 @@
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if section.settings.full_width
+    assign full_width =  'edge'
+  endif
+
+-%}
+
+<div class="global__section {{ section_padding }}">
+  <section
+    id="custom-liquid--{{ section.id }}"
+    class="custom-liquid custom-liquid--{{ section.id }} homepage-section-{{ section.id }}"
+    data-section-id="{{ section.id }}"
+    data-section-type="custom-liquid">
+
+    <div class="grid__wrapper {{ full_width }}">
+      <div class="span-12 auto">
+        {{ section.settings.liquid }}
+      </div>
+    </div>
+  </section>
+  <style>
+    .custom-liquid .grid__wrapper {
+      font-size: initial !important;
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Custom liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "liquid",
+      "label": "Custom liquid",
+      "info": "Add app snippets or other Liquid code to create advanced customizations."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom liquid"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ],
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

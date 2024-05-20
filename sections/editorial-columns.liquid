@@ -1,0 +1,222 @@
+{% comment %} Editorial Columns Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-editorial-columns.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-editorial-columns.css' | asset_url }}"></noscript>
+
+{% comment %} Editorial Columns Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+
+  case section.settings.text_align
+  when 'left'
+    assign text_align =  'a-left'
+  when 'center'
+    assign text_align =  'a-center'
+  when 'right'
+    assign text_align =  'a-right'
+  endcase
+
+  case section.blocks.size
+    when 0
+    when 1
+      assign block_width = 'span-12 auto'
+    when 2
+      assign block_width = 'span-6 auto'
+    when 3
+      assign block_width = 'span-4 auto'
+    when 4
+      assign block_width = 'span-3 auto'
+    when 5
+      assign block_width = 'auto'
+    when 6
+      assign block_width = 'span-2 auto'
+  endcase
+
+  assign sm_render = '100vw'
+  assign md_render = 'calc(100vw / ' | append: section.blocks.size | append: ')'
+  assign lg_render = 'calc(1600px / ' | append: section.blocks.size | append: ')'
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+
+-%}
+
+{% comment %} Editorial Columns Template {% endcomment %}
+<div
+  class="section-txt-cols text-columns-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="editorial-columns"
+  data-section-loaded="false">
+  <div class="grid__wrapper">
+    {% render 'snip-headings', align: heading_align, classes: 'section-txt-cols__section-heading', grid: 'span-12', heading: section.settings.title %}
+  </div>
+  <div class="section-txt-cols__inner-wrapper grid__wrapper">
+    {% for block in section.blocks %}
+      <article class="section-txt-cols__item text-promo-{{ block.id }} {{ block_width }} {{ text_align }}" {{ block.shopify_attributes }}>
+        {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+          <div class="section-txt-cols__image mb4">
+            {% if block.settings.image != blank %}
+              {% render 'helper-image',
+                 type: block.settings.image,
+                 sm_render: sm_render
+                 md_render: md_render,
+                 lg_render: lg_render,
+                 loading: loading,
+                 fetchpriority: fetch_priority %}
+            {% else %}
+              <div class="demo-1  onboard">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {% endif %}
+          </div>
+        {% if block.settings.link != blank %}</a>{% endif %}
+
+          <div class="section-txt-cols__content mb2 animate--text delay--{{ forloop.index0 }}">
+            {% if block.settings.title != blank %}
+              <h3 class="section-txt-cols__block-heading mb2">{{ block.settings.title }}</h3>
+            {% endif %}
+            {% if block.settings.subheading != blank %}
+              <div class="section-txt-cols__block-subheading mb2">
+                {{ block.settings.subheading }}
+              </div>
+            {% endif %}
+          </div>
+      </article>
+    {% endfor %}
+    <style type="text/css">
+      {% if section.blocks.size == 5 %}
+        .text-columns-{{ section.id }} .grid__wrapper {
+          grid-template-columns: repeat(5, 1fr) !important;
+        }
+      {% endif %}
+    </style>
+
+    {% if section.blocks.size == 0 %}
+      {% render 'onboard-no-blocks' %}
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Editorial columns",
+  "tag": "section",
+  "class": "dynamic-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Editorial columns"
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Our collections"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Text",
+          "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial columns",
+      "blocks": [
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        },
+        {
+          "type": "text_block"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

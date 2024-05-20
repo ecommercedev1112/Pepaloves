@@ -1,0 +1,147 @@
+{% comment %} Linkliset Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+-%}
+
+{% comment %} Linklist Template {% endcomment %}
+<div class="simple-linklist-section grid__wrapper global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="linklist-section"
+  data-section-loaded="false">
+
+  <div class="linklist-section__container span-12 auto">
+    <div class="linklist-section__wrapper {{ section.settings.alignment }}">
+      {% for link in linklists[section.settings.menu].links %}
+        <a class="linklist-section__link mr4 mb1" href="{{ link.url }}" title="{{ link.title | escape }}">{{ link.title | escape }}</a>
+      {%- endfor -%}
+    </div>
+  </div>
+  <style>
+    .simple-linklist-section:after {
+      content: "";
+      width: 40px;
+      height: 100%;
+      display: block;
+      position: absolute;
+      z-index: 1;
+      background: #ffffff;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--background) 100%);
+      right: -1px;
+    }
+    @media (max-width: 767px) {
+      .linklist-section__container {
+        display: flex;
+        overflow-x: scroll;
+        white-space: nowrap;
+        align-items: center;
+        height: 40px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .linklist-section__wrapper {
+        width: 1600px;
+      }
+    }
+    .linklist-section__link {
+      display: inline-block;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.4s ease-out;
+      font-size: var(--font-size-sm);
+    }
+    .linklist-section__link:hover {
+      border-bottom: 1px solid var(--text-color);
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Linklist",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A simple horizontal linklist. Will only show top level links within selected navigation."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Linklist",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        }
+      ],
+      "default": "a-center"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Linklist"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

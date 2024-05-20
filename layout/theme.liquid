@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html class="no-js supports-no-cookies" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.announcement_bg }}">
+  {%- if canonical_url != blank -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+  {%- endif -%}
+
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {%- unless settings.main_font.system? and settings.heading_font.system? and settings.nav_font.system? -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {%- endunless -%}
+
+    <!-- Preload onDomain stylesheets and script libraries -->
+  <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
+
+  {% if settings.favicon %}
+    <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png" />
+  {% endif %}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  <meta name="description" content="{{ page_description | escape }}">
+
+  {% render 'snip-social-meta-tags' %}
+  {% render 'snip-structured-data' %}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+  {{ content_for_header }}
+
+  {% render 'css-variables' %}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  {%- unless settings.main_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.main_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- unless settings.heading_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.heading_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- unless settings.nav_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.nav_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+</head>
+
+<body id="{{ page_title | handle }}"
+      class="template-{{ template.name | handle }} js-slideout-toggle-wrapper js-modal-toggle-wrapper {{ settings.scroll_animation }} {{ settings.text_animation }}">
+
+  {%- if template == 'index' -%}
+    <h1 class="visually-hidden">{{ page_title }}</h1>
+  {%- endif -%}
+
+  <div class="js-slideout-overlay site-overlay"></div>
+  <div class="js-modal-overlay site-overlay"></div>
+
+  <main class="site-wrap">
+
+    {% section 'mobile-header' %}
+
+    {% sections 'header-group' %}
+
+    <div class="page-wrap">
+      {{ content_for_layout }}
+    </div>
+
+    {% sections 'footer-group' %}
+  </main>
+
+  {% section 'mailing-popup' %}
+  {% section 'quickshop' %}
+
+  {%- if settings.cart_type == 'drawer' -%}
+    <aside class="slideout slideout__drawer-right mini-cart" data-wau-slideout="ajax-cart" id="slideout-ajax-cart">
+      {% render 'cart-mini' %}
+    </aside>
+  {% elsif settings.cart_type == 'modal_cart' %}
+    <div class="modal__container" data-wau-modal="ajax-cart" id="modal-ajax-cart">
+      <div class="modal__inner-wrapper">
+        {% render 'cart-mini' %}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- if additional_checkout_buttons and settings.show_additional_buttons and template == 'cart' and settings.cart_type == 'page_only' -%}
+    <div class="ajax-cart__sticky-footer">
+      <div class="ajax-cart__buttons-additional a-center">
+        {{ content_for_additional_checkout_buttons }}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {% render 'cart-config' %}
+
+  <script type="text/javascript">
+    var jsAssets = {
+      "zoom": {{ 'vendor-zoom.js' | asset_url | json }},
+      "flickity": {{ 'vendor-flickity.js' | asset_url | json }},
+      "masonry": {{ 'vendor-masonry.js' | asset_url | json }},
+      "product": {{ 'product.js' | asset_url | json }},
+      "productModel": {{ 'product-model.js' | asset_url | json }},
+      "productVideo": {{ 'product-video.js' | asset_url | json }},
+      "productPickupAvailability": {{ 'pickup-availability.js' | asset_url | json }},
+      "productComplementaryProducts": {{ 'complementary-products.js' | asset_url | json }},
+      "parallax": {{ 'vendor-parallax.js' | asset_url | json }}
+    }
+    var jsFormat = {
+      "money": {{ shop.money_format | json }}
+    }
+  </script>
+
+  <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+
+  {%- if settings.product_grid_video -%}
+    <script src="{{ 'vendor-video.js' | asset_url }}" defer></script>
+  {%- endif -%}
+
+  {%- render 'snip-photoswipe' -%}
+
+  <aside class="slideout slideout__drawer-right" data-wau-slideout="store-availability" id="slideout-store-availability"></aside>
+
+</body>
+</html>

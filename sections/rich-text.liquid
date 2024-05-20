@@ -1,0 +1,250 @@
+{% comment %} Rich Text Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-rich-text.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-rich-text.css' | asset_url }}"></noscript>
+
+{% comment %} Rich Text logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign reduce_padding = false
+  if section.settings.reduce_padding
+    assign reduce_padding = true
+  endif
+
+-%}
+
+{% comment %} Rich Text Template {% endcomment %}
+<div
+  class="global__section section-richtext rich-text-{{ section.id }} {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="rich-text"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper edge {% unless reduce_padding %}py9{% endunless %}">
+    {% render 'snip-headings', align: section.settings.alignment, classes: 'animate--text delay--1 px4', grid: 'span-12' %}
+
+    {%- unless section.settings.page == blank and section.settings.rich_text == blank -%}
+      <div class="span-12 auto {{ section.settings.alignment }} px4 mb2">
+        <div class="pages-content animate--text delay--2">
+          <div class="rte">
+            {% if section.settings.page != blank %}
+              {% assign feat_page = pages[section.settings.page] %}
+              {{ feat_page.content }}
+            {% elsif section.settings.rich_text != blank %}
+              {{ section.settings.rich_text }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {%- endunless -%}
+  </div>
+  <style>
+    .rich-text-{{ section.id }} h2 {
+      font-size: {{ section.settings.heading_size }}px;
+      line-height: calc(({{ section.settings.heading_size }}px * .375) + {{ section.settings.heading_size }}px);
+    }
+    .rich-text-{{ section.id }} p,
+    .rich-text-{{ section.id }} a,
+    .rich-text-{{ section.id }} .pages-content,
+    .rich-text-{{ section.id }} .pages-content p,
+    .rich-text-{{ section.id }} .pages-content a {
+      font-size: {{ section.settings.text_size }}px;
+      line-height: calc(({{ section.settings.text_size }}px * .375) + {{ section.settings.text_size }}px);
+    }
+     @media (min-width: 768px) {
+      .rich-text-{{ section.id }} .section-heading,
+      .rich-text-{{ section.id }} .pages-content {
+        max-width: {{ section.settings.content_width }}%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    @media (max-width: 767px) {
+      .rich-text-{{ section.id }} h2 {
+        font-size: calc({{ section.settings.heading_size }}px - ({{ section.settings.heading_size }}px * 0.15)) !important;
+        line-height: calc(({{ section.settings.heading_size }}px * .2) + {{ section.settings.heading_size }}px);
+      }
+      .rich-text-{{ section.id }} p {
+        font-size: calc({{ section.settings.text_size }}px - ({{ section.settings.text_size }}px * 0.15)) !important;
+        line-height: calc(({{ section.settings.text_size }}px * .2) + {{ section.settings.text_size }}px);
+      }
+    }
+    {% unless section.settings.color_scheme == 'none' %}
+      .rich-text-{{ section.id }},
+      .rich-text-{{ section.id }} h2,
+      .rich-text-{{ section.id }} p,
+      .rich-text-{{ section.id }} a {
+        color: var(--scheme-{{ section.settings.color_scheme }}-text) !important;
+      }
+      .rich-text-{{ section.id }} a:hover {
+        color: var(--scheme-{{ section.settings.color_scheme }}-hover) !important;
+      }
+      .rich-text-{{ section.id }} .grid__wrapper {
+        background-color: var(--scheme-{{ section.settings.color_scheme }}-bg) !important;
+      }
+    {% endunless %}
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Welcome"
+    },
+    {
+      "type": "richtext",
+      "id": "rich_text",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 20
+    },
+    {
+      "type": "page",
+      "id": "page",
+      "label": "Or show content from a page",
+      "info": "Contact forms will not be displayed."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        }
+      ],
+      "default": "a-center"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content width",
+      "default": 60
+    },
+    {
+      "type": "checkbox",
+      "id": "reduce_padding",
+      "label": "Reduce section padding",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ],
+    "groups": [
+      "footer"
+    ]
+  }
+}
+{% endschema %}

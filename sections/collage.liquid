@@ -1,0 +1,376 @@
+{% comment %}Collage Section Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if section.settings.full_width
+    assign full_width =  'edge'
+  endif
+
+-%}
+
+{% comment %} Collage Section Template {% endcomment %}
+<div class="global__section collage-{{ section.id }} {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="collage"
+  data-section-loaded="false">
+
+  <div class="section-collage__grid--desktop grid__wrapper cg0 rg0 {{ full_width }} sm-hide">
+    <div class="section-collage__left-column span-6 auto">
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign loading = 'lazy'
+          assign fetch_priority = 'auto'
+          if section.index == 1 and forloop.index <= 2
+            assign loading = 'eager'
+            assign fetch_priority = 'high'
+          endif
+         %}
+        {%- if block.settings.grid_position == 'left' -%}
+           {%- render 'snip-collage-blocks', block: block, loading: loading, fetchpriority: fetch_priority -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="section-collage__right-column span-6 auto">
+      {%- for block in section.blocks -%}
+      {% liquid
+        assign loading = 'lazy'
+        assign fetch_priority = 'auto'
+        if section.index == 1 and forloop.index <= 2
+          assign loading = 'eager'
+          assign fetch_priority = 'high'
+        endif
+       %}
+        {%- if block.settings.grid_position == 'right' -%}
+           {%- render 'snip-collage-blocks', block: block, loading: loading, fetchpriority: fetch_priority -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="section-collage__grid--mobile grid__wrapper cg0 rg0 {{ full_width }} sm-pt8 lg-hide md-hide">
+   {%- for block in section.blocks -%}
+      {% liquid
+        assign loading = 'lazy'
+        assign fetch_priority = 'auto'
+        if section.index == 1 and forloop.index <= 2
+          assign loading = 'eager'
+          assign fetch_priority = 'high'
+        endif
+       %}
+     {%- render 'snip-collage-blocks', block: block, loading: loading, fetchpriority: fetch_priority -%}
+   {%- endfor -%}
+  </div>
+
+  <style type="text/css">
+    .collage-{{ section.id }} .bpr {
+      padding-right: {{ section.settings.grid_gap }}px;
+    }
+    .collage-{{ section.id }} .bpt {
+      padding-top: {{ section.settings.grid_gap }}px;
+    }
+    .collage-{{ section.id }} .bpb {
+      padding-bottom: {{ section.settings.grid_gap }}px;
+    }
+    .collage-{{ section.id }} .bpl {
+      padding-left: {{ section.settings.grid_gap }}px;
+    }
+    @media (max-width:767px) {
+      .collage-{{ section.id }} .bpr {
+        padding-right: calc({{ section.settings.grid_gap }}px / 2);
+      }
+      .collage-{{ section.id }} .bpl {
+        padding-left: calc({{ section.settings.grid_gap }}px / 2);
+      }
+      .collage-{{ section.id }} .bpr.pr0.pl0,
+      .collage-{{ section.id }} .bpl.pr0.pl0 {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .collage-{{ section.id }} .bpt {
+        padding-top: calc({{ section.settings.grid_gap }}px / 2);
+      }
+      .collage-{{ section.id }} .bpb {
+        padding-bottom: calc({{ section.settings.grid_gap }}px / 2);
+      }
+    }
+    .collage_text--link {
+      display: inline-block;
+      margin-top: var(--space-5);
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Collage",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Grid padding",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Image",
+      "type": "image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Image link"
+        },
+        {
+          "type": "select",
+          "id": "grid_position",
+          "label": "Grid position",
+          "options": [
+            {
+              "value": "right",
+              "label": "Right"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_left",
+          "label": "Enable padding left",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_right",
+          "label": "Enable padding right",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_top",
+          "label": "Enable padding top",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_bottom",
+          "label": "Enable padding bottom",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_full",
+          "label": "Mobile full width",
+          "default": false
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Mission"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "a-left",
+              "label": "Left"
+            },
+            {
+              "value": "a-center",
+              "label": "Center"
+            }
+          ],
+          "default": "a-center"
+        },
+        {
+          "type": "select",
+          "id": "grid_position",
+          "label": "Grid position",
+          "options": [
+            {
+              "value": "right",
+              "label": "Right"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_left",
+          "label": "Enable padding left",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_right",
+          "label": "Enable padding right",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_top",
+          "label": "Enable padding top",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "padding_bottom",
+          "label": "Enable padding bottom",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collage",
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "left",
+            "padding_left": false,
+            "padding_right": true,
+            "padding_top": false,
+            "padding_bottom": false
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "heading": "Our Collections",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a collection, share announcements, or welcome customers to your store.</p>",
+            "link_text": "Shop All Collections",
+            "link_url": "shopify://collections",
+            "alignment": "a-center",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": false,
+            "padding_top": false,
+            "padding_bottom": false
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

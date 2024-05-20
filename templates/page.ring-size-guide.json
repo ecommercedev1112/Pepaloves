@@ -1,0 +1,276 @@
+{
+  "sections": {
+    "banner": {
+      "type": "template-header",
+      "settings": {
+        "full_width": true,
+        "image": "",
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "Find The Perfect Fit",
+        "subheading": "",
+        "heading_placement": "left",
+        "alignment": "center",
+        "color_scheme": "3"
+      }
+    },
+    "16433128830460f710": {
+      "type": "image-with-text",
+      "settings": {
+        "full_width": false,
+        "iwt_layout": "image_left",
+        "iwt_heading": "Option 1 : Measure Your Existing Ring",
+        "iwt_text": "<p>1. \tUse an existing ring that fits the desired finger.<br\/>2. \tMeasure the internal diameter of the ring.<br\/>3. \tUse the chart below to determine your ring size. If your ideal fit falls between two sizes, we recommend choosing<br\/>the larger size.<\/p>",
+        "iwt_button": "Ring Size Chart",
+        "iwt_link": "#ring-size-chart",
+        "color_scheme": "none",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    },
+    "16433145595d2126aa": {
+      "type": "text-with-icons",
+      "blocks": {
+        "1643314559b9c7e8e1-0": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_asscher",
+            "link": "",
+            "title": "Asscher",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-1": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_baguette",
+            "link": "",
+            "title": "Baguette",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-2": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_cushion",
+            "link": "",
+            "title": "Cushion",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-3": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_emerald",
+            "link": "",
+            "title": "Emerald",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-4": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_heart",
+            "link": "",
+            "title": "Heart",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-5": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_marquise",
+            "link": "",
+            "title": "Marquise",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-6": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_oval",
+            "link": "",
+            "title": "Oval",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-7": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_pear",
+            "link": "",
+            "title": "Pear",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-8": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_princess",
+            "link": "",
+            "title": "Princess",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-9": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_radiant",
+            "link": "",
+            "title": "Radiant",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-10": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_round",
+            "link": "",
+            "title": "Round",
+            "subheading": ""
+          }
+        },
+        "1643314559b9c7e8e1-11": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_trillion",
+            "link": "",
+            "title": "Trillion",
+            "subheading": ""
+          }
+        }
+      },
+      "block_order": [
+        "1643314559b9c7e8e1-0",
+        "1643314559b9c7e8e1-1",
+        "1643314559b9c7e8e1-2",
+        "1643314559b9c7e8e1-3",
+        "1643314559b9c7e8e1-4",
+        "1643314559b9c7e8e1-5",
+        "1643314559b9c7e8e1-6",
+        "1643314559b9c7e8e1-7",
+        "1643314559b9c7e8e1-8",
+        "1643314559b9c7e8e1-9",
+        "1643314559b9c7e8e1-10",
+        "1643314559b9c7e8e1-11"
+      ],
+      "settings": {
+        "title": "Shop by Shape",
+        "color_scheme": "none",
+        "section_padding": "both"
+      }
+    },
+    "1643313106fc46e404": {
+      "type": "image-with-text",
+      "settings": {
+        "full_width": false,
+        "iwt_layout": "image_right",
+        "iwt_heading": "Option 2: Measure the Desired Finger",
+        "iwt_text": "<p>1. \tUse a flexible measuring tape to measure the circumference of the desired finger. If you don’t have a measuring tape, a string or strip of paper will work just fine.<br\/>\t2. \tWrap the paper or string snug around your finger where you want the ring to sit.<br\/>\t3. \tMark the spot where it meets and measure the distance. This is the circumference of your finger.<\/p>",
+        "iwt_button": "Ring Size Chart",
+        "iwt_link": "#ring-size-chart",
+        "color_scheme": "none",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "page_alignment": "left"
+      }
+    },
+    "16433133735cb76d33": {
+      "type": "table",
+      "blocks": {
+        "e5dbdf83-86ad-4325-94fd-7bc0493491c3": {
+          "type": "table_header",
+          "settings": {
+            "header_cells": "<p>Diameter (mm), Circumference (mm), US & Canada, Australia UK<br\/> & Ireland, Europe, Spain & Italy, Japan<\/p>"
+          }
+        },
+        "43d7d2cc-89ff-42b2-9fb3-55d62def301a": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>14.1, 14.5, 14.9, 15.3, 15.7, 16.1, 16.5, 16.7, 16.9, 17.3, 17.7, 18.1, 18.5, 18.8, 19.0, 19.4, 19.8, 20.0, 20.2, 20.6, 21.0, 21.4, 21.5, 21.6, 21.8, 21.9, 22.1, 22.3, 22.5, 22.6, 22.7, 22.9, 23.2<\/p>"
+          }
+        },
+        "ccba8b3e-98c4-4e5e-abab-0079d0d75dea": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>44.29, 45.55, 46.80, 48.06, 49.32, 50.57, 51.83, 52.46, 53.09, 54.34, 55.06, 56.86, 58.11, 59.06, 59.69, 60.94, 62.20, 62.83, 6.46, 64.71, 65.97, 67.23, 67.54, 67.85, 68.48, 68.80, 69.42, 70.05, 70.68, 70.99, 71.31, 71.94, 72.88<\/p>"
+          }
+        },
+        "efbc0727-98c7-4a5b-a4fd-9cff244297cd": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>3, 3.5, 4, 4.5, 5, 5.5, 6, -, 6.5, 7, 7.5, 8, 8.5, -, 9, 9.5, 10, -, 10.5, 11, 11.5, 12, -, -, 12.5, -, -, 13, -, 13.5, -, -, 14<\/p>"
+          }
+        },
+        "74bb7b81-076a-4c2e-a252-7c8784f1870b": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>F, G, H, I, J 1\/2, K 1\/2, L 1\/2, -, M 1\/2, N 1\/2, O 1\/2, P 1\/2, Q 1\/2, -, R 1\/2, S 1\/2, T 1\/2, -, U 1\/2, V 1\/2, W 1\/, X 1\/2, -, -, Z, -, -, -, Z 1\/2, -, -, Z+2, Z+3<\/p>"
+          }
+        },
+        "21c76ea4-3908-451d-8982-859cb17f3f98": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>44, 45, 47, 48, 50, 52, 53, -, 54, 55, 56, 57, 58, -, 59, 60, 61, -, 62, 63, 64, 66, -, 68, -, 69, -, 70, -, -, 71, 72, -<\/p>"
+          }
+        },
+        "74bd7bf5-ccf0-4a3b-973e-7abb61335238": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>4, 5.5, 7, 9, 10, 12, 13, -, 14, 15, 16.5, 18, 19, -, 20, 21.5, 22, -, 23.5, 25, 26, 27.5, -, -, 28, -, 29, 30, -, -, 31, 32, -<\/p>"
+          }
+        },
+        "daa2da9e-8280-4c6c-84a5-c1cda9ea30ca": {
+          "type": "table_column",
+          "settings": {
+            "table_cells": "<p>4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, -, 19, 20, 21, 22, 23, 24, -, 25, -, -, 26, -, 27, -, -, 28, -, -<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "e5dbdf83-86ad-4325-94fd-7bc0493491c3",
+        "43d7d2cc-89ff-42b2-9fb3-55d62def301a",
+        "ccba8b3e-98c4-4e5e-abab-0079d0d75dea",
+        "efbc0727-98c7-4a5b-a4fd-9cff244297cd",
+        "74bb7b81-076a-4c2e-a252-7c8784f1870b",
+        "21c76ea4-3908-451d-8982-859cb17f3f98",
+        "74bd7bf5-ccf0-4a3b-973e-7abb61335238",
+        "daa2da9e-8280-4c6c-84a5-c1cda9ea30ca"
+      ],
+      "settings": {
+        "title": "Ring Size Chart",
+        "alignment": "center",
+        "section_padding": "bottom"
+      }
+    },
+    "1643314318bf608970": {
+      "type": "rich-text",
+      "settings": {
+        "title": "Need Help w\/Sizing?",
+        "rich_text": "<p> In need of assistance? <a href=\"\/pages\/about-us\" title=\"About Us\">Contact Us<\/a> or go <a href=\"\/collections\" title=\"All collections\">ring shopping<\/a>!<\/p>",
+        "heading_size": 40,
+        "text_size": 20,
+        "page": "",
+        "alignment": "center",
+        "content_width": 60,
+        "section_padding": "bottom",
+        "color_scheme": "1"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "16433128830460f710",
+    "16433145595d2126aa",
+    "1643313106fc46e404",
+    "main",
+    "16433133735cb76d33",
+    "1643314318bf608970"
+  ]
+}

@@ -1,0 +1,243 @@
+<article
+id="product-photos"
+class="{{ gallery_width }} mb4">
+<span class="demo-1 ">{{ 'product-1' | append: current | placeholder_svg_tag: 'placeholder-svg' }}</span>
+</article>
+
+<article
+  id="product-description"
+  class="{{ form_width }}">
+
+  <div class="sm-px6 a-left">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {%- when 'text_metafield' -%}
+         {%- unless block.settings.content == blank -%}
+           <div class="product-template__text-block pt2 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.label != blank -%}
+              <p class="product-template__text-block--label mb0">{{ block.settings.label }}</p>
+            {%- endif -%}
+            {%- if block.settings.content != blank -%}
+              <div class="product-template__text-block--content rte pt1 mb0">
+                <p>{{ block.settings.content }}</p>
+              </div>
+            {%- endif -%}
+           </div>
+         {%- endunless -%}
+        {%- when 'richtext_metafield' -%}
+          {%- unless block.settings.content == blank -%}
+             <div class="product-template__text-block pt2 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.label != blank -%}
+                <p class="product-template__text-block--label mb0">{{ block.settings.label }}</p>
+              {%- endif -%}
+              {%- if block.settings.content != blank -%}
+                <div class="product-template__text-block--content rte pt1 mb0">
+                  {{ block.settings.content }}
+                </div>
+              {%- endif -%}
+             </div>
+           {%- endunless -%}
+        {%- when 'product_title' -%}
+          <h2 class="h2 lh1 pt2 mb1 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <a href="#">Product Title</a>
+          </h2>
+        {%- when 'product_prices' -%}
+          <div class="product-form__prices pt2 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <div id="product-price" class="product__price-container price pt1 mb1 price--unit-available" data-price=""><div class="price__pricing-group">
+              <dl class="price__regular lh0">
+                <dt>
+                  <span class="visually-hidden visually-hidden--inline">Regular Price</span>
+                </dt>
+                <dd>
+                  <span class="price-item price-item--regular" data-regular-price="">€55,00</span>
+                </dd>
+              </dl>
+              <dl class="price__sale lh0">
+                <dt>
+                  <span class="visually-hidden visually-hidden--inline">Sale Price</span>
+                </dt>
+                <dd>
+                  <span class="price-item price-item--sale" data-sale-price=""></span>
+                </dd>
+                <dt>
+                  <span class="visually-hidden visually-hidden--inline">Regular Price</span>
+                </dt>
+                <dd>
+                  <span class="price-item price-item--regular" data-regular-price=""></span>
+                </dd>
+              </dl>
+            </div>
+            </div>
+          </div>
+        {%- when 'product_sku' -%}
+          <div class="product__sku-container pt2 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <span class="product__sku-label">{{ 'customer.order.details.sku' | t }} &nbsp; | &nbsp;</span>
+            <span class="product__sku-value js-variant-sku">SKU-1234</span>
+          </div>
+        {%- when 'product_form' -%}
+          <div class="product-form__variants product__section--variants inline-block animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <div class="variants">
+            </div>
+          </div>
+        {%- when 'product_buttons' -%}
+          <div class="product-form__buttons product__add-container mt4 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {% if block.settings.show_quantity %}
+              <div class="product__quantity pt2 mb2">
+                <label class="product__quantity-label vib-center" for="{{ product_type }}-productQty-123">{{ 'products.product.quantity' | t }}</label>
+                <div class="product__quantity--selector">
+                  <button
+                    class="product__quantity-down downer js-qty-down mr1 mb0 vib-center no-js-hidden"
+                    href="{{ product.url }}"
+                    tabindex="0"
+                    aria-label="Decrease"
+                    type="button"
+                    disabled
+                  >
+                    {%
+                      render 'snip-icons',
+                      wrapper: '.product__quantity',
+                      type: 'apollo',
+                      icon: 'minus',
+                      size: '10px',
+                      fill: 'var(--text-color)',
+                      hover: 'var(--text-color)'
+                    %}
+                  </button>
+                  <input id="{{ product_type }}-productQty-123"
+                    min="1"
+                    data-limit="{% if current_variant.inventory_management == 'shopify' %}{% unless current_variant.inventory_policy == 'continue' %}{{ current_variant.inventory_quantity }}{% endunless %}{% endif %}"
+                    type="text" name="quantity"
+                    class="product-qty product__quantity-input vib-center"
+                    disabled
+                    value="1" />
+                  <button
+                    class="product__quantity-up js-qty-up up ml1 mb0 vib-center no-js-hidden"
+                    href="{{ product.url }}"
+                    tabindex="0"
+                    aria-label="Increase"
+                    type="button"
+                    disabled
+                  >
+                    {%
+                      render 'snip-icons',
+                      wrapper: '.product__quantity',
+                      type: 'apollo',
+                      icon: 'plus',
+                      size: '10px',
+                      fill: 'var(--text-color)',
+                      hover: 'var(--text-color)'
+                    %}
+                  </button>
+                </div>
+              </div>
+            {% endif %}
+            <input
+            type="submit"
+            name="button"
+            class="button ajax-submit js-ajax-submit add-item add w100" value="SOLD OUT" disabled />
+          </div>
+        {%- when 'line_item_property' -%}
+          <div class="product-form__lineitem-properties product__line-item animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {% if block.settings.property_type == 'text' %}
+              <p class="line-item-property__field sm relative pt2 mb2">
+                <label for="{{ block.settings.title | handleize }}">{{ block.settings.title }}</label>
+                {%- if block.settings.required -%}
+                  <small class="property--required absolute t0 r0">*&nbsp;{{ 'products.product.required' | t }}</small>
+                {%- endif -%}
+                <input id="{{ block.settings.title | handleize }}"
+                 type="text"
+                 {% if block.settings.required %}required{% endif %}
+                 data-product-property
+                 name="properties[{{ block.settings.title }}]"
+                 data-property-id="{{ block.id }}"
+                 value="">
+              </p>
+            {% elsif block.settings.property_type == 'multi_line_text' %}
+              <p class="line-item-property__field sm relative pt2 mb2">
+                <label for="{{ block.settings.title | handleize }}">{{ block.settings.title }}:</label>
+                {%- if block.settings.required -%}
+                  <small class="property--required absolute t0 r0">*{{ 'products.product.required' | t }}</small>
+                {%- endif -%}
+                <textarea id="{{ block.settings.title | handleize }}"
+                 {% if block.settings.required %}required{% endif %}
+                 data-product-property
+                 name="properties[{{ block.settings.title }}]"
+                 data-property-id="{{ block.id }}"
+                 ></textarea>
+              </p>
+            {% endif %}
+          </div>
+        {%- when 'product_description' -%}
+          <div class="product-template__description rte pt3 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <p class="label mb1">{{ 'products.product.product_info' | t }}</p>
+            <p>Use this text to share information about your brand with your customers. Describe a collection, share announcements, or welcome customers to your store.</p>
+          </div>
+        {%- when 'social_share' -%}
+          <div class="product-template__social-share pt2 pb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <p class="inline-block mb0 mr3 v-center">{{ 'products.product.social_share' | t }}</p>
+            {% render 'snip-social-sharing',
+              share_title: 'Product Title',
+              share_permalink: # %}
+          </div>
+        {%- when 'product_pickup' -%}
+          <link rel="preload" href="{{ 'section-pickup-availability.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+          <noscript><link rel="stylesheet" href="{{ 'section-pickup-availability.css' | asset_url }}"></noscript>
+          <pickup-availability
+            class="product-single__store-availability-container animate--text delay--4"
+            style="opacity: 1; display: block; visibility: visible;">
+            <div class="store-availability-container pt2 mb2" data-pick-up-available="true"><div class="store-availability__product-properties grid__wrapper edge cg0 py2">
+               <div class="store-availability__pickup-details span-12 auto">
+                   <span class="visually-hidden">Pickup</span><div class="store-availability-information__title block lh2">
+                  <svg class="icon--apollo-checkmark mr0 pr1 vib-center inline-block" height="12px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25.7 20" xml:space="preserve">
+                     <g class="hover-fill" fill="var(--success-msg-dark)">
+                       <polygon points="8.2,15.8 2,9.6 0,11.6 8.2,20 25.7,2.1 23.7,0 "></polygon>
+                     </g>
+                     <style>.store-availability__pickup-details .icon--apollo-checkmark:hover .hover-fill { fill: var(--success-msg-dark);}</style>
+                  </svg>
+                  <div class="store-availability-information__content">
+                    <span class="vib-center pr1 sm w100">Pickup available</span>
+                    <button disabled class="slideout__trigger-store-availability js-slideout-open btn-as-link underlined vib-center w100 a-left inline-block" data-slideout-direction="right" data-wau-slideout-target="store-availability" aria-label="Toggle slideout" tabindex="0" type="button" name="button">See Stores
+                    </button></div><!-- /.store-availability-information__content -->
+                  </div></div></div></div>
+          </pickup-availability>
+        {%- when 'rating' -%}
+         <div class="product__section--rating-wrapper pt2 mb2 animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+           <div class="product__section-rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}">
+             <span aria-hidden="true" class="product__section-rating-star color-icon" style="--rating: 4; --rating-max: 5; --rating-decimal: 1;">
+             </span>
+           </div>
+           <p class="product__section-rating-text caption">
+             <span aria-hidden="true">4 / 5</span>
+           </p>
+           <p class="product__section-rating-count caption">
+             <span aria-hidden="true">(12)</span>
+             <span class="visually-hidden">12 {{ "accessibility.total_reviews" | t }}</span>
+           </p>
+         </div>
+        {%- when 'metafield_popup' -%}
+          <div class="product-form__popup pt2 mb2 sm-pt1 sm-mb1 {{ multiples }} border--{{ block.settings.show_border_label }} animate--text delay--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {% if block.settings.popup_label != blank and block.settings.popup_metafield_content != blank or block.settings.page != blank %}
+              <button class="btn-as-link underline js-modal-open" type="button" name="button" data-wau-modal-target="product-modal--{{ forloop.index }}" {{ block.shopify_attributes }}>
+                {{ block.settings.popup_label }}
+              </button>
+              <div data-wau-modal-content="product-modal--{{ forloop.index }}" style="display: none;">
+                {% if block.settings.page != blank %}
+                  {% assign feat_page = pages[block.settings.page] %}
+                  {{ feat_page.content }}
+                {% else %}
+                  <div class="rte">
+                    {{ block.settings.popup_metafield_content }}
+                  </div><!-- /.rte -->
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {%- when '@app' -%}
+          <div class="product__section--app" {{ block.shopify_attributes }}>
+            {% render block %}
+          </div>
+      {% endcase %}
+    {% endfor %}
+
+  </div>
+</article>

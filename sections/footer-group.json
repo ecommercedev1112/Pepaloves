@@ -1,0 +1,191 @@
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer-1": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "foot",
+            "title": "Tienda Online",
+            "column_width": 3
+          }
+        },
+        "footer-2": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "distribuci-n",
+            "title": "Distribuidor",
+            "column_width": 3
+          }
+        },
+        "footer-3": {
+          "type": "menu",
+          "settings": {
+            "footer_nav": "colecciones-veganas",
+            "title": "Compromiso animalista",
+            "column_width": 5
+          }
+        }
+      },
+      "block_order": [
+        "footer-1",
+        "footer-2",
+        "footer-3"
+      ],
+      "settings": {
+        "show_credit_cards": false,
+        "show_copyright": true,
+        "alignment": "a-center",
+        "show_locale_selector": true,
+        "show_country_selector": false,
+        "show_newsletter": true,
+        "show_social": true,
+        "enable_follow_on_shop": false
+      }
+    },
+    "text_with_icons_4PeGNb": {
+      "type": "text-with-icons",
+      "blocks": {
+        "text_block_riVEmx": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_asscher",
+            "link": "",
+            "title": "Asscher",
+            "subheading": ""
+          }
+        },
+        "text_block_jyxCN3": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_baguette",
+            "link": "",
+            "title": "Baguette",
+            "subheading": ""
+          }
+        },
+        "text_block_Aq4P7m": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_cushion",
+            "link": "",
+            "title": "Cushion",
+            "subheading": ""
+          }
+        },
+        "text_block_G3EyTp": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_emerald",
+            "link": "",
+            "title": "Emerald",
+            "subheading": ""
+          }
+        },
+        "text_block_Cc8wVm": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_heart",
+            "link": "",
+            "title": "Heart",
+            "subheading": ""
+          }
+        },
+        "text_block_i9CdFq": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "jewelry_marquise",
+            "link": "",
+            "title": "Marquise",
+            "subheading": ""
+          }
+        },
+        "text_block_jD6jEe": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "jewelry_oval",
+            "link": "",
+            "title": "Oval",
+            "subheading": ""
+          }
+        },
+        "text_block_EJa46M": {
+          "type": "text_block",
+          "disabled": true,
+          "settings": {
+            "icon": "jewelry_pear",
+            "link": "",
+            "title": "Pear",
+            "subheading": ""
+          }
+        },
+        "text_block_X4kWT7": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_princess",
+            "link": "",
+            "title": "Princess",
+            "subheading": ""
+          }
+        },
+        "text_block_ddcEfd": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_radiant",
+            "link": "",
+            "title": "Radiant",
+            "subheading": ""
+          }
+        },
+        "text_block_KfrH6h": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_round",
+            "link": "",
+            "title": "Round",
+            "subheading": ""
+          }
+        },
+        "text_block_CHwKye": {
+          "type": "text_block",
+          "settings": {
+            "icon": "jewelry_trillion",
+            "link": "",
+            "title": "Trillion",
+            "subheading": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_block_riVEmx",
+        "text_block_jyxCN3",
+        "text_block_Aq4P7m",
+        "text_block_G3EyTp",
+        "text_block_Cc8wVm",
+        "text_block_i9CdFq",
+        "text_block_jD6jEe",
+        "text_block_EJa46M",
+        "text_block_X4kWT7",
+        "text_block_ddcEfd",
+        "text_block_KfrH6h",
+        "text_block_CHwKye"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "Shop by Shape",
+        "icon_size": 60,
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "text_with_icons_4PeGNb"
+  ]
+}

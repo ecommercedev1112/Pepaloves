@@ -1,0 +1,131 @@
+/* ---- Modal Styles ---- */
+.modal__container {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 15;
+  left: 50%;
+  top: 10vh;
+  transform: translateX(-50%);
+  webkit-transition: opacity 1.2s ease-in-out;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.modal__inner-content-container {
+  max-height: 560px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin: 10px;
+}
+
+@media (max-width: 767px) {
+  .modal__inner-content-container {
+    max-height:  unset;
+    overflow-y:  unset;
+  }
+}
+
+/* Modal Content/Box */
+.modal__inner-wrapper {
+  background-color: var(--background);
+  padding: 20px;
+  border: 1px solid #888;
+  max-height: 800px;
+  overflow-y: hidden;
+  position: relative;
+}
+.modal__inner-wrapper .loading-wrapper {
+  height: 100%;
+}
+@media (min-width: 980px) {
+  .modal__inner-wrapper,
+  .modal__container {
+    width: 880px;
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  .modal__inner-wrapper,
+  .modal__container {
+    width: 90%;
+  }
+}
+@media (max-width: 767px) {
+  .modal__inner-wrapper,
+  .modal__container {
+    width: 100%;
+  }
+  .modal__inner-wrapper {
+    overflow: unset;
+    max-height: unset;
+    padding: 50px 10px 20px 10px !important;
+  }
+}
+.modal__container.modal--active {
+  display: block;
+  opacity: 1;
+}
+.modal__container button.slideout__trigger-ajax-cart.js-modal-close {
+    padding: 0 5px;
+}
+.modal__trigger--open {
+  z-index: 2;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+.modal__trigger--open button {
+  margin-bottom: 0;
+}
+.modal__trigger--close {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.modal__trigger--close button {
+  padding: 15px 10px 15px 10px;
+  margin-bottom: 0;
+  line-height: unset;
+  height: 50px;
+  background-color: unset !important;
+  color: unset !important;
+}
+.modal__trigger--close button .icn-close:after,
+.modal__trigger--close button .icn-close:before {
+  border-color: var(--text-color);
+}
+.modal__general-modal__wrapper {
+  padding: 30px !important;
+}
+.modal__general-modal__wrapper .slideout__trigger-general-modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+/* ---- Modal Full Width --- */
+.modal__container[data-wau-modal-full] {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: unset;
+  overflow: hidden;
+  min-height: 100%;
+}
+.modal__container[data-wau-modal-full] .modal__inner-wrapper {
+  border: unset;
+  max-height: unset;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+.modal__container[data-wau-modal-full] .modal__inner-content-container {
+  max-height: unset;
+  padding: 0;
+  margin: 0;
+  overflow: unset;
+}
+.modal__general-modal__wrapper .slideout__trigger--close button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

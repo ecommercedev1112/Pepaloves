@@ -1,0 +1,178 @@
+{% comment %} Collection List Assets {% endcomment %}
+<link rel="preload" href="{{ 'component-collection-grid.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-collection-grid.css' | asset_url }}"></noscript>
+
+{% comment %} Collection List Logic {% endcomment %}
+{%- liquid
+  case section.settings.items_per_row
+  when 4
+    assign items_per_row = 'span-3 auto'
+  when 3
+    assign items_per_row = 'span-4 auto'
+  when 2
+    assign items_per_row = 'span-6 auto'
+  when 1
+    assign items_per_row = 'span-12'
+  endcase
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if settings.section_title_align == 'left'
+    assign heading_align = 'a-left'
+  else
+    assign heading_align = 'a-center'
+  endif
+-%}
+
+{% comment %} Collection List Template {% endcomment %}
+<div
+  class="section-collection-list collection-list-{{ section.id }} global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="collection-list"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper">
+    {% render 'snip-headings', align: heading_align, grid: 'span-12', url: routes.collection_url %}
+
+    {% if section.blocks.size == 0 %}
+      {% render 'collection-loop', items_per_row: items_per_row %}
+    {% else %}
+      {% assign collection = '' %}
+      {% for block in section.blocks %}
+        {% liquid
+          assign loading = 'lazy'
+          assign fetch_priority = 'auto'
+          if section.index == 1 and forloop.index <= section.settings.items_per_row
+            assign loading = 'eager'
+            assign fetch_priority = 'high'
+          endif
+         %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+        {%
+          render 'collection-grid-item',
+          collection: collection,
+          items_per_row: items_per_row,
+          grid_items: section.settings.items_per_row,
+          block: block,
+          show_link: section.settings.show_link,
+          product_image: block.settings.product_image,
+          loading: loading,
+          fetchpriority: fetch_priority
+         %}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "tag": "section",
+  "class": "dynamic-section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collection list"
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Collections per row",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "product_image",
+          "label": "Use product image",
+          "info": "Will overwrite the collection image and show image of first product in collection.",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list",
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        },
+        {
+          "type": "featured_collection"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "customers/account",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

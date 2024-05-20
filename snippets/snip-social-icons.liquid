@@ -1,0 +1,109 @@
+{%- liquid
+
+  unless fill_color
+    assign fill_color = 'var(--text-color)'
+  endunless
+
+  unless hover_color
+    assign hover_color = 'var(--text-color-light)'
+  endunless
+
+-%}
+<div id="social-icons" class="social-icons__general--wrapper mb1">
+  {% if settings.facebook_url != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.facebook_url }}" title="Facebook">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'facebook',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.twittername != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.twittername }}" title="Twitter">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'twitter',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.pinterest_url != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.pinterest_url }}" title="Pinterest">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'pinterest',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.youtube_url != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.youtube_url }}" title="Youtube">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'youtube',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.linkedin_url != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.linkedin_url }}" title="Linkedin">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'linkedin',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.instagram != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.instagram }}" title="Instagram">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'instagram',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.tiktok != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.tiktok }}" title="Tiktok">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'tiktok',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+  {% if settings.etsy != blank %}
+    <a class="inline-block v-center mt0 mr3 mb5 ml0" href="{{ settings.etsy }}" title="Etsy">
+      {% render 'snip-icons',
+         wrapper: '.social-icons__general--wrapper',
+         type: 'social',
+         icon: 'etsy',
+         size: '20px',
+         classes: 'm0 p0',
+         fill: fill_color,
+         hover: hover_color %}
+    </a>
+  {% endif %}
+</div>

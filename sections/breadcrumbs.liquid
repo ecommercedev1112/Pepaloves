@@ -1,0 +1,145 @@
+{% comment %} Breadcrumbs Logic {% endcomment %}
+{%- liquid
+
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+-%}
+
+{% comment %} Breadcrumbs Template {% endcomment %}
+<div class="breadcrumb__nav grid__wrapper global__section {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="breadcrumbs"
+  data-section-loaded="false">
+  <div class="span-12 auto {{ section.settings.alignment }}">
+    {% if template contains "article" %}
+      <a href="{{ routes.root_url }}" class="homepage-link" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+      <span class="separator mx3">|</span>
+      {{ blog.title | link_to: blog.url }}
+      <span class="separator mx3">|</span>
+      <span class="page-title">{{ page_title }}</span>
+    {% elsif template contains "list-collections" %}
+      <a href="{{ routes.root_url }}" class="homepage-link" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+      <span class="separator mx3">|</span>
+      <span class="page-title">{{ 'collections.general.all_collections' | t }}</span>
+    {% elsif template contains "collection" %}
+        <a href="{{ routes.root_url }}" class="homepage-link" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+      {% if current_tags.size > 0 %}
+        <span class="separator mx3">|</span>
+        {{ collection.title | link_to: collection.url }}
+        <span class="separator mx3">|</span>
+        <span class="page-title">{{ current_tags.first }}</span>
+      {% else %}
+        <span class="separator mx3">|</span>
+        <span class="page-title">{{ collection.title }}</span>
+      {% endif %}
+    {% elsif template contains "order" or template contains "addresses" or template contains "register" %}
+      <a href="{{ routes.root_url }}" class="homepage-link" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+      <span class="separator mx3">|</span>
+      <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
+      <span class="separator mx3">|</span>
+      <span class="page-title">{{ page_title }}</span>
+    {% else %}
+      <a href="{{ routes.root_url }}" class="homepage-link" title="{{ 'general.breadcrumbs.home' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+      <span class="separator mx3">|</span>
+      <span class="page-title">{{ page_title }}</span>
+    {% endif %}
+  </div>
+  <style>
+    .breadcrumb__nav a:hover {
+      text-decoration: underline;
+    }
+    .breadcrumb__wrapper a, .breadcrumb__wrapper span {
+     font-size: var(--font-size);
+     color: var(--text-color);
+    }
+    .breadcrumb__wrapper a:hover {
+     text-decoration: underline;
+    }
+    .breadcrumb__link--active {
+     font-weight: bolder;
+    }
+  </style>
+</div>
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "tag": "section",
+  "class": "dynamic-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        },
+        {
+          "value": "a-right",
+          "label": "Right"
+        }
+      ],
+      "default": "a-left"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breadcrumbs"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "page",
+      "product",
+      "search",
+      "customers/account",
+      "customers/order",
+      "customers/addresses",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

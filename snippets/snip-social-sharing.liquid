@@ -1,0 +1,52 @@
+<div class="social-icons__share--wrapper share-icons mt2 mb1 inline v-center">
+  <a class="inline-block mt0 mr2 mb0 ml0 lh0"
+    target="_blank"
+    rel="noreferrer"
+    href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}"
+    aria-label="{{ 'social.icons.facebook' | t }}">
+    {% render 'snip-icons',
+       wrapper: '.social-icons__share--wrapper',
+       type: 'social',
+       icon: 'facebook',
+       size: '15px',
+       classes: 'm0 p0',
+       fill: 'var(--text-color)',
+       hover: 'var(--text-color-light)' %}
+    <span class="hide" aria-hidden="true">{{ 'social.icons.facebook' | t }}</span>
+    <span class="hide">{{ 'social.icons.facebook' | t }}</span>
+  </a>
+
+  <a class="inline-block mt0 mr2 mb0 ml0 lh0"
+    target="_blank"
+    rel="noreferrer"
+    href="//twitter.com/share?text={{ share_title | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}"
+    aria-label="{{ 'social.icons.twitter' | t }}">
+    {% render 'snip-icons',
+       wrapper: '.social-icons__share--wrapper',
+       type: 'social',
+       icon: 'twitter',
+       size: '15px',
+       classes: 'm0 p0',
+       fill: 'var(--text-color)',
+       hover: 'var(--text-color-light)' %}
+    <span class="hide" aria-hidden="true">{{ 'social.icons.twitter' | t }}</span>
+    <span class="hide">{{ 'social.icons.twitter' | t }}</span>
+  </a>
+
+  <a class="inline-block mt0 mr2 mb0 ml0 lh0"
+    target="_blank"
+    rel="noreferrer"
+    href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | image_url: width: 1024, height: 1024 }}&amp;description={{ share_title | url_param_escape }}"
+    aria-label="{{ 'social.icons.pinterest' | t }}">
+    {% render 'snip-icons',
+       wrapper: '.social-icons__share--wrapper',
+       type: 'social',
+       icon: 'pinterest',
+       size: '15px',
+       classes: 'm0 p0',
+       fill: 'var(--text-color)',
+       hover: 'var(--text-color-light)' %}
+    <span class="hide" aria-hidden="true">{{ 'social.icons.pinterest' | t }}</span>
+    <span class="hide">{{ 'social.icons.pinterest' | t }}</span>
+  </a>
+</div>

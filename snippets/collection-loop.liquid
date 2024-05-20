@@ -1,0 +1,33 @@
+{% if collections.size > 0 %}
+  {% paginate collections by items_per_page %}
+    {% for collection in collections %}
+      {% liquid
+        assign loading = 'lazy'
+        assign fetch_priority = 'auto'
+        if section.index == 1 and forloop.index <= section.settings.items_per_row
+          assign loading = 'eager'
+          assign fetch_priority = 'high'
+        endif
+       %}
+      {% render 'collection-grid-item',
+        collection: collection,
+        items_per_row: items_per_row,
+        grid_items: grid_items,
+        index: forloop.index,
+        show_collection_image: show_collection_image,
+        loading: loading,
+        fetchpriority: fetch_priority %}
+    {% endfor %}
+
+    {% if collections.size > items_per_page %}
+      <div class="span-12 auto">
+        {% render 'snip-pagination', paginate: paginate %}
+      </div>
+    {% endif %}
+
+  {% endpaginate %}
+{% else %}
+  <div class="span-12 a-center v-center">
+    <p>{{ 'collections.general.no_matches' | t }}</p>
+  </div>
+{% endif %}

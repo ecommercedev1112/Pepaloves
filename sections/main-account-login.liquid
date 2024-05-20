@@ -1,0 +1,219 @@
+{% comment %} Login Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-customers.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-customers.css' | asset_url }}"></noscript>
+
+{% comment %} Login Template {% endcomment %}
+<section class="user-login pt8 pb8"
+  data-section-id="{{ section.id }}"
+  data-section-type="customer-login"
+  data-section-loaded="false">
+  <div class="grid__wrapper">
+    {% if shop.checkout.guest_login %}
+      <h1 class="span-12 auto a-center">{{ 'customer.login.guest_title' | t }}</h1>
+    {%- else -%}
+      <h1 class="span-12 auto a-center">{{ 'customer.login.title' | t }}</h1>
+    {%- endif -%}
+
+    <div class="push-4 span-4 auto relative overflow-hidden">
+      {% if shop.checkout.guest_login %}
+        <div class="guest-user-login">
+          {% form 'guest_login' %}
+            <input class="button btn-secondary" type="submit" value="{{ 'customer.login.guest_continue' | t }}" />
+          {% endform %}
+        </div>
+      {% endif %}
+      <div id="customer-login" class="w100 section-fade-in">
+        {% form 'recover_customer_password' %}
+          <div class="grid__wrapper">
+            <div class="span-12 a-left relative">
+              {%- if form.posted_successfully? -%}
+              <div class="note note-success mb3 inline-block w100">
+                <div class="inline-block v-start">
+                  {% render 'snip-icons',
+                    wrapper: '.note-success',
+                    type: 'apollo',
+                    icon: 'checkmark',
+                    classes: 'mr3',
+                    size: '12px',
+                    fill: 'var(--success-msg-dark)',
+                    hover: 'var(--success-msg-dark)' %}
+                </div>
+                <p class="form-message form-message--success inline-block w90 mb0 sm v-start" tabindex="-1" data-form-status>
+                  {{ 'customer.recover_password.success' | t }}
+                </p>
+              </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {% endform %}
+
+        {% form 'customer_login' %}
+          <div class="customer-login form grid__wrapper rg5">
+            <div class="span-12 a-left relative">
+              {%- if form.errors -%}
+                <div class="errors note note-error mb3 inline-block w100">
+                  <div class="inline-block v-start w10">
+                    {% render 'snip-icons',
+                       wrapper: '.note-error',
+                       type: 'apollo',
+                       icon: 'error',
+                       classes: 'mr3',
+                       size: '12px',
+                       fill: 'var(--error-msg-dark)',
+                       hover: 'var(--error-msg-dark)' %}
+                  </div>
+                  <div class="inline-block v-start mb0 w80">
+                    {{ form.errors | default_errors }}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="span-12 a-left relative">
+              <label for="customer-email">{{ 'customer.login.email' | t }}</label>
+              <input
+                type="email"
+                name="customer[email]"
+                id="customer-email"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                {%- if form.errors contains 'form' -%}
+                  class="input--error"
+                  aria-invalid="true"
+                {%- endif -%}
+                >
+            </div>
+
+              <div class="span-12 a-left relative">
+                <label for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
+                <input
+                  type="password"
+                  value=""
+                  name="customer[password]"
+                  id="CustomerPassword"
+                  {%- if form.errors contains 'form' -%}
+                    class="input--error"
+                    aria-invalid="true"
+                  {%- endif -%}
+                >
+                <div id="forgot-password" class="mb3 mt1">
+                  <a class="sm" href="{{ routes.account_login_url }}" onclick="Toggle('recover-password', 'customer-login');return false;">{{ 'customer.login.forgot_password' | t }}</a>
+                </div>
+              </div>
+
+            <div class="span-12 a-left relative">
+              <input class="button btn-secondary mr3" type="submit" value="{{ 'customer.login.sign_in' | t }}" />
+              <a class="button " href="{{ routes.account_register_url }}" onclick="Toggle('create-customer', 'customer-login');return false;">{{ 'customer.register.title' | t }}</a>
+            </div>
+          </div>
+        {% endform %}
+      </div>
+      <div id="recover-password" class="mt8 w100 hidden" style="display:none;">
+        {% render 'snip-headings', align: 'a-center', grid: 'span-12', translation: 'customer.recover_password.title' %}
+        <p class="mb3 a-center">{{ 'customer.recover_password.subtext' | t }}</p>
+        {%- assign formId = 'RecoverPassword' -%}
+        {% form 'recover_customer_password' %}
+          <div class="form grid__wrapper">
+            <div class="span-12 a-left relative">
+              {% render 'snip-form-status', form: form, form_id: formId %}
+            </div>
+            <div id="recover-email" class="span-12 a-left relative">
+              <label for="RecoverEmail" class="mb3">{{ 'customer.recover_password.email' | t }}</label>
+              <input
+              type="email"
+              value=""
+              name="email"
+              id="RecoverEmail"
+              class="input-full{% if form.errors %} input--error{% endif %}"
+              autocorrect="off"
+              autocapitalize="off"
+              {% if form.errors %}
+                aria-invalid="true"
+                aria-describedby="RecoverEmail-email-error"
+              {%- endif -%}
+              >
+
+              {%- if form.errors -%}
+                <span id="RecoverEmail-email-error" class="input-error-message inline-block w100 mt1">
+                  <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                  {% render 'snip-icons',
+                    wrapper: '.input-error-message',
+                    type: 'apollo',
+                    icon: 'error',
+                    classes: 'mr3',
+                    size: '12px',
+                    fill: 'var(--error-msg-dark)',
+                    hover: 'var(--error-msg-dark)' %}
+                  <span class="sm">{{ form.errors.messages['form'] }}</span>
+                </span>
+              {%- endif -%}
+
+            </div>
+            <div class="span-12 a-left relative">
+              <input class="button btn-secondary mr3" type="submit" value="{{ 'customer.recover_password.submit' | t }}" />
+              <a class="button " href="{{ routes.account_login_url }}" onclick="Toggle('customer-login', 'recover-password');return false;">{{ 'customer.recover_password.cancel' | t }}</a>
+            </div>
+          </div>
+        {% endform %}
+      </div>
+      <div id="create-customer" class="mt8 w100 hidden" style="display:none;">
+        {% render 'snip-headings', align: 'a-center', grid: 'span-12', translation: 'customer.register.title' %}
+
+        {% form 'create_customer' %}
+          <div class="form grid__wrapper rg5">
+            {% render 'snip-form-error' %}
+
+            <div class="span-12 a-left relative">
+              <label for="first-name">{{ 'customer.register.first_name' | t }}</label>
+              <input id="first-name" type="text" value="" name="customer[first_name]" size="30" />
+            </div>
+
+            <div class="span-12 a-left relative">
+              <label for="last-name">{{ 'customer.register.last_name' | t }}</label>
+              <input id="last-name" type="text" value="" name="customer[last_name]" size="30" />
+            </div>
+
+            <div class="span-12 a-left relative">
+              <label for="email">{{ 'customer.register.email' | t }}</label>
+              <input id="email" type="email" value="" name="customer[email]" size="30" />
+            </div>
+
+            <div class="span-12 a-left relative">
+              <label for="password">{{ 'customer.register.password' | t }}</label>
+              <input id="password" type="password" value="" name="customer[password]" size="30" />
+            </div>
+
+            <div class="span-12 a-left relative">
+              <input class="button btn-secondary mr3" type="submit" value="{{ 'customer.register.submit' | t }}"/>
+              <a class="button " href="#" onclick="Toggle('customer-login', 'create-customer');return false;">{{ 'customer.recover_password.cancel' | t }}</a>
+            </div>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    if (window.location.hash == '#recover') { Toggle('recover-password', 'customer-login'); }
+
+    function Toggle(show, hide) {
+      var show = document.getElementById(show);
+      show.classList.remove("hide");
+      show.classList.add("show");
+      show.style.display = 'block';
+
+      var hide = document.getElementById(hide);
+      hide.classList.remove("show");
+      hide.classList.add("hide");
+      hide.style.display='none';
+    }
+  </script>
+</section>
+{% schema %}
+{
+  "name": "Main account login",
+  "settings": [
+  ]
+}
+{% endschema %}

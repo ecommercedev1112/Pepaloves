@@ -1,0 +1,44 @@
+{% comment %}
+snippets/complementary-products.liquid
+
+Usage:
+{%
+
+  render 'complementary-products',
+  section: section,
+  block: block,
+  product: product
+%}
+{% endcomment %}
+<complementary-products>
+{%- if recommendations.performed? -%}
+  <div
+    class="js-complementary-products"
+    data-base-url="{{ routes.product_recommendations_url }}"
+    data-product-id="{{ product.id }}"
+    data-section-id="{{ section.id }}"
+    data-intent="complementary"
+    data-limit="{{ block.settings.limit }}">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      {% if block.settings.heading != blank %}
+        {% render 'snip-headings', grid: 'span-12', align: heading_align, heading: block.settings.heading, classes: 'h3 mb0' %}
+      {% endif %}
+      {%- for product in recommendations.products limit: section.settings.items_shown -%}
+        {%
+          render 'complementary-product',
+          product: product
+        %}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+{%- else  -%}
+  <div
+    class="js-complementary-products grid__wrapper edge pt4"
+    data-base-url="{{ routes.product_recommendations_url }}"
+    data-product-id="{{ product.id }}"
+    data-section-id="{{ section.id }}"
+    data-intent="complementary"
+    data-limit="{{ block.settings.limit }}">
+  </div>
+{%- endif -%}
+</complementary-products>

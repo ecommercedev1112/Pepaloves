@@ -1,0 +1,262 @@
+  {% comment %} Featured product carousel Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-featured-product-carousel.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-featured-product-carousel.css' | asset_url }}"></noscript>
+
+{% comment %} Featured product carousel logic {% endcomment %}
+{%- liquid
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  assign enough_to_wrap = false
+  if section.blocks.size > 1
+    assign enough_to_wrap = true
+  endif
+
+  assign has_product = false
+  for block in section.blocks 
+    if block.settings.product != blank
+      assign has_product = true
+    endif
+  endfor 
+
+-%}
+
+{% capture carousel_config %}{
+  "wrapAround":{{ enough_to_wrap }},
+  "cellAlign": "left",
+  "dragThreshold":"15",
+  "draggable": {{ enough_to_wrap }},
+  "pauseAutoPlayOnHover":false,
+  "prevNextButtons": {{ enough_to_wrap }},
+  "pageDots": {{ enough_to_wrap }},
+  "arrowShape": "M71.9,95L25.1,52.2c-0.6-0.6-0.9-1.3-0.9-2.2s0.3-1.6,0.9-2.2L71.9,5l3.9,4.3L31.4,50l44.4,40.7L71.9,95z"
+}{% endcapture %}
+
+{% comment %} Shop the Look Template {% endcomment %}
+<div class="global__section section-featured-product-carousel featured-product-carousel-{{ section.id }} {{ section_padding }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="carousel"
+  data-section-loaded="false"
+  data-asset-url="{{ 'carousel.js' | asset_url }}">
+
+  <div class="grid__wrapper cg4 sm-cg0 edge">
+    <article class="section-featured-product-carousel__content-outer span-6 auto px10 sm-px2 js-carousel" data-flickity='{{ carousel_config }}'>
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign loading = 'lazy'
+          assign fetch_priority = 'auto'
+          if section.index == 1 and forloop.first
+            assign loading = 'eager'
+            assign fetch_priority = 'high'
+          endif
+         %}
+        {%- assign product = block.settings.product -%}
+        {%- if product != blank -%}
+          <div class="section-featured-product-carousel__content-wrapper pb5 mb9 sm-pb2 sm-mb3 {{ section.settings.alignment }}" data-slider-index="{{ forloop.index0 }}" {{ block.shopify_attributes }} data-slide-index="{{ forloop.index0 }}">
+             {%- if product.featured_media.preview_image != blank -%}
+                {% render 'helper-image',
+                   type: product.featured_media.preview_image,
+                   sm_render: '100vw'
+                   md_render: 'calc(100vw / 2)',
+                   lg_render: 'calc(100vw / 2)',
+                   loading: loading,
+                   fetchpriority: fetch_priority %}
+              {%- elsif product.media.size > 1 and product.media[1].media_type == 'image' -%}
+                {% render 'helper-image',
+                   type: product.media[1],
+                   sm_render: '100vw'
+                   md_render: 'calc(100vw / 2)',
+                   lg_render: 'calc(100vw / 2)',
+                   loading: loading,
+                   fetchpriority: fetch_priority %}
+              {%- else -%}
+                <div class="onboard demo-1 color-1">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+              {%- endif -%}
+             <h3 class="mt5">{{ product.title }}</h3>
+             {%- if product.description != blank -%}
+               <p class="rte">{{ product.description | strip_html | truncatewords: 20 }}</p>
+             {%- endif -%}
+             {%- if block.settings.link_text != blank -%}
+               <a class="btn-border-link inline-block relative" href="{{ product.url }}">
+                <span>{{ block.settings.link_text }}</span>
+               </a>
+             {%- endif -%}
+          </div>
+        {%- elsif product == blank and forloop.index == 1 or product == blank and forloop.index == 2 -%}
+          <div class="section-featured-product-carousel__content-wrapper pb5 mb9 sm-pb2 sm-mb3 {{ section.settings.alignment }}" data-slider-index="{{ forloop.index0 }}" {{ block.shopify_attributes }}  data-slide-index="{{ forloop.index0 }}">
+            <div class="onboard demo-1 color-1">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <h3 class="mt5">Product Title {{ forloop.index }}</h3>
+            <p class="rte">This is the product description shortened to twenty words or less.</p>
+            {%- if block.settings.link_text != blank -%}
+              <a class="btn-border-link inline-block relative" href="#">
+                <span>{{ block.settings.link_text }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </article>
+    <article class="section-featured-product-carousel__image-outer span-6 sm-hide auto relative js-carousel-pagination">
+      {%- for block in section.blocks -%}
+        {% liquid
+          assign loading = 'lazy'
+          assign fetch_priority = 'auto'
+          if section.index == 1 and forloop.first
+            assign loading = 'eager'
+            assign fetch_priority = 'high'
+          endif
+         %}
+        <div class="section-featured-product-carousel__image-wrapper js-nav-item {% if forloop.first %}is-nav-selected{% endif %}" data-slide-index="{{ forloop.index0 }}">
+        {%- if block.settings.product.url != blank -%}
+          <a href="{{ product.url }}" title="{{ product.title | escape }}">
+        {%- endif -%}
+        {%- if block.settings.look_image != blank -%}
+            {% render 'helper-image',
+               type: block.settings.look_image,
+               sm_render: '100vw'
+               md_render: 'calc(100vw / 2)',
+               lg_render: 'calc(100vw / 2)',
+               loading: loading,
+               fetchpriority: fetch_priority %}
+          {%- elsif block.settings.product.media.size > 1 and block.settings.product.media[1].media_type == 'image' -%}
+            {% render 'helper-image',
+               type: block.settings.product.media[1],
+               sm_render: '100vw'
+               md_render: 'calc(100vw / 2)',
+               lg_render: 'calc(100vw / 2)',
+               loading: loading,
+               fetchpriority: fetch_priority %}
+          {%- else -%}
+            <div class="onboard demo-1 color-1">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+          {%- if block.settings.product.url != blank -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </article>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured product carousel",
+  "tag": "section",
+  "class": "dynamic-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        },
+        {
+          "value": "a-right",
+          "label": "Right"
+        }
+      ],
+      "default": "a-center"
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Product",
+      "type": "product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "look_image",
+          "label": "Look image",
+          "info": "Optional, will fallback to second product image if applicable."
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Button text",
+          "default": "View Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured product carousel",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "404",
+      "article",
+      "blog",
+      "cart",
+      "collection",
+      "list-collections",
+      "index",
+      "page",
+      "product",
+      "search",
+      "metaobject"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,273 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a": {
+          "type": "product_title",
+          "settings": {
+          }
+        },
+        "43192c80-a930-4433-aa13-e083c64b206d": {
+          "type": "product_sku",
+          "settings": {
+          }
+        },
+        "43a00949-a2f3-4d11-9bc8-0764850b060f": {
+          "type": "product_prices",
+          "settings": {
+          }
+        },
+        "a714ffdc-0ed2-45ff-9945-54a700b33d75": {
+          "type": "product_customization",
+          "settings": {
+            "property_type": "text",
+            "title": "Engraving or Initials",
+            "required": false
+          }
+        },
+        "e6875fb5-148a-4e09-8072-5d5b4b2a1765": {
+          "type": "product_form",
+          "settings": {
+          }
+        },
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84": {
+          "type": "product_buttons",
+          "settings": {
+          }
+        },
+        "35d7ec12-af12-4b47-9421-dd981a44a735": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "SIZE GUIDE",
+            "show_border_label": true,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        },
+        "2d587658-77a6-434d-9116-80bb5399a066": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "PRODUCTION",
+            "show_border_label": true,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        },
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741": {
+          "type": "metafield_popup",
+          "settings": {
+            "popup_label": "RETURNS",
+            "show_border_label": false,
+            "popup_metafield_content": "<p>Add content which will be shown in a popup across all product pages<\/p>",
+            "page": ""
+          }
+        },
+        "6de531da-e00e-4bb6-bda9-87b7d806e825": {
+          "type": "richtext_metafield",
+          "settings": {
+            "label": "MATERIALS",
+            "content": ""
+          }
+        },
+        "1623dfe7-5ea9-47ab-a679-594538b7e404": {
+          "type": "product_description",
+          "settings": {
+          }
+        },
+        "fa93d867-94af-47af-999d-e5cf78771b56": {
+          "type": "social_share",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "90b84880-2bb4-4603-891c-c2bb5ddee26a",
+        "43192c80-a930-4433-aa13-e083c64b206d",
+        "43a00949-a2f3-4d11-9bc8-0764850b060f",
+        "a714ffdc-0ed2-45ff-9945-54a700b33d75",
+        "e6875fb5-148a-4e09-8072-5d5b4b2a1765",
+        "2e477d4a-8c5a-4bda-9e1a-c5ab8d560e84",
+        "35d7ec12-af12-4b47-9421-dd981a44a735",
+        "2d587658-77a6-434d-9116-80bb5399a066",
+        "5d34f80f-d27f-4c9d-bd22-8e76fd870741",
+        "6de531da-e00e-4bb6-bda9-87b7d806e825",
+        "1623dfe7-5ea9-47ab-a679-594538b7e404",
+        "fa93d867-94af-47af-999d-e5cf78771b56"
+      ],
+      "settings": {
+        "full_width": true,
+        "gallery_style": "scroll_gallery",
+        "thumbnail_position": "right",
+        "click_to_enlarge": true,
+        "enable_video_looping": false
+      }
+    },
+    "1642796129844cd818": {
+      "type": "collage",
+      "blocks": {
+        "16427961293651b8a6-1": {
+          "type": "text",
+          "settings": {
+            "heading": "Our Collections",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Shop All Collections",
+            "link_url": "",
+            "alignment": "a-left",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "16427961293651b8a6-0": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "left",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "16427961293651b8a6-2": {
+          "type": "image",
+          "settings": {
+            "image_url": "",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": true,
+            "padding_bottom": true
+          }
+        },
+        "f5a62b97-c552-4915-b030-9636a520c23c": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "text": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+            "link_text": "Learn More",
+            "link_url": "shopify:\/\/pages\/contact",
+            "alignment": "a-left",
+            "grid_position": "right",
+            "padding_left": true,
+            "padding_right": true,
+            "padding_top": false,
+            "padding_bottom": true
+          }
+        }
+      },
+      "block_order": [
+        "16427961293651b8a6-1",
+        "16427961293651b8a6-0",
+        "16427961293651b8a6-2",
+        "f5a62b97-c552-4915-b030-9636a520c23c"
+      ],
+      "settings": {
+        "full_width": false,
+        "grid_gap": 20,
+        "section_padding": "none"
+      }
+    },
+    "product-details": {
+      "type": "main-product-details",
+      "blocks": {
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3": {
+          "type": "product_type",
+          "settings": {
+          }
+        },
+        "87ab27ea-e73d-437e-897b-28d30835ed8b": {
+          "type": "product_vendor",
+          "settings": {
+          }
+        },
+        "a739078f-4d98-4349-a399-c18c2f011733": {
+          "type": "product_collection",
+          "settings": {
+          }
+        },
+        "5f5b2366-2c2d-4f21-993f-edcc396ef367": {
+          "type": "product_richtext",
+          "settings": {
+            "metafield_label": "Gold Care",
+            "metafield_content": ""
+          }
+        },
+        "2dabc49f-deb1-47c0-a5e6-121e913d4e16": {
+          "type": "product_richtext",
+          "settings": {
+            "metafield_label": "Stone Care",
+            "metafield_content": ""
+          }
+        },
+        "69d20af4-e6c1-4e5f-b476-18aa5d026c07": {
+          "type": "product_text",
+          "settings": {
+            "metafield_label": "Gemstone",
+            "metafield_content": ""
+          }
+        },
+        "045afbc5-a40f-4239-be93-56a9c4674d17": {
+          "type": "product_text",
+          "settings": {
+            "metafield_label": "Gemstone Shape",
+            "metafield_content": ""
+          }
+        },
+        "5986361c-c039-409a-aa9c-b91d69605971": {
+          "type": "product_text",
+          "settings": {
+            "metafield_label": "Carat Weight",
+            "metafield_content": ""
+          }
+        },
+        "ef0b90f2-8a9d-4859-9f74-9bba8095a392": {
+          "type": "product_text",
+          "settings": {
+            "metafield_label": "Style",
+            "metafield_content": ""
+          }
+        }
+      },
+      "block_order": [
+        "9baa0512-a43a-4ae2-8feb-e5ac17faadb3",
+        "87ab27ea-e73d-437e-897b-28d30835ed8b",
+        "a739078f-4d98-4349-a399-c18c2f011733",
+        "5f5b2366-2c2d-4f21-993f-edcc396ef367",
+        "2dabc49f-deb1-47c0-a5e6-121e913d4e16",
+        "69d20af4-e6c1-4e5f-b476-18aa5d026c07",
+        "045afbc5-a40f-4239-be93-56a9c4674d17",
+        "5986361c-c039-409a-aa9c-b91d69605971",
+        "ef0b90f2-8a9d-4859-9f74-9bba8095a392"
+      ],
+      "settings": {
+        "outer_border": true,
+        "container_width": "66",
+        "color_scheme": "2",
+        "section_padding": "both"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "items_per_row": 4,
+        "items_shown": 9,
+        "title": "Related Products",
+        "subheading": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.<\/p>",
+        "link_text": "",
+        "link_url": "",
+        "text_position": "left",
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1642796129844cd818",
+    "product-details",
+    "product-recommendations"
+  ]
+}

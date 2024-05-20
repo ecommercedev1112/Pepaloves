@@ -1,0 +1,152 @@
+{% comment %}  Store availability Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-pickup-availability.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-pickup-availability.css' | asset_url }}"></noscript>
+
+{% comment %} Store availability Logic {% endcomment %}
+{%- liquid
+  assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true
+  assign pick_up_available = false
+  if pick_up_availabilities.size > 0
+    assign pick_up_available = true
+  endif
+-%}
+
+{% comment %} Store availability Template {% endcomment %}
+<div class="store-availability-container pt2 mb2"
+  data-pick-up-available="{{ pick_up_available }}">
+
+  {%- if pick_up_available -%}
+    <div class="store-availability__product-properties grid__wrapper edge cg0 py2">
+     <div class="store-availability__pickup-details span-12 auto">
+         <span class="visually-hidden">{{ 'product_pickup_availability.pickup' | t }}</span>
+         {%- assign closest_location = pick_up_availabilities.first -%}
+         {%- if closest_location.available -%}
+           <div class="store-availability-information__title block lh2">
+             {% render 'snip-icons',
+                wrapper: '.store-availability__pickup-details',
+                type: 'apollo',
+                icon: 'checkmark',
+                size: '12px',
+                classes: 'mr0 pr1 vib-center inline-block',
+                fill: 'var(--success-msg-dark)',
+                hover: 'var(--success-msg-dark)' %}
+                <div class="store-availability-information__content">
+                  <span class="vib-center pr1 sm w100">{{ 'product_pickup_availability.pick_up_available_at_html' | t: location_name: closest_location.location.name }}</span>
+                  <button class="slideout__trigger-store-availability js-slideout-open btn-as-link underlined vib-center w100 a-left inline-block" data-slideout-direction="right" data-wau-slideout-target="store-availability" aria-label="Toggle slideout" tabindex="0" type="button" name="button">
+                    {%- if pick_up_availabilities.size == 1 -%}
+                      {{ 'product_pickup_availability.view_store_info' | t }}
+                    {%- else -%}
+                      {{ 'product_pickup_availability.check_other_stores' | t }}
+                    {%- endif -%}
+                  </button>
+                </div><!-- /.store-availability-information__content -->
+            </div>
+         {%- else -%}
+           <span class="store-availability-information__title block lh2">
+             {% render 'snip-icons',
+                wrapper: '.store-availability__pickup-details',
+                type: 'apollo',
+                icon: 'error',
+                size: '12px',
+                classes: 'mr0 pr1 vib-center inline-block',
+                fill: 'var(--error-msg-dark)',
+                hover: 'var(--error-msg-dark)' %}
+              <div class="store-availability-information__content">
+                <span class="vib-center pr1 sm w100 inline-block">{{ 'product_pickup_availability.pick_up_unavailable_at_html' | t: location_name: closest_location.location.name }}</span>
+                <button
+                  class="slideout__trigger-store-availability js-slideout-open btn-as-link underlined vib-center w100 a-left inline-block"
+                  data-slideout-direction="right"
+                  data-wau-slideout-target="store-availability"
+                  aria-label="Toggle slideout"
+                  tabindex="0"
+                  type="button"
+                  name="button">
+                  {%- if pick_up_availabilities.size == 1 -%}
+                    {{ 'product_pickup_availability.view_store_info' | t }}
+                  {%- else -%}
+                    {{ 'product_pickup_availability.check_other_stores' | t }}
+                  {%- endif -%}
+                </button>
+              </div><!-- /.store-availability-information__content -->
+           </span>
+         {%- endif -%}
+     </div>
+    </div>
+
+    <div class="store-availability-container store-availabilities__modal modal px6 py6" id="StoreAvailabilityModal" data-wau-slideout-content="store-availability">
+      <div class="slideout__trigger--close">
+        <button class="slideout__trigger-store-availability btn-secondary js-slideout-close" data-slideout-direction="right" aria-label="Close navigation" tabindex="0" type="button" name="button">
+          {% render 'snip-icons',
+             wrapper: '.store-availabilities__modal',
+             type: 'theme',
+             icon: 'left-arrow',
+             size: '20px',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+        </button>
+      </div>
+      <div class="store-availabilities-modal__header p4">
+        <span class="store-availabilities-modal__product-information">
+          <h3 class="store-availabilities-modal__product-title mb1 pt6" data-store-availability-modal-product-title>
+          </h3>
+          {%- unless product_variant.title contains 'Default' -%}
+          <p class="store-availabilities-modal__variant-title store-availability-small-text sm-caps">
+            {{ product_variant.title }}
+          </p>
+          {%- endunless -%}
+        </span>
+      </div>
+      <div class="store-availabilities-list p4">
+        {%- for availability in pick_up_availabilities -%}
+          <div class="store-availability-list__item py4 border-bottom{% if forloop.first %} border-top{% endif %}">
+            <div class="store-availability-list__location mb1">
+              <h4>{{ availability.location.name }}</h4>
+            </div>
+            <div class="store-availability-list__stock store-availability-small-text inline-block mb3 mt0">
+              {%- if availability.available -%}
+                {% render 'snip-icons',
+                   wrapper: '.store-availability-list__stock',
+                   type: 'apollo',
+                   icon: 'checkmark',
+                   size: '12px',
+                   classes: 'mr0 vib-center',
+                   fill: 'var(--success-msg-dark)',
+                   hover: 'var(--success-msg-dark)' %}
+                   {{ 'product_pickup_availability.pick_up_available' | t }}, {{ availability.pick_up_time | downcase }}
+              {%- else -%}
+                {% render 'snip-icons',
+                   wrapper: '.store-availability-list__stock',
+                   type: 'apollo',
+                   icon: 'error',
+                   size: '12px',
+                   classes: 'mr0 vib-center',
+                   fill: 'var(--error-msg-dark)',
+                   hover: 'var(--error-msg-dark)' %}
+                   {{ 'product_pickup_availability.pick_up_currently_unavailable' | t }}
+              {%- endif -%}
+            </div>
+            {%- assign address = availability.location.address -%}
+              <div class="store-availability-list__address mt0 mb0">
+                {{ address | format_address }}
+              </div>
+            {%- if address.phone.size > 0 -%}
+              <p class="store-availability-list__phone mt0 mb0">
+                {{ address.phone }}
+              </p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": {
+  },
+  "settings": [
+
+  ]
+}
+{% endschema %}

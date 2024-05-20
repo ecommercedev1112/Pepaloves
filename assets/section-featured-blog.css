@@ -1,0 +1,27 @@
+.section-featured-blog .article-loop__date {
+  background: var(--text-color);
+  color: var(--background);
+  padding: var(--space-2);
+}
+
+.section-featured-blog .article-loop__date.has-image--true {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.section-featured-blog .article-loop__date.has-image--false {
+  margin-bottom: 10px;
+}
+@media (max-width: 767px) {
+  .blog_article-comments-link {
+    width: 50% !important;
+  }
+}
+
+.article-headline__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+}

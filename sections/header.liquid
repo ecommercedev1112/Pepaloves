@@ -1,0 +1,288 @@
+
+{% render 'announcement-bar', section: section %}
+
+
+{% comment %} Header Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-header.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-header.css' | asset_url }}"></noscript>
+<!-- Load navigation style assets -->
+<link rel="preload" href="{{ 'component-navigation.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'component-navigation.css' | asset_url }}"></noscript>
+
+{% comment %} Header Logic {% endcomment %}
+{%- liquid
+
+  assign layout_style = ''
+  if section.settings.header_layout == 'inline_layout_left' or section.settings.header_layout == 'inline_layout_center'
+    assign layout_style = 'inline-layout'
+  else
+    assign layout_style = 'block-layout'
+  endif
+
+  if section.settings.enable_sticky
+    assign sticky = 'stickynav'
+    assign sticky_js = 'js-stickynav'
+  endif
+
+  assign nav_align = ''
+  assign nav_width = ''
+  assign logo_width = ''
+  assign cartlink_width = ''
+
+  if section.settings.header_layout == 'inline_layout_center'
+    assign logo_width = 'span-4 auto'
+    assign logo_align = 'a-center'
+    assign nav_align = 'v-center a-center'
+    assign nav_alignment = 'center'
+    assign nav_width = 'span-4 auto'
+    assign cartlink_width = 'span-4 auto'
+
+  elsif section.settings.header_layout == 'inline_layout_left'
+    assign logo_width = 'span-3 auto'
+    assign logo_align = 'a-left'
+    assign nav_align = 'v-center a-left'
+    assign nav_alignment = 'left'
+    assign nav_width = 'span-6 auto'
+    assign cartlink_width = 'span-3 auto'
+
+  elsif section.settings.header_layout == 'block_layout_center'
+    assign logo_width = 'push-4 span-4 auto'
+    assign nav_align = 'v-center a-center'
+    assign nav_width = 'span-12 auto'
+    assign nav_alignment = 'center'
+    assign cartlink_width = 'span-4 auto'
+
+  elsif section.settings.header_layout == 'block_layout_left'
+    assign logo_width = 'span-6 auto'
+    assign nav_align = 'v-center a-left'
+    assign nav_width = 'span-12 auto'
+    assign nav_alignment = 'left'
+    assign cartlink_width = 'span-6 auto'
+
+  endif
+
+  assign use_icons = false
+
+  assign locale_selector = false
+
+  if section.settings.show_locale_selector == true
+
+    assign locale_selector = true
+
+  endif
+
+-%}
+
+
+{% comment %} Header Template {% endcomment %}
+<header class="section-header header-section no-section-animation"
+  data-section-id="{{ section.id }}"
+  data-section-type="header"
+  data-asset-preload="true"
+  data-asset-url="{{ 'section-header.js' | asset_url }}">
+
+  <section class="section-header__main-bar main-bar w100 devices-hide js-theme-header {{ sticky }} {{ sticky_js }}">
+    <div class="grid__wrapper {{ layout_style }}">
+      {% if section.settings.header_layout == 'inline_layout_center' or section.settings.header_layout == 'inline_layout_left' %}
+        {%
+          render 'header-inline',
+          use_icons: use_icons,
+          nav_align: nav_align,
+          nav_width: nav_width,
+          logo_align: logo_align,
+          cartlink_width: cartlink_width,
+          logo_width: logo_width
+        %}
+      {% else %}
+        {%
+          render 'header-block',
+          use_icons: use_icons,
+          nav_align: nav_align,
+          nav_width: nav_width,
+          logo_align: logo_align,
+          cartlink_width: cartlink_width,
+          logo_width: logo_width,
+          locale_selector: locale_selector 
+        %}
+      {% endif %}
+    </div>
+  </section>
+
+  <aside class="slideout slideout__drawer-right  section-header__searchbox" data-wau-slideout="searchbox" id="slideout-searchbox">
+    <article class="span-10 push-1 auto v-stretch v-center">
+      <div class="slideout__trigger--close slideout__trigger-search">
+        <button class="js-slideout-close" aria-label="Close search slideout" data-slideout-direction="right" tabindex="0" type="button" name="button">
+          {% render 'snip-icons',
+          wrapper: '.section-header__mobile',
+          type: 'theme',
+          icon: 'close',
+          size: '18px',
+          classes: 'mt0 mr0 mb0 ml0',
+          fill: 'var(--header-text)',
+          hover: 'var(--header-hover)' %}
+        </button>
+      </div>
+      {%- if settings.predictive_search_enabled -%}
+      <div
+        id="predictiveSearch"
+        data-section-type="predictive-search"
+        data-asset-url="{{ 'section-predictive-search.js' | asset_url }}"
+        data-routes="{{ routes.predictive_search_url | default: '/search/suggest' }}"
+        data-input-selector='input[name="q"]'
+        data-results-selector="#predictive-search"
+        >
+      {%- endif -%}
+        <form class="searchbox__form py4 px6 border-bottom" action="{{ routes.search_url }}" method="get">
+          <label class="visually-hidden" for="q">{{ 'general.search.title' | t }}</label>
+          <input class="searchbox__input mb0 mt5 no-bg-color" type="text" title="{{ 'general.search.title' | t }}" autocomplete="off" name="q" id="q" placeholder="{{ 'general.search.placeholder' | t }}" />
+          <input name="options[prefix]" type="hidden" value="last">
+
+          {% if settings.search_show_products_only %}
+            <input type="hidden" name="type" value="product">
+          {% endif %}
+
+          {%- if settings.predictive_search_enabled -%}
+            <div id="predictive-search"
+              class="predictive-search"
+              tabindex="-1"></div>
+          {%- endif -%}
+        </form>
+      {%- if settings.predictive_search_enabled -%}
+      </div>
+      {%- endif -%}
+      {%- if settings.search_linklist != blank -%}
+        <div class="searchbox_featured-linklist py4 px6">
+          <ul class="js-accordion c-accordion c-accordion--searchbox c-accordion--outer__wrapper c-accordion--search"
+            id="c-accordion--mobile">
+            {%- render 'snip-linklist', menu: settings.search_linklist -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </article>
+  </aside>
+
+  {% style %}
+  .header__logo-wrapper a {
+    font-size: {{ section.settings.logo_size }}px;
+    word-break: break-word;
+  }
+  .header__logo-wrapper a img {
+    max-width: {{ section.settings.logo_max_width }}px;
+  }
+  .navigation {
+    text-align: {{ nav_alignment }};
+  }
+  {% endstyle %}
+</header>
+<div class="clear js-clear-element js-desktop-clear-element"></div>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "Enable language selector",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "Only shown on desktop."
+    },
+    {
+      "type": "richtext",
+      "id": "announcement_text",
+      "label": "Shop announcement",
+      "default": "<p>Share a shop announcement or message</p>"
+    },
+    {
+      "type": "range",
+      "id": "announcement_text_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Layout",
+      "default": "block_layout_center",
+      "options": [
+        {
+          "value": "inline_layout_left",
+          "label": "Logo left inline with nav"
+        },
+        {
+          "value": "inline_layout_center",
+          "label": "Logo center inline with nav"
+        },
+        {
+          "value": "block_layout_left",
+          "label": "Logo left above nav"
+        },
+        {
+          "value": "block_layout_center",
+          "label": "Logo center above nav"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "default": false,
+      "label": "Enable sticky header"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 50,
+      "max": 500,
+      "step": 5,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Logo text",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "main_nav",
+      "label": "Choose main menu",
+      "default": "main-menu",
+      "info": "It is best practice to select the same menu used in the Mobile Nav. [Learn More](https://developers.google.com/search/mobile-sites/mobile-first-indexing)"
+    }
+  ]
+}
+{% endschema %}

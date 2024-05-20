@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "banner": {
+      "type": "template-header",
+      "disabled": true,
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "subheading": "",
+        "heading_placement": "center",
+        "alignment": "a-center",
+        "color_scheme": "3"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "7d909784-cab3-4de7-830e-ae0c0df7a740": {
+          "type": "page_content",
+          "settings": {
+            "block_position": "content"
+          }
+        }
+      },
+      "block_order": [
+        "7d909784-cab3-4de7-830e-ae0c0df7a740"
+      ],
+      "settings": {
+        "page_alignment": "left"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main"
+  ]
+}

@@ -1,0 +1,120 @@
+{% comment %} Article Logic {% endcomment %}
+{%- liquid
+  assign number_of_comments = article.comments_count
+
+  assign show_sidebar = false
+
+  if section.settings.show_sidebar
+    assign show_sidebar = true
+    assign item_width = 'span-9 auto'
+    assign md_render = 'calc(100vw * 0.75)'
+    assign lg_render = 'calc(1600px * 0.75)'
+  else
+    assign item_width = 'span-12 auto'
+    assign md_render = '100vw'
+    assign lg_render = '1600px'
+  endif
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+
+-%}
+
+{% comment %} Article Template {% endcomment %}
+<section
+  class="article-template"
+  data-section-id="{{ section.id }}"
+  data-section-type="article-template"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper cg8 sm-cg0 pt8 pb8 sm-pt4 narrow">
+      <div class="{{ item_width }}">
+        {% if article.image and section.settings.show_featured_image %}
+          {% render 'helper-image',
+             type: article.image,
+             sm_render: '100vw'
+             md_render: md_render,
+             lg_render: lg_render,
+             loading: loading,
+             fetchpriority: fetch_priority %}
+        {% endif %}
+
+        <div class="rte mt4 sm-mt3">
+          {{ article.content }}
+        </div>
+
+      <div class="pb3">
+        {% render 'snip-social-sharing',
+          share_title: article.title,
+          share_permalink: article.url,
+          share_image: article
+        %}
+      </div>
+
+        {%- if blog.previous_article or blog.next_article -%}
+        <div class="prev-next-pagination mb8 border-top border-bottom shrink-wrap px1 py4">
+          <a class="prev-article inline-block w50 mb0 a-left" href="{{ blog.previous_article }}">
+            {% if blog.previous_article != blank %}
+              {% render 'snip-icons',
+                 wrapper: '.prev-next-pagination',
+                 type: 'theme',
+                 icon: 'left-arrow',
+                 size: '15px',
+                 classes: 'vib-center mr2 inline-block w10',
+                 fill: 'var(--text-color)',
+                 hover: 'var(--text-color)' %}
+              <span class="vib-center inline-block w80">&nbsp;{{ blog.previous_article.title | truncate: 30 }}</span>
+            {% endif %}
+          </a>
+          <a class="next-article inline-block w50 mb0 a-right" href="{{ blog.next_article }}">
+            {% if blog.next_article != blank %}
+              <span class="vib-center inline-block w80">{{ blog.next_article.title | truncate: 30 }}&nbsp;</span>
+              {% render 'snip-icons',
+                 wrapper: '.prev-next-pagination',
+                 type: 'theme',
+                 icon: 'right-arrow',
+                 size: '15px',
+                 classes: 'vib-center ml2 inline-block w10',
+                 fill: 'var(--text-color)',
+                 hover: 'var(--text-color)' %}
+            {% endif %}
+          </a>
+        </div>
+        {%- endif -%}
+        {%- if blog.comments_enabled? -%}
+          {% render 'article-comments',
+            blog: blog,
+            article: article,
+            number_of_comments: number_of_comments
+           %}
+        {%- endif -%}
+      </div>
+
+      {% render 'article-sidebar',
+        blog: blog,
+        article: article,
+        show_sidebar: show_sidebar %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog post",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_sidebar",
+      "label": "Show sidebar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_image",
+      "label": "Show article featured image",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+{% comment %} Collection List Header Logic {% endcomment %}
+
+{% comment %} Collection List Header Template {% endcomment %}
+<section
+  class="collection-list-template collection-list-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="collection-header"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper">
+    <div class="collection-description span-12 auto mt2 pb2 pt9 a-center">
+        {% if section.settings.text != blank %}
+           <div class="rte">
+             {{ section.settings.text }}
+           </div>
+        {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection list header",
+  "settings": [
+    {
+      "id": "text",
+      "type": "richtext",
+      "label": "Text",
+      "default": "<p>Add some descriptive text to your all collections page.</p>"
+    }
+  ]
+}
+{% endschema %}

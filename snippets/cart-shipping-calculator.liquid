@@ -1,0 +1,31 @@
+<div id="shipping-calculator" class="js-shipping-calc-wrapper mb4 block pt6 pb6">
+  <div class="form grid__wrapper">
+    <div class="address_province_container province span-6 auto simple-select" id="address_province_container" style="display: none;">
+      <label for="address_province" id="address_province_label" class="js-shipping-calc-address-province-label">Province</label>
+      <select id="address_province" class="address_form select-selected js-shipping-calc-address-province" style="min-width: unset;" name="address[province]" data-default="{% if shop.customer_accounts_enabled and customer and customer.default_address.province != '' %}{{ customer.default_address.province }}{% endif %}"></select>
+    </div>
+    <div class="country span-6 auto simple-select">
+      <label for="address_country">{{ 'cart.general.shipping_country' | t }}</label>
+      <select id="address_country" class="select-selected js-shipping-calc-address-country" style="min-width: unset;" name="address[country]" data-default="{% if shop.customer_accounts_enabled and customer %}{{ customer.default_address.country }}{% elsif settings.shipping_calculator_default_country != '' %}{{ settings.shipping_calculator_default_country }}{% endif %}">
+        <option value="0">{{ 'cart.general.shipping_choose_country' | t }}</option>
+        {{ country_option_tags }}
+      </select>
+    </div>
+    <div class="postal span-6 auto v-end">
+      <label for="address_zip">{{ 'cart.general.shipping_zip_postal' | t }}</label>
+      <input class="js-shipping-calc-address-zip" type="text" id="address_zip" placeholder="{{ 'cart.general.shipping_zip_postal' | t }}" name="address[zip]"{% if shop.customer_accounts_enabled and customer %} value="{{ customer.default_address.zip }}"{% endif %} />
+    </div>
+    <div class="action_bottom span-6 auto v-end">
+      <input type="submit" data-ajax-shipping-rates style="margin-bottom: 0;" class="get-rates button  mb0 js-shipping-calc-submit" value="{{ 'cart.general.calc_shipping' | t }}" />
+    </div>
+
+    <div id="wrapper-response" class="shipping-calc__response js-shipping-calc-response span-12 auto" style="display:none;">
+      <div class="shipping-calc__response--wrapper">
+        <p id="shipping-rates-feedback" class="js-shipping-calc-rates-feedback mb2">
+        </p>
+        <ul id="shipping-rates" class="js-shipping-calc-rates shipping-calc__rates mb0">
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+ .section-richtext .rte,
+ .section-richtext .rte p:last-child {
+	margin: 0;
+}
+.section-richtext__section-heading {
+	 margin-bottom: var(--space-5);
+}
+.section-richtext .a-center .rte,
+.section-richtext .a-center .rte p {
+  text-align: center;
+}
+.section-richtext .a-left .rte,
+.section-richtext .a-left .rte p {
+ text-align: left;
+}
+.rte ul {
+  list-style: initial;
+}

@@ -1,0 +1,155 @@
+.product-listing__quickview-trigger {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  text-align: center;
+  background: var(--directional-bg);
+  color: var(--directional-text);
+  width: 44px;
+  height: 44px;
+  line-height: 42px;
+  padding: 0;
+  margin-bottom: 0;
+  -webkit-transition: background .5s ease,color .5s ease;
+  -moz-transition: background .5s ease,color .5s ease;
+  -o-transition: background .5s ease,color .5s ease;
+  transition: background .5s ease,color .5s ease;
+  -webkit-appearance: none;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.product-listing__quickview-trigger svg.quickview-trigger--check {
+  display: none;
+}
+.product-listing__quickview-trigger svg.quickview-trigger--dots {
+  transform: rotate(-90deg);
+}
+.product-listing__quickview-trigger svg.quickview-trigger--loading {
+  display: none;
+  -webkit-animation: rotate 2s linear infinite;
+      animation: rotate 2s linear infinite;
+}
+.product-listing__quickview-trigger svg.quickview-trigger--loading .path {
+  stroke: var(--directional-text);
+  stroke-linecap: round;
+  -webkit-animation: dash 1.5s ease-in-out infinite;
+          animation: dash 1.5s ease-in-out infinite;
+}
+.product-listing__quickview-trigger.loading-quickshop svg.quickview-trigger--dots,
+.product-listing__quickview-trigger.loading-quickshop svg.quickview-trigger--search,
+.product-listing__quickview-trigger.loading-quickshop svg.quickview-trigger--plus {
+  display: none;
+}
+.product-listing__quickview-trigger.loading-quickshop svg.quickview-trigger--loading {
+  display: inline-block;
+}
+.product-listing__quickview-trigger:hover {
+  background: var(--directional-hover) !important;
+}
+.product-listing__quickview-trigger:visited {
+  background: var(--directional-bg);
+  color: var(--directional-text);
+}
+.product-listing__quickview-trigger svg {
+  pointer-events: none;
+}
+.no-js .product-listing__quickview-trigger {
+  display: none;
+}
+.slideout__trigger-quickview__wrapper {
+  position: fixed;
+  left: 2px;
+  z-index: 1;
+  background: var(--background);
+}
+.product__section-container {
+  grid-gap: 30px;
+}
+.product-quickview__form-wrapper .flickity-button {
+  z-index: 100;
+}
+.product-quickview__form-wrapper {
+  min-height: 510px;
+  padding: 30px 20px;
+}
+.product__quickview-wrapper section.product__section-container.row {
+  width: 830px;
+}
+.product-quickview__wrapper #thumbnails {
+  display: none !important;
+}
+#modal-quickview .product__section-content {
+  padding: 0;
+}
+#modal-quickview .product-photos .carousel {
+  margin-bottom: 0;
+}
+#modal-quickview .product-page {
+  padding-top: 0;
+  row-gap: 0;
+}
+#modal-quickview .product__section-images {
+  animation: fadeIn; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 3s; /* don't forget to set a duration! */
+}
+#modal-quickview .product__section-content {
+  animation: fadeIn; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s; /* don't forget to set a duration! */
+}
+@media (min-width: 768px) {
+  .slideout__trigger-quickview__wrapper {
+    top: 2px;
+  }
+  #modal-quickview .product-quickview__container {
+    overflow-y: auto;
+    max-height: 800px;
+    margin: 12px;
+  }
+  #modal-quickview .modal__inner-wrapper {
+    padding: 10px !important;
+  }
+}
+@media (max-width: 767px) {
+  .product-index:hover .product-listing__quickview-trigger {
+    display: none !important;
+  }
+  .product-quickview__wrapper {
+    padding-left: var(--space-6) !important;
+    padding-right: var(--space-6) !important;
+  }
+}
+.slideout .product-quickview__container .note {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  z-index: 72;
+  width: 100%;
+  background: var(--text-color);
+  border-color: var(--text-color);
+  color: var(--background);
+  padding: var(--space-6);
+  margin: 0;
+}
+.slideout .product-quickview__container .note a {
+  color: var(--background);
+}
+.slideout .product-quickview__container .note a:hover {
+  color: var(  --background-dark);
+}
+.slideout.quickview .product-quickview__form-wrapper .flickity-button.flickity-prev-next-button.previous {
+  left: -50px;
+  top: 50%;
+}
+.slideout.quickview .product-quickview__form-wrapper .flickity-button.flickity-prev-next-button.next {
+  left: 101%;
+  top: 50%;
+}
+@media (min-width: 768px) {
+  .slideout.quickview .product-quickview__container .product-image-container,
+  .slideout.quickview .product-quickview__container #product-photos {
+    padding: 0 var(--space-0);
+  }
+}

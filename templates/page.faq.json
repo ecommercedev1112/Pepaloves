@@ -1,0 +1,72 @@
+{
+  "sections": {
+    "banner": {
+      "type": "template-header",
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "subheading": "",
+        "heading_placement": "center",
+        "alignment": "a-center",
+        "color_scheme": "3"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "229e0fe3-146b-46f1-ae0a-2fab32363df8": {
+          "type": "heading",
+          "settings": {
+            "heading": "Info",
+            "block_position": "sidebar"
+          }
+        },
+        "3f2d7d89-2687-48e7-956a-02f8af8f669e": {
+          "type": "menu",
+          "settings": {
+            "menu": "main-menu",
+            "show_border": true,
+            "block_position": "sidebar"
+          }
+        },
+        "09cbc61d-9cd0-4fae-ba20-34cf4b1c0d07": {
+          "type": "text",
+          "settings": {
+            "text_rte": "<p>Can’t find the answers you’re looking for? <a href=\"\/pages\/contact\" title=\"Contact\">Contact Us<\/a>.<\/p>",
+            "show_border": false,
+            "block_position": "sidebar"
+          }
+        },
+        "6b06919b-1360-419d-85db-2756e2467f59": {
+          "type": "heading",
+          "settings": {
+            "heading": "General FAQ",
+            "block_position": "content"
+          }
+        },
+        "3fe62ba4-dfd1-4001-9a88-b02c39fa6867": {
+          "type": "page_content",
+          "settings": {
+            "block_position": "content"
+          }
+        }
+      },
+      "block_order": [
+        "229e0fe3-146b-46f1-ae0a-2fab32363df8",
+        "3f2d7d89-2687-48e7-956a-02f8af8f669e",
+        "09cbc61d-9cd0-4fae-ba20-34cf4b1c0d07",
+        "6b06919b-1360-419d-85db-2756e2467f59",
+        "3fe62ba4-dfd1-4001-9a88-b02c39fa6867"
+      ],
+      "settings": {
+        "page_alignment": "left"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main"
+  ]
+}

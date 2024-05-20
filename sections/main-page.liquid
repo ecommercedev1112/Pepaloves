@@ -1,0 +1,262 @@
+{% comment %} Page Logic {% endcomment %}
+{%- liquid
+
+  assign sidebar_blocks = 0
+  for block in section.blocks
+    if block.settings.block_position == 'sidebar'
+      assign sidebar_blocks = sidebar_blocks | plus: 1
+    endif
+  endfor
+
+  if sidebar_blocks > 0
+    assign grid_width = 'span-9'
+  else
+    assign grid_width = 'span-12'
+  endif
+
+
+  case section.settings.page_alignment
+    when 'left'
+      assign text_align = 'a-left'
+    when 'center'
+      assign text_align = 'a-center'
+    when 'right'
+      assign text_align = 'a-right'
+  endcase
+
+-%}
+
+{% comment %} Page Template {% endcomment %}
+<section
+  id="page"
+  class="global__section page-template"
+  data-section-id="{{ section.id }}"
+  data-section-type="page-template"
+  data-section-loaded="false">
+
+  <div class="grid__wrapper narrow cg9 sm-cg0">
+   {%- if section.blocks.size > 0 -%}
+      <div class="span-3 auto {{ text_align }}">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.block_position == 'sidebar' -%}
+            {%- case block.type -%}
+              {%- when 'text' -%}
+                <div class="page-template__content-block py3 {% if block.settings.show_border %}border-bottom{% endif %} animate--text">
+                  <div class="rte mb0">{{ block.settings.text_rte }}</div>
+                </div>
+              {%- when 'menu' -%}
+                <div class="page-template__content-block py3 {% if block.settings.show_border %}border-bottom{% endif %} animate--text">
+                  <ul>
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- when 'heading' -%}
+                <div class="page-template__content-block animate--text">
+                  <h3 class="{{ text_align }} border-bottom mb0 pb2">{{ block.settings.heading }}</h3>
+                </div>
+              {%- when 'page_content' -%}
+                <div class="page-template__content-block rte mb0 py3 animate--text">
+                  {{ page.content }}
+                </div>
+              {%- when 'contact_form' -%}
+                <div class="page-template__content-block mb0 py3 animate--text">
+                  {% render 'snip-custom-contact' %}
+                </div>
+            {%- endcase -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+    <div class="page-content {{ grid_width }} auto">
+      <div class="page_inner-container {{ text_align }}">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.block_position == 'content' -%}
+            {%- case block.type -%}
+              {%- when 'text' -%}
+                <div class="page-template__content-block py3 {% if block.settings.show_border %}border-bottom{% endif %} animate--text">
+                  <div class="rte mb0">{{ block.settings.text_rte }}</div>
+                </div>
+              {%- when 'menu' -%}
+                <div class="page-template__content-block py3 {% if block.settings.show_border %}border-bottom{% endif %} animate--text">
+                  <ul>
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- when 'heading' -%}
+                <div class="page-template__content-block animate--text">
+                  <h3 class="{{ text_align }} border-bottom mb0 pb2">{{ block.settings.heading }}</h3>
+                </div>
+              {%- when 'page_content' -%}
+                <div class="page-template__content-block rte mb0 py3 animate--text">
+                  {{ page.content }}
+                </div>
+              {%- when 'contact_form' -%}
+                <div class="page-template__content-block mb0 py3 animate--text">
+                  {% render 'snip-custom-contact' %}
+                </div>
+            {%- endcase -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Page template",
+  "settings": [
+    {
+      "type": "text_alignment",
+      "id": "page_alignment",
+      "label": "Content alignment",
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text_rte",
+          "label": "Text"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show bottom border",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_position",
+          "label": "Layout position",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "sidebar",
+              "label": "Sidebar"
+            }
+          ],
+          "default": "sidebar"
+        }
+      ]
+    },
+    {
+      "name": "Menu",
+      "type": "menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show bottom border",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "block_position",
+          "label": "Layout position",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "sidebar",
+              "label": "Sidebar"
+            }
+          ],
+          "default": "sidebar"
+        }
+      ]
+    },
+    {
+      "name": "Heading",
+      "type": "heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "select",
+          "id": "block_position",
+          "label": "Layout position",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "sidebar",
+              "label": "Sidebar"
+            }
+          ],
+          "default": "sidebar"
+        }
+      ]
+    },
+    {
+      "name": "Page content",
+      "type": "page_content",
+      "limit":1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "block_position",
+          "label": "Layout position",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "sidebar",
+              "label": "Sidebar"
+            }
+          ],
+          "default": "content"
+        }
+      ]
+    },
+    {
+      "name": "Contact form",
+      "type": "contact_form",
+      "settings": [
+        {
+          "type": "select",
+          "id": "block_position",
+          "label": "Layout position",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "sidebar",
+              "label": "Sidebar"
+            }
+          ],
+          "default": "content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

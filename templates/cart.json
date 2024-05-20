@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "banner": {
+      "type": "banner-image",
+      "settings": {
+      }
+    },
+    "main": {
+      "type": "main-cart",
+      "settings": {
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "iwt_layout": "image_left",
+        "iwt_heading": "Heading",
+        "iwt_text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+        "iwt_button": "Button",
+        "iwt_link": "",
+        "iwt_section_height": 500,
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main",
+    "image-with-text"
+  ]
+}

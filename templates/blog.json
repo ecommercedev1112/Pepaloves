@@ -1,0 +1,51 @@
+{
+  "sections": {
+    "banner": {
+      "type": "blog-header",
+      "settings": {
+        "full_width": true,
+        "scale": 2,
+        "banner_height": 400,
+        "heading": "",
+        "subheading": "",
+        "heading_placement": "left",
+        "alignment": "a-center",
+        "color_scheme": "3"
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "text": "",
+        "items_per_page": 20,
+        "show_taglist": true,
+        "text_align": "left",
+        "show_date": true,
+        "show_excerpt": false,
+        "show_author": false,
+        "show_tags": false,
+        "show_comments": false
+      }
+    },
+    "16433844957d3795ed": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured collection",
+        "subheading": "<p>Use this text to share information about your brand with your customers. Describe a collection, share announcements, or welcome customers to your store.<\/p>",
+        "link_text": "SHOP THE COLLECTION",
+        "link_url": "",
+        "text_position": "left",
+        "collection": "",
+        "display_type": "carousel",
+        "items_per_row": 3,
+        "items_per_page": 7,
+        "section_padding": "both"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "main",
+    "16433844957d3795ed"
+  ]
+}

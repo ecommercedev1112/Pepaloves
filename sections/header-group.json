@@ -1,0 +1,22 @@
+{
+  "name": "Header",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "announcement_text": "<p>ENVÍOS GRATIS EN PEDIDOS SUPERIORES A 40 EUROS<\/p>",
+        "announcement_text_size": 12,
+        "header_layout": "block_layout_center",
+        "enable_sticky": true,
+        "logo": "shopify:\/\/shop_images\/LOGO_PEPALOVES_7343e6df-7791-4f42-8abc-85dc6fd03e04.jpg",
+        "logo_max_width": 225,
+        "logo_size": 23,
+        "main_nav": "men-principal"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

@@ -1,0 +1,33 @@
+{% for option in product.options %}
+
+    {%- liquid
+      assign option_handle = option | handle
+      assign option_index = forloop.index0
+
+      assign values = ''
+
+      assign swatch_count = 0
+    -%}
+
+    {% capture downcased_option %}{{ option | downcase }}{% endcapture %}
+    {% if downcased_option contains 'size' or downcased_option contains 'sizes' %}
+        <div class="size-swatch">
+          <ul data-option-index="{{ option_index }}" class="{{ option_handle }} options mb0">
+            {% assign values = '' %}
+            {% for variant in product.variants %}
+              {% if variant.available %}
+
+              {% assign value = variant.options[option_index] %}
+              {% capture wrapped_value %},{{ value }},{% endcapture %}
+                {% unless values contains wrapped_value %}
+                <li data-option-title="{{ value | escape }}" class="size {{ value | handle }} inline-block mr1">
+                  <a href="{{ variant.url }}"><small>{{ value | escape }}</small></a>
+                </li>
+                {% capture values %}{{ values }}{{ wrapped_value }}{% endcapture %}
+                {% endunless %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div><!-- .swatch -->
+    {% endif %}
+  {% endfor %}

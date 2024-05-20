@@ -1,0 +1,166 @@
+{% comment %} Blog Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-blog.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-blog.css' | asset_url }}"></noscript>
+
+{% comment %} Blog Logic {% endcomment %}
+{%- liquid
+  assign articles = blogs[blog.handle].articles
+  case articles.size
+  when 1
+    assign items_per_row = 'span-6 auto sm-span-12'
+  when 2
+    assign items_per_row = 'span-6 auto sm-span-12'
+  else
+    assign items_per_row = 'span-4 auto sm-span-12'
+  endcase
+
+  assign items_per_page = section.settings.items_per_page
+
+-%}
+
+{% comment %} Blog Template {% endcomment %}
+<section
+  class="blog-template"
+  data-section-id="{{ section.id }}"
+  data-section-type="blog-template"
+  data-section-loaded="false">
+
+  {% paginate blog.articles by items_per_page %}
+    <div class="grid__wrapper rg9 pb8">
+
+      {% if section.settings.text != blank or current_tags or section.settings.show_taglist %}
+        <div class="span-12 auto mb5">
+          {% unless section.settings.text == blank %}
+            <div class="blog-description a-center rte">
+              {{ section.settings.text }}
+            </div>
+          {% endunless %}
+          {%- if section.settings.show_taglist -%}
+            <div class="linklist-section__container span-12 auto">
+              <div class="linklist-section__wrapper a-center">
+                {% for tag in blog.all_tags %}
+                  <span class="linklist-section__link mr4 mb1">{{ tag | link_to_add_tag: tag }}</span>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+          {% if current_tags %}
+            <div class="blog-template__tags--wrapper">
+              <p class="blog-template__tags--label mb0 inline-block wauto v-center mr3">{{ 'blogs.article.tagged' | t }}</p>
+              <ul class="blog-template__tags--group inline-block mb0 w80 v-center">
+                {%- for tag in current_tags -%}
+                  <li class="blog-template__tags--tag mr3 mb0">{{ tag | link_to_remove_tag: tag }}</li>
+                {%- endfor -%}
+                <li class="blog-template__tags--clear">
+                  <a class="btn-border-link inline-block relative mb0" href="{{ blog.url }}">
+                     <span>{{ 'collections.general.clear_all_tags' | t }}</span>
+                   </a>
+                 </li>
+              </ul>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% render 'article-loop',
+          blog: blog,
+          grid_items: section.settings.items_per_row,
+          items_per_row: items_per_row,
+          side_by_side: side_by_side,
+          paginate: paginate ,
+          items_per_page: items_per_page,
+          show_excerpt: section.settings.show_excerpt %}
+
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <div class="span-12 auto mb8">
+        {% render 'snip-pagination', paginate: paginate %}
+      </div>
+    {% endif %}
+
+  {% endpaginate %}
+
+  <style>
+    .blog-template .article-loop__excerpt {
+      text-align: {{ section.settings.text_align }};
+    }
+    .blog-template .linklist-section__link {
+      display: inline-block;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.4s ease-out;
+      font-size: var(--font-size-sm);
+    }
+    .blog-template .linklist-section__link:hover {
+      border-bottom: 1px solid var(--text-color);
+    }
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "id": "text",
+      "type": "richtext",
+      "label": "Text",
+      "default": "<p>Add some descriptive text to your Blog page.</p>"
+    },
+    {
+      "type": "range",
+      "id": "items_per_page",
+      "min": 2,
+      "max": 48,
+      "step": 1,
+      "label": "Posts per page",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_taglist",
+      "label": "Show tag linklist",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show published date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Show comment count",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

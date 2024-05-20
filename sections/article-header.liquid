@@ -1,0 +1,411 @@
+{% comment %} Article Header Logic {% endcomment %}
+{%- liquid
+
+  assign has_image = false
+  assign heading_placement = section.settings.heading_placement
+  if heading_placement == 'below'
+    assign float_header = false
+  else
+    assign float_header = true
+  endif
+  assign subheading = section.settings.subheading
+
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+
+  if section.settings.image == blank and template contains 'article' and article.image != blank
+    assign has_image = true
+  endif
+
+  if template contains 'collection' and template != 'list-collections'
+    assign basic_banner_img = collection.handle | append: '.jpg'
+
+    if images[basic_banner_img] != blank and collection.description contains '[banner]'
+      assign has_image = true
+    elsif section.settings.collection_image and collection.image != blank
+      assign has_image = true
+    endif
+  endif
+
+  if section.settings.full_width
+    assign full_width =  'edge'
+  endif
+
+  assign sm_render = '100vw'
+  assign md_render = '100vw'
+  assign lg_render = '100vw'
+  assign byline = blank
+
+
+  case template.name
+    when '404'
+      assign heading = 'general.404.title' | t
+    when 'search'
+      if search.performed
+        assign heading = 'general.search.title_results' | t
+      else
+        assign heading = 'general.search.title' | t
+      endif
+    when 'collection'
+      assign heading = collection.title
+    when 'list-collections'
+      assign heading = 'collections.general.all_collections' | t
+    when 'blog'
+      assign heading = blog.title
+    when 'customers/account'
+      assign heading = 'customer.account.title' | t
+    when 'customers/login'
+      if shop.checkout.guest_login
+        assign heading = 'customer.login.guest_title' | t
+      else
+        assign heading = 'customer.login.title' | t
+      endif
+    when 'customers/order'
+      assign heading = 'customer.order.title' | t
+      assign subheading = '<p>' | append: order.name | append: '</p>'
+    when 'customers/addresses'
+      assign heading = 'customer.addresses.title' | t
+    when 'cart'
+      assign heading = 'cart.general.title' | t
+  endcase
+
+  if template contains 'page'
+    assign heading = page.title
+  endif
+
+  if template contains 'article'
+    assign heading = article.title
+    assign show_date = false
+    assign show_author = false
+
+    if section.settings.show_date
+      assign show_date = true
+      assign published_at = article.published_at | date: format: 'month_date_year'
+      assign date = 'blogs.article.posted_on_date_html' | t: date: published_at
+    endif
+
+    if section.settings.show_author
+      assign show_author = true
+    endif
+
+    if show_date and show_author
+      assign byline = '<p>' | append: article.author | append: ' – ' | append: date | append: '</p>'
+    elsif show_date and show_author == false
+      assign byline = '<p>' | append: date | append: '</p>'
+    elsif show_date == false and show_author
+      assign byline = '<p>' | append: article.author | append: '</p>'
+    endif
+
+  endif
+
+
+  if section.settings.heading != blank
+    assign heading = section.settings.heading
+  endif
+
+  if section.settings.scale > 0
+    assign section_type = 'data-section-type="parallax"'
+    assign scale = section.settings.scale
+    assign is_parallax = true
+  else
+    assign section_type = 'data-section-type="template-header"'
+    assign is_parallax = false
+  endif
+
+  assign text_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-text)'
+  assign bg_color = 'var(--scheme-' | append: section.settings.color_scheme | append: '-bg)'
+
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetch_priority = 'high'
+  endif
+
+-%}
+
+{% comment %} Template Header Template {% endcomment %}
+<div class="global__section section__banner-{{ section.id }} mt0 grid__wrapper {{ full_width }} relative template-header"
+data-section-id="{{ section.id }}"
+{{ section_type }}
+data-section-loaded="false"
+data-scale="1.{{ scale }}"
+{%- if is_parallax -%}data-asset-url="{{ 'section-parallax.js' | asset_url }}"{%- endif -%}>
+
+  {%- capture text_content -%}
+     <h1 class="span-12 auto mb1 animate--text">{{ heading }}</h1>
+    {%- if show_date or show_author -%}
+      <div class="span-12 auto mb0 rte animate--text delay--1">
+        {{ byline }}
+      </div>
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- capture image_content -%}
+    {%- if has_image -%}
+     {%- if section.settings.collection_image and collection.image != blank -%}
+      {% render 'helper-image',
+         type: collection.image,
+         sm_render: sm_render,
+         md_render: md_render,
+         lg_render: lg_render,
+         loading: loading,
+         fetchpriority: fetch_priority %}
+      {%- elsif template contains 'collection' and images[basic_banner_img] != blank and collection.description contains '[banner]' and template != 'list-collections' -%}
+        <div class="box-ratio">
+           <img srcset="{{ basic_banner_img | file_img_url: '180x' }} 180w,
+              {{ basic_banner_img | file_img_url: '360x' }} 360w,
+              {{ basic_banner_img | file_img_url: '540x' }} 540w,
+              {{ basic_banner_img | file_img_url: '720x' }} 720w,
+              {{ basic_banner_img | file_img_url: '780x' }} 780w,
+              {{ basic_banner_img | file_img_url: '900x' }} 900w,
+              {{ basic_banner_img | file_img_url: '1080x' }} 1080w,
+              {{ basic_banner_img | file_img_url: '1220x' }} 1220w,
+              {{ basic_banner_img | file_img_url: '1520x' }} 1520w,
+              {{ basic_banner_img | file_img_url: '1920x' }} 1920w"
+              src="{{ basic_banner_img | file_img_url: '720x' }}"
+              sizes="(min-width: 1601px) {{ lg_render }}, (min-width: 768px) and (max-width: 1600px) {{ md_render }}, (max-width: 767px) {{ sm_render }}, 900px"
+              width="{{ basic_banner_img.width }}"
+              height="{{ basic_banner_img.height }}"
+              alt="{{ basic_banner_img.alt | escape }}"
+              loading="{{ loading }}"
+              fetchpriority="{{ fetch_priority }}">
+         </div>
+      {%- elsif section.settings.image == blank and template contains 'article' and article.image != blank -%}
+        {% render 'helper-image',
+           type: article.image,
+           sm_render: sm_render,
+           md_render: md_render,
+           lg_render: lg_render,
+           loading: loading,
+           fetchpriority: fetch_priority %}
+      {%- else -%}
+        {% render 'helper-image',
+           type: section.settings.image,
+           sm_render: sm_render,
+           md_render: md_render,
+           lg_render: lg_render,
+           loading: loading,
+           fetchpriority: fetch_priority %}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  <div class="section__banner-inner-wrapper span-12 auto grid__wrapper edge rg0 cg0 relative">
+  {% if heading != blank and heading_placement == 'center' %}
+    <div class="section__banner-image span-12 auto">
+      {{ image_content }}
+    </div>
+    <div class="section__banner-caption grid__wrapper span-12 auto {{ section.settings.alignment }} sm-py12 absolute-center banner-text--over">
+      {{ text_content }}
+    </div>
+  {% elsif heading != blank and heading_placement == 'below' %}
+    <div class="section__banner-image span-12 auto">
+      {{ image_content }}
+    </div>
+    <div class="section__banner-caption grid__wrapper span-12 auto {{ section.settings.alignment }} mt2 pb2 pt9">
+      {{ text_content }}
+    </div>
+  {% elsif heading != blank and heading_placement == 'left' %}
+    <div class="section__banner-caption v-center span-6 auto {{ section.settings.alignment }} px10 sm-py12 banner-text--over">
+      {{ text_content }}
+    </div>
+    <div class="section__banner-image span-6 v-center auto">
+      {{ image_content }}
+    </div>
+  {% elsif heading != blank and heading_placement == 'right' %}
+    <div class="section__banner-image span-6 v-center auto">
+      {{ image_content }}
+    </div>
+    <div class="section__banner-caption v-center span-6 auto {{ section.settings.alignment }} px6 sm-py12 banner-text--over">
+      {{ text_content }}
+    </div>
+  {% endif %}
+  </div>
+
+
+  {%- style -%}
+    {%- unless section.settings.color_scheme == 'none' -%}
+    .section__banner-{{ section.id }} .section__banner-caption.banner-text--over h1,
+    .section__banner-{{ section.id }} .section__banner-caption.banner-text--over .rte p,
+    .section__banner-{{ section.id }} .section__banner-caption.banner-text--over .rte a,
+    .section__banner-{{ section.id }} .section__banner-caption.banner-text--over .section__banner-countdown p,
+    .section__banner-{{ section.id }} .section__banner-caption.banner-text--over .section__banner-countdown span {
+      color: {{ text_color }};
+    }
+      {%- unless heading_placement == 'below' -%}
+        .section__banner-{{ section.id }} .section__banner-inner-wrapper {
+          background-color: {{ bg_color }};
+        }
+      {%- endunless -%}
+    {%- endunless -%}
+    .section__banner-{{ section.id }} .box-ratio {
+      padding-bottom: {{ section.settings.banner_height }}px !important;
+    }
+    .section__banner-{{ section.id }} .box-ratio img {
+      object-fit: cover;
+      object-position: {{ section.settings.image.presentation.focal_point }};
+      height: {{ section.settings.banner_height }}px !important;
+    }
+    {%- if float_header == true -%}
+      .section__banner-{{ section.id }} .section__banner-image {
+        height: {{ section.settings.banner_height }}px !important;
+      }
+    {%- elsif has_image == false and float_header == false -%}
+      /* No image and no floating text default header colors back to normal */
+      body.over-content--true .section-header .color--header-text,
+      body.over-content--true .section-header .color--header-text span {
+        color: var(--header-text) !important;
+      }
+      body.over-content--true .section-header .color--header-text svg .hover-fill {
+        fill: var(--header-text) !important;
+      }
+      body.over-content--true .section-header .color--header-text:hover,
+      body.over-content--true .section-header .color--header-text:hover span {
+        color: var(--header-hover) !important;
+      }
+      body.over-content--true .section-header .color--header-text:hover svg .hover-fill {
+        fill: var(--header-hover) !important;
+      }
+      body.over-content--true .section__banner-{{ section.id }} .section__banner-caption {
+        padding-top: var(--space-11) !important;
+      }
+    {%- endif -%}
+    .section__banner-{{ section.id }} .section__banner-caption.absolute-center.a-left {
+      text-align: left !important;
+    }
+    .section__banner-{{ section.id }} .section__banner-caption.absolute-center.a-right {
+      text-align: right !important;
+    }
+    {%- if has_image and is_parallax -%}
+      .section__banner-{{ section.id }} .box-ratio img {
+        transform: scale(1.{{ scale }});
+      }
+    {%- endif -%}
+  {%- endstyle -%}
+</div>
+
+{% schema %}
+{
+  "name": "Article header",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Enable full width",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "2880px x 1620px recommended"
+    },
+    {
+      "type": "range",
+      "id": "scale",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Parallax effect",
+      "default": 2,
+      "info": "The higher the scale the greater the effect, 0 removes parallax effect."
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "min": 200,
+      "max": 600,
+      "step": 100,
+      "unit": "px",
+      "label": "Height",
+      "default": 400
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Use a metafield to override the template heading. [Learn more](https://www.weareunderground.com/blogs/shopify-blog/forge-section-heading-metafields)"
+    },
+    {
+      "type": "select",
+      "id": "heading_placement",
+      "label": "Text placement",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "center",
+          "label": "Over image"
+        },
+        {
+          "value": "below",
+          "label": "Below"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "a-left",
+          "label": "Left"
+        },
+        {
+          "value": "a-center",
+          "label": "Center"
+        },
+        {
+          "value": "a-right",
+          "label": "Right"
+        }
+      ],
+      "default": "a-center"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "3",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show published date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

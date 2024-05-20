@@ -1,0 +1,58 @@
+{% comment %} Cart Assets {% endcomment %}
+<link rel="preload" href="{{ 'section-main-cart.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ 'section-main-cart.css' | asset_url }}"></noscript>
+
+{% comment %} Mini Cart Logic {% endcomment %}
+{%- liquid
+  if settings.cart_type == 'drawer'
+    assign is_narrow = 'narrow'
+    assign cart_type_class = 'ajax-cart__drawer-wrapper'
+    assign cart_class = 'js-slideout-close'
+    assign cart_data = 'data-slideout-direction="right" aria-controls="slideout-ajax-cart"'
+  elsif settings.cart_type == 'modal_cart'
+    assign cart_type_class = 'ajax-cart__modal-wrapper'
+    assign cart_class = 'js-modal-close'
+    assign cart_data = 'aria-controls="modal-ajax-cart"'
+  endif
+-%}
+
+{% comment %} Mini Cart template {% endcomment %}
+<section id="mini-cart"
+class="mini-cart__container js-mini-cart-wrapper {{ cart_type_class }} py5 additional-buttons--{% if additional_checkout_buttons and settings.show_additional_buttons %}true{% else %}false{% endif %}"
+data-ajax-cart-mini>
+  <div class="loading-wrapper js-mini-cart-loader no-js-hidden">
+    <div class="loading-ripple"><div></div><div></div></div>
+  </div>
+  <div class="ajax-cart__header-wrapper {{ is_narrow }} grid__wrapper pt0 pb3">
+    <div class="span-8 sm-span-8 auto a-left v-start">
+      <p class="py2 mb0 lh1 h3">{{ 'cart.general.title' | t }}</p>
+    </div>
+    <div class="span-4 sm-span-4 auto a-right v-start">
+      <div class="py1 slideout__trigger--close">
+        <button class="slideout__trigger-ajax-cart {{ cart_class }} btn-as-link lh1" {{ cart_data }} aria-label="Close cart" tabindex="0" type="button" name="button">
+          <span class="vib-center mr1">{{ 'cart.general.close_cart' | t }}</span>
+          {% render 'snip-icons',
+             wrapper: '.ajax-cart__header-wrapper',
+             type: 'theme',
+             icon: 'close',
+             size: '12px',
+             classes: 'vib-center',
+             fill: 'var(--text-color)',
+             hover: 'var(--text-color)' %}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ajax-cart__form-wrapper cart-wrapper js-ajax-cart-content">
+
+  </div>
+  {% if request.design_mode == false and additional_checkout_buttons and settings.show_additional_buttons and settings.cart_type == 'drawer' %}
+    <div class="ajax-cart__additional-checkout px7 js-additional-checkout-buttons">
+      <p class="sm-caps or-divider mt2 mb2 a-center"><span>Or</span></p>
+      <div class="ajax-cart__buttons-additional">
+      {{ content_for_additional_checkout_buttons }}
+      </div>
+    </div>
+  {% endif %}
+</section>

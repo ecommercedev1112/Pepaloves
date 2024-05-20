@@ -1,0 +1,56 @@
+{% capture nav_logo %}
+  <article class="header-inline__logo-wrapper {{ logo_width }} auto {{ nav_align }}">
+    <div class="site-logo header__logo-wrapper relative lh0 {{ logo_align }}">
+      {% if section.settings.logo_homepage != blank and template == 'index' %}
+        <a class="header__img-logo-home inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}">{{ section.settings.logo | image_url: width: 800 | image_tag: loading: 'eager', fetchpriority: 'high' }}</a>
+      {% elsif section.settings.logo != blank %}
+        <a class="header__img-logo inline-block lh0 mb0 shrink-wrap" href="{{ routes.root_url }}">{{ section.settings.logo | image_url: width: 800 | image_tag: loading: 'eager', fetchpriority: 'high' }}</a>
+      {% else %}
+        <a class="header__text-logo inline-block v-center m0" href="{{ routes.root_url }}">{{ shop.name }}</a>
+      {% endif %}
+    </div>
+  </article>
+{% endcapture %}
+
+{% capture nav_full %}
+  <article class="header-inline__nav-wrapper {{ nav_width }} {{ nav_align }}">
+    <div class="navigation" role="navigation">
+      <ul
+        role="menubar"
+        aria-label="Primary Navigation"
+        id="main-nav"
+        class="navigation__menu tablet-hide sm-hide">
+
+        {% assign menu = linklists[section.settings.main_nav] %}
+
+        {% for link in menu.links %}
+          {%
+            render 'header-drop-navigation',
+            link: link
+          %}
+        {% endfor %}
+      </ul>
+
+    </div>
+  </article>
+{% endcapture %}
+
+{% capture cart_links %}
+  <article class="header-inline__cart-links-wrapper {{ cartlink_width }} v-center a-right">
+    <ul class="header__cart-links__wrapper cart-link-topbar-false inline-block mb0">
+      {% render 'header-cart-links', classes: "m0 p0 lh0", use_icons: use_icons, fill_color: 'var(--header-text)', hover_color: 'var(--header-hover)' %}
+    </ul>
+  </article>
+{% endcapture %}
+
+{% case logo_align %}
+{% when 'a-center' %}
+  {{ nav_full }}
+  {{ nav_logo }}
+  {{ cart_links }}
+
+{% when 'a-left' %}
+  {{ nav_logo }}
+  {{ nav_full }}
+  {{ cart_links }}
+{% endcase %}

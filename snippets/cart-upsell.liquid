@@ -1,0 +1,96 @@
+{%- liquid
+  assign matches = false
+  assign product = settings.product_upsell
+  for item in cart.items
+   if item.id == product.selected_or_first_available_variant.id
+    assign matches = true
+    break
+   endif
+  endfor
+-%}
+ {%- unless matches or product == blank -%}
+  <div class="product-form__upsell-item--outer p4 relative span-12 auto">
+      <div
+      class="product-form__upsell-item js-product-listing"
+      id="product-listing-{{ product.id }}"
+      data-product-id="{{ product.id }}"
+      data-alpha="{{ product.title }}"
+      data-price="{{ product.price }}">
+        <div class="product-form__upsell-container grid__wrapper cg0 rg0 edge">
+          <div class="product-form__upsell-image span-3 sm-span-3 auto relative">
+            {%- if product.media.size < 1 -%}
+              <div class="box-ratio" style="padding-bottom: 100%;">
+                {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {% else %}
+              {%- assign preview_image = product.featured_media.preview_image -%}
+                 <img srcset="{%- if preview_image.width >= 180 -%}{{ preview_image | image_url: width: 180 }} 180w,{%- endif -%}
+                    {%- if preview_image.width >= 360 -%}{{ preview_image | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if preview_image.width >= 540 -%}{{ preview_image | image_url: width: 540 }} 540w,{%- endif -%}"
+                    src="{{ preview_image | image_url: width: 360 }}"
+                    sizes="(min-width: 1601px) 130px, (min-width: 768px) and (max-width: 1600px) 100px, (max-width: 767px) 80px, 130px"
+                    height="{{ preview_image.height }}"
+                    width="{{ preview_image.width }}"
+                    alt="{{ preview_image.alt | escape }}"
+                    loading="lazy">
+            {%- endif -%}
+          </div>
+          <div class="product-form__upsell-info span-9 sm-span-9 auto v-center">
+            <div class="product-form__upsell-info--inner px4 py1">
+              {%- if settings.cart_upsell_title != blank -%}
+                <p class="mb2 sm">{{ settings.cart_upsell_title }}</p>
+              {%- endif -%}
+              <a class="product-form__upsell-info--title mb0 sm" href="{{ product.url }}">
+                <span class="sm">{{ product.title }} {{ product.variants.size }} | </span>
+                <span class="product-form__upsell-info--price varies--{% if product.price_varies %}true{% else %}false{% endif %} mb0 sm">
+                  {% if product.price < product.compare_at_price %}
+                    <span class="product-loop__price--sale onsale inline-block sm">
+                      {{ product.price | money }}
+                    </span>
+                    <span class="product-loop__price--compare was inline-block hide sm">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                    {% assign savings = product.compare_at_price | minus: product.price %}
+                    <span class="product-loop__price--savings savings hide sm">
+                      ({{ 'collections.general.save' | t }} {{ savings | money }})
+                    </span>
+                  {% else %}
+                    {% if product.price_varies %}
+                      <span class="product-loop__price--from sm">{{ 'products.general.from' | t }} </span>
+                      {{ product.price_min | money }}
+                    {% else %}
+                      {{ product.price | money }}
+                    {% endif %}
+                  {% endif %}
+                </span>
+              </a>
+            </div>
+            {% if settings.show_collection_swatches or settings.show_product_sizes %}
+              {%- if product.variants.size > 1 -%}
+                <div class="product-form__upsell-info--variants px4 py1 sm-hide">
+                  {% render 'snip-product-loop-swatches',
+                    product: product,
+                    color_swatch_style: settings.color_swatch_style,
+                    product_info_align: product_info_align,
+                    hide_link: true %}
+                </div>
+              {%- endif -%}
+            {% endif %}
+            <div class="product-form_upsell-buttons px4 pt1">
+              {%- if product.variants.size == 1 and product.available -%}
+               <a class="js-upsell-submit btn-border-link relative inline-block wauto" data-variant-id="{{ product.selected_or_first_available_variant.id }}" href="{{ product.url }}">
+                 <span>{{ 'products.product.add_to_cart' | t }}</span>
+               </a>
+              {%- else -%}
+                {% assign product_url = '/products/' | append: product.handle | append: '?section_id=quickshop' %}
+                <a class="product-form__upsell-info--view btn-border-link relative inline-block py3 mb0 js-quickview-trigger wauto"
+                data-product-url="{{ product_url }}"
+                href="{{ product.url }}"><span>{{ 'products.general.view_full' | t }}</span></a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+ {%- endunless -%}

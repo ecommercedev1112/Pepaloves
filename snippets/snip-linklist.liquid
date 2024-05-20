@@ -1,0 +1,79 @@
+{% for link in menu.links %}
+
+  {% assign level_one_nested_link_count = 0 %}
+
+  {% if link.links != blank %}
+
+    {%- liquid 
+      assign level_one_nested_link_count = level_one_nested_link_count | plus: 1
+      assign level_one_link_index = forloop.index
+      assign accordion_content_class = 'c-accordion__panel--'
+      assign accordion_content_id = accordion_content_class | append: unique_id | append: '-' | append: forloop.index  
+    -%}
+
+    <li class="js-accordion-header c-accordion__header c-accordion__top-level">
+      <a class="js-accordion-link c-accordion__link mb0" href="{{ link.url }}">{{ link.title | escape }}</a>
+      <button class="dropdown-arrow" aria-label="{{ link.title | escape }}" data-toggle="accordion" aria-expanded="false" aria-controls="{{ accordion_content_id }}" >
+        {% render 'snip-icons',
+           wrapper: '.js-accordion-header',
+           type: 'apollo',
+           icon: 'down-carrot',
+           size: '8px',
+           classes: 'inactive-arrow mt0 mr0 mb0 ml0',
+           fill: text_color,
+           hover: hover_color %}
+      </button>
+    </li>
+
+    <li class="c-accordion__panel {{ accordion_content_id }}" id="{{ accordion_content_id }}" data-parent="#c-accordion--mobile">
+
+      {% assign level_two_unique_id = unique_id | append: '-' | append: level_one_nested_link_count %}
+
+      <ul class="js-accordion js-accordion-mobile-nav c-accordion c-accordion--mobile-nav c-accordion--mobile-nav__inner c-accordion__second-level-wrapper c-accordion--{{ level_two_unique_id }}"
+      id="c-accordion--mobile-1">
+
+        {% for sub_link in link.links %}
+          {% if sub_link.links != blank %}
+
+              {% assign level_two_link_index = forloop.index %}
+              {% assign level_two_accordion_content_id = 'c-accordion__panel--' | append: unique_id | append: '-' | append: level_one_link_index | append: '-' | append: level_two_link_index %}
+
+              <li class="js-accordion-header c-accordion__header c-accordion__second-level">
+                <a class="js-accordion-link c-accordion__link mb0" href="{{ sub_link.url }}">{{ sub_link.title | escape }}</a>
+                <button class="dropdown-arrow" aria-label="{{ sub_link.title | escape }}" data-toggle="accordion" aria-expanded="false" aria-controls="{{ level_two_accordion_content_id }}" >
+                  {% render 'snip-icons',
+                     wrapper: '.js-accordion-header',
+                     type: 'apollo',
+                     icon: 'down-carrot',
+                     size: '8px',
+                     classes: 'inactive-arrow mt0 mr0 mb0 ml0',
+                     fill: text_color,
+                     hover: hover_color %}
+                </button>
+              </li>
+
+              <li class="c-accordion__panel c-accordion__third-level {{ level_two_accordion_content_id }}" id="{{ level_two_accordion_content_id }}" data-parent="#c-accordion--mobile-1">
+                <ul>
+                  {% for sub_sub_link in sub_link.links %}
+
+                    <li>
+                      <a class="js-accordion-link c-accordion__link mb0" href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a>
+                    </li>
+
+                  {% endfor %}
+                </ul>
+              </li>
+          {% else %}
+          <li class="c-accordion__second-level">
+            <a class="js-accordion-link c-accordion__link mb0" href="{{ sub_link.url }}">{{ sub_link.title | escape }}</a>
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </li>
+  {% else %}
+  <li class="c-accordion__top-level">
+    <a class="js-accordion-link c-accordion__link mb0" href="{{ link.url }}">{{ link.title | escape }}</a>
+  </li>
+  {% endif %}
+{% endfor %}

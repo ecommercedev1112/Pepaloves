@@ -1,0 +1,64 @@
+{%- liquid
+
+   assign padding = ''
+   if block.settings.padding_left
+    assign padding = 'bpl'
+   endif
+   if block.settings.padding_right
+    assign padding = padding | append: ' bpr'
+   endif
+   if block.settings.padding_top
+    assign padding = padding | append: ' bpt'
+   endif
+   if block.settings.padding_bottom
+    assign padding = padding | append: ' bpb'
+   endif
+ -%}
+{%- case block.type -%}
+{%- when 'text' -%}
+  <div class="section-collage__block--text span-6 sm-span-12 auto {{ block.settings.alignment }} v-center {{ padding }}" {{ block.shopify_attributes }}>
+   {%- if block.settings.heading != blank -%}
+     <h2 class="animate--text">{{ block.settings.heading }}</h2>
+   {%- endif -%}
+   {%- if block.settings.text != blank -%}
+     <div class="rte mb0 animate--text delay--1">
+       {{ block.settings.text }}
+     </div>
+   {%- endif -%}
+   {%- if block.settings.link_url != blank and block.settings.link_text != blank -%}
+      <a class="collage_text--link animate--text delay--3 btn-border-link relative" href="{{ block.settings.link_url }}">
+        <span>{{ block.settings.link_text }}</span>
+      </a>
+   {%- endif -%}
+  </div>
+{%- when 'image' -%}
+  {%- if block.settings.image != blank -%}
+    <div class="section-collage__block--image span-6{% if block.settings.mobile_full %} sm-span-12 pl0 pr0{% else %} sm-span-6{% endif %} auto {{ padding }}" {{ block.shopify_attributes }} data-loading="{{ loading }}" data-fetchpriority="{{ fetchpriority }}">
+      {%- if block.settings.image_url != blank -%}
+        <a href="{{ block.settings.image_url }}" title="{{ block.settings.image.alt }}">
+      {%- endif -%}
+      {% render 'helper-image',
+         type: block.settings.image,
+         sm_render: '300px',
+         md_render: 'calc(100vw / 2)',
+         lg_render: 'calc(1600px / 2)',
+         loading: loading,
+         fetchpriority: fetchpriority %}
+      {%- if block.settings.image_url != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="section-collage__block--image span-6{% if block.settings.mobile_full %} sm-span-12 pl0 pr0{% else %} sm-span-6{% endif %} auto {{ padding }}" {{ block.shopify_attributes }}>
+      {%- if block.settings.image_url != blank -%}
+        <a href="{{ block.settings.image_url }}" title="{{ block.settings.image.alt }}">
+      {%- endif -%}
+      <div class="onboard demo-1  ">
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+      {%- if block.settings.image_url != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endcase -%}

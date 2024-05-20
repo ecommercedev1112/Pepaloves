@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html class="no-js supports-no-cookies" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="">
+  {%- if canonical_url != blank -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+  {%- endif -%}
+
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  {%- unless settings.main_font.system? and settings.heading_font.system? and settings.nav_font.system? -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {%- endunless -%}
+
+    <!-- Preload onDomain stylesheets and script libraries -->
+  <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
+
+  {% if settings.favicon %}
+    <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png" />
+  {% endif %}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  <meta name="description" content="{{ page_description | escape }}">
+
+  {% render 'snip-social-meta-tags' %}
+  {% render 'snip-structured-data' %}
+
+  {{ content_for_header }}
+
+  {% render 'css-variables' %}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  {%- unless settings.main_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.main_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- unless settings.heading_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.heading_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+  {%- unless settings.nav_font.system? -%}
+    <link rel="preload" as="font" href="{{ settings.nav_font | font_url }}" type="font/woff2" crossorigin>
+  {%- endunless -%}
+
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
+  <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" aysnc></script>
+</head>
+
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }} js-slideout-toggle-wrapper js-modal-toggle-wrapper">
+
+  <main class="site-wrap section-fade-in">
+    <div class="page-wrap mb10">
+      {{ content_for_layout }}
+    </div>
+  </main>
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+</body>
+</html>
